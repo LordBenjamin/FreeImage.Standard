@@ -40,6 +40,12 @@
     </None>
 
     <!-- NOTE: this is renaming to FreeImage... might be avoidable if dll mapping is implemented: https://github.com/dotnet/coreclr/issues/930 -->
+    <None Include="..\..\runtimes\linux-arm\native\libfreeimage-3.17.0.so">
+      <PackagePath>runtimes/linux-arm/native/FreeImage.so</PackagePath>
+      <Pack>true</Pack>
+    </None>
+
+    <!-- NOTE: this is renaming to FreeImage... might be avoidable if dll mapping is implemented: https://github.com/dotnet/coreclr/issues/930 -->
     <None Include="..\..\runtimes\osx.10.10-x64\native\libfreeimage.3.17.0.dylib">
       <PackagePath>runtimes/osx.10.10-x64/native/FreeImage.dylib</PackagePath>
       <Pack>true</Pack>
