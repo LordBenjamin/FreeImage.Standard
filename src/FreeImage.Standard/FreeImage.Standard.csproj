@@ -30,12 +30,12 @@
 
   <ItemGroup>
 
-    <None Include="..\..\runtimes\win7-x64\native\FreeImage.dll">
-      <PackagePath>runtimes/win7-x64/native/FreeImage.dll</PackagePath>
+    <None Include="..\..\runtimes\win-x64\native\FreeImage.dll">
+      <PackagePath>runtimes/win-x64/native/FreeImage.dll</PackagePath>
       <Pack>true</Pack>
     </None>
-    <None Include="..\..\runtimes\win7-x86\native\FreeImage.dll">
-      <PackagePath>runtimes/win7-x86/native/FreeImage.dll</PackagePath>
+    <None Include="..\..\runtimes\win-x86\native\FreeImage.dll">
+      <PackagePath>runtimes/win-x86/native/FreeImage.dll</PackagePath>
       <Pack>true</Pack>
     </None>
 
