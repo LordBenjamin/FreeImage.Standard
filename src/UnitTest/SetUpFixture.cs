@@ -73,7 +73,7 @@ namespace FreeImageNETUnitTest
 
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                runtimeFolderName = "ubuntu.16.04-x64";
+                runtimeFolderName = "linux-x64";
                 libraryFileName = "libfreeimage-3.17.0.so";
             }
             else
@@ -88,7 +88,7 @@ namespace FreeImageNETUnitTest
         private static string GetWindowsRuntimeFolder()
         {
             int ptrSize = Marshal.SizeOf<IntPtr>();
-            return (ptrSize == 4) ? "win7-x86" : "win7-x64";
+            return (ptrSize == 4) ? "win-x86" : "win-x64";
         }
     }
 }
