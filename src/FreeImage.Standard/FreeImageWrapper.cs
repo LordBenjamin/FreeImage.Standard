@@ -211,12 +211,10 @@ namespace FreeImageAPI
             {
                 throw new FreeImageException("FreeImage library not found", e);
             }
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
 			catch (EntryPointNotFoundException e)
 			{
 				throw new FreeImageException("FreeImage entry point not found", e);
 			}
-#endif
             catch (BadImageFormatException e)
             {
                 throw new FreeImageException("Incorrect FreeImage library format", e);
