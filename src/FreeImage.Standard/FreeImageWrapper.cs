@@ -569,8 +569,6 @@ namespace FreeImageAPI
             }
         }
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
 		/// <summary>
 		/// Converts a FreeImage bitmap to a .NET <see cref="System.Drawing.Bitmap"/>.
 		/// </summary>
@@ -818,8 +816,6 @@ namespace FreeImageAPI
 			return result;
 		}
 
-#endif
-
         /// <summary>
         /// Converts a raw bitmap to a FreeImage bitmap.
         /// </summary>
@@ -927,8 +923,6 @@ namespace FreeImageAPI
             return dib;
         }
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
 		/// <summary>
 		/// Saves a .NET <see cref="System.Drawing.Bitmap"/> to a file.
 		/// </summary>
@@ -992,8 +986,6 @@ namespace FreeImageAPI
 			Unload(dib);
 			return result;
 		}
-
-#endif
 
         /// <summary>
         /// Loads a FreeImage bitmap.
@@ -1080,8 +1072,6 @@ namespace FreeImageAPI
             return dib;
         }
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
 		/// <summary>
 		/// Loads a .NET <see cref="System.Drawing.Bitmap"/> from a file.
 		/// </summary>
@@ -1101,8 +1091,6 @@ namespace FreeImageAPI
 			Unload(dib);
 			return result;
 		}
-
-#endif
 
         /// <summary>
         /// Deletes a previously loaded FreeImage bitmap from memory and resets the handle to 0.
@@ -2277,8 +2265,6 @@ namespace FreeImageAPI
 
         #region Pixel access functions
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
         /// <summary>
         /// Retrieves an hBitmap for a FreeImage bitmap.
         /// Call FreeHbitmap(IntPtr) to free the handle.
@@ -2446,8 +2432,6 @@ namespace FreeImageAPI
         {
             return DeleteObject(hbitmap);
         }
-        
-#endif
 
         #endregion
 
@@ -5234,7 +5218,6 @@ namespace FreeImageAPI
 
         #region Dll-Imports
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
         /// <summary>
         /// Retrieves a handle to a display device context (DC) for the client area of a specified window
         /// or for the entire screen. You can use the returned handle in subsequent GDI functions to draw in the DC.
@@ -5358,7 +5341,6 @@ namespace FreeImageAPI
         /// <param name="size">Size of the block of memory to move, in bytes.</param>
         [DllImport("Kernel32.dll", EntryPoint = "RtlMoveMemory", SetLastError = false)]
         private static unsafe extern void MoveMemory(void* dst, void* src, uint size);
-#endif
 
         private static unsafe uint PlatformCompareMemory(void* buf1, void* buf2, uint count)
         {
