@@ -441,6 +441,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             fStream.Dispose();
         }
 
+#if NET472
         [Test]
         public void FreeImage_GetHbitmap()
         {
@@ -466,6 +467,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             {
             }
         }
+#endif
 
         [Test]
         public void FreeImage_GetResolutionX()

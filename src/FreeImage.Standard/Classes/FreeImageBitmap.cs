@@ -2519,8 +2519,9 @@ namespace FreeImageAPI
 
 				this.frameIndex = frameIndex;
 			}
-        }
+		}
 
+#if NET472
 		/// <summary>
 		/// Creates a GDI bitmap object from this <see cref="FreeImageBitmap"/>.
 		/// </summary>
@@ -2570,16 +2571,17 @@ namespace FreeImageAPI
 			EnsureNotDisposed();
 			return FreeImage.GetBitmapForDevice(dib, IntPtr.Zero, false);
 		}
+#endif
 
-        /// <summary>
-        /// Gets the <see cref="Color"/> of the specified pixel in this <see cref="FreeImageBitmap"/>.
-        /// </summary>
-        /// <param name="x">The x-coordinate of the pixel to retrieve.</param>
-        /// <param name="y">The y-coordinate of the pixel to retrieve.</param>
-        /// <returns>A <see cref="System.Drawing.Color"/> structure that represents the color of the specified pixel.</returns>
-        /// <exception cref="Exception">The operation failed.</exception>
-        /// <exception cref="NotSupportedException">The type of this bitmap is not supported.</exception>
-        public unsafe Color GetPixel(int x, int y)
+		/// <summary>
+		/// Gets the <see cref="Color"/> of the specified pixel in this <see cref="FreeImageBitmap"/>.
+		/// </summary>
+		/// <param name="x">The x-coordinate of the pixel to retrieve.</param>
+		/// <param name="y">The y-coordinate of the pixel to retrieve.</param>
+		/// <returns>A <see cref="System.Drawing.Color"/> structure that represents the color of the specified pixel.</returns>
+		/// <exception cref="Exception">The operation failed.</exception>
+		/// <exception cref="NotSupportedException">The type of this bitmap is not supported.</exception>
+		public unsafe Color GetPixel(int x, int y)
 		{
 			EnsureNotDisposed();
 			if (FreeImage.GetImageType(dib) == FREE_IMAGE_TYPE.FIT_BITMAP)
@@ -3723,9 +3725,9 @@ namespace FreeImageAPI
 			return dib.GetHashCode();
 		}
 
-#endregion
+		#endregion
 
-#region Static functions
+		#region Static functions
 
 		/// <summary>
 		/// Returns a value that indicates whether the pixel format for this <see cref="FreeImageBitmap"/> contains alpha information.
@@ -3809,6 +3811,8 @@ namespace FreeImageAPI
 			return new FreeImageBitmap(filename);
 		}
 
+#if NET472
+
 		/// <summary>
 		/// Creates a <see cref="FreeImageBitmap"/> from a handle to a GDI bitmap.
 		/// </summary>
@@ -3845,13 +3849,15 @@ namespace FreeImageAPI
 		{
 			return FreeImage.FreeHbitmap(hbitmap);
 		}
+		
+#endif
 
-        /// <summary>
-        /// Creates a <see cref="FreeImageBitmap"/> from the specified data stream.
-        /// </summary>
-        /// <param name="stream">A <see cref="Stream"/> that contains the data for this <see cref="FreeImageBitmap"/>.</param>
-        /// <returns>The <see cref="FreeImageBitmap"/> this method creates.</returns>
-        public static FreeImageBitmap FromStream(Stream stream)
+		/// <summary>
+		/// Creates a <see cref="FreeImageBitmap"/> from the specified data stream.
+		/// </summary>
+		/// <param name="stream">A <see cref="Stream"/> that contains the data for this <see cref="FreeImageBitmap"/>.</param>
+		/// <returns>The <see cref="FreeImageBitmap"/> this method creates.</returns>
+		public static FreeImageBitmap FromStream(Stream stream)
 		{
 			return new FreeImageBitmap(stream);
 		}
