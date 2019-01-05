@@ -1,0 +1,1 @@
+FreeImage.Standard is a fork of FreeImage-dotnet-core (https://github.com/matgr1/FreeImage-dotnet-core), which is in turn a fork of the FreeImage C# wrapper (http://freeimage.sourceforge.net/).
