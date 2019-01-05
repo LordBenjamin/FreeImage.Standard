@@ -1,3 +1,5 @@
+![](https://img.shields.io/nuget/dt/FreeImage.Standard.svg)
+
 This is a clone of the FreeImage .NET project (http://freeimage.sourceforge.net/) modified to work with .NET Standard 2.0.
 
 FreeImage native binaries are included in the nuget package for Windows x86/x64, Linux x64/armhf, and OSX x64 (^10.10).
