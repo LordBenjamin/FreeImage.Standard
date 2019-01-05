@@ -55,10 +55,6 @@ namespace FreeImageNETUnitTest
             string runtimeFolderName;
             string libraryFileName;
 
-#if NET461
-            runtimeFolderName = GetWindowsRuntimeFolder();
-            libraryFileName = $"{libraryName}.dll";
-#else
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 runtimeFolderName = GetWindowsRuntimeFolder();
@@ -80,7 +76,6 @@ namespace FreeImageNETUnitTest
             {
                 throw new Exception($"Unsupported platform");
             }
-#endif
 
             return Path.Combine(runtimesFolder, runtimeFolderName, "native", libraryFileName);
         }

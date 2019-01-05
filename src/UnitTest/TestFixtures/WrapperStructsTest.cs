@@ -230,7 +230,6 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.That(rational1 == 0);
         }
 
-#if NET461
         [Ignore("Ignoring StreamWrapper")]
         public void StreamWrapper()
         {
@@ -370,8 +369,6 @@ namespace FreeImageNETUnitTest.TestFixtures
             wrapper.Dispose();
             stream.Dispose();
         }
-
-#endif
 
         [Ignore("Ignoring LocalPlugin")]
         public void LocalPlugin()
