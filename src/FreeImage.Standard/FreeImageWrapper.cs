@@ -168,11 +168,7 @@ namespace FreeImageAPI
 
         internal static Assembly GetAssembly(Type type)
         {
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
 			return Assembly.GetAssembly(type);
-#else
-            return type.GetTypeInfo().Assembly;
-#endif
         }
 
         /// <summary>
@@ -2779,8 +2775,6 @@ namespace FreeImageAPI
             return result;
         }
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
 		/// <summary>
 		/// Returns the <see cref="FREE_IMAGE_FORMAT"/> for the specified
 		/// <see cref="ImageFormat"/>.
@@ -2808,8 +2802,6 @@ namespace FreeImageAPI
 			}
 			return FREE_IMAGE_FORMAT.FIF_UNKNOWN;
 		}
-
-#endif
 
         /// <summary>
         /// Retrieves all parameters needed to create a new FreeImage bitmap from
@@ -5144,17 +5136,10 @@ namespace FreeImageAPI
 
         internal static string ColorToString(Color color)
         {
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
 			return string.Format(
 				System.Globalization.CultureInfo.CurrentCulture,
 				"{{Name={0}, ARGB=({1}, {2}, {3}, {4})}}",
 				new object[] { color.Name, color.A, color.R, color.G, color.B });
-#else
-            return string.Format(
-                System.Globalization.CultureInfo.CurrentCulture,
-                "{{ARGB=({0}, {1}, {2}, {3})}}",
-                new object[] { color.A, color.R, color.G, color.B });
-#endif
         }
 
         internal static void Resize(ref string str, int length)
