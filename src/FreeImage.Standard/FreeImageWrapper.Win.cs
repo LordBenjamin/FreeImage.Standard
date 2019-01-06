@@ -1,5 +1,7 @@
 ﻿#if NET472 // TODO: This is Windows specific (P/Invoke), not a .NET FX / Core issue
 using System;
+using Gdi = FreeImageAPI.NativeMethods.Gdi;
+using Win32 = FreeImageAPI.NativeMethods.Win32;
 
 namespace FreeImageAPI
 {
@@ -31,14 +33,14 @@ namespace FreeImageAPI
 			if (release = (hdc == IntPtr.Zero))
 			{
 				// We don't so request dc
-				hdc = GetDC(IntPtr.Zero);
+				hdc = Gdi.GetDC(IntPtr.Zero);
 			}
 			if (hdc != IntPtr.Zero)
 			{
 				// Get pointer to the infoheader of the bitmap
 				IntPtr info = GetInfo(dib);
 				// Create a bitmap in the dc
-				hBitmap = CreateDIBSection(hdc, info, DIB_RGB_COLORS, out ppvBits, IntPtr.Zero, 0);
+				hBitmap = Gdi.CreateDIBSection(hdc, info, DIB_RGB_COLORS, out ppvBits, IntPtr.Zero, 0);
 				if (hBitmap != IntPtr.Zero && ppvBits != IntPtr.Zero)
 				{
 					// Copy the data into the dc
@@ -52,7 +54,7 @@ namespace FreeImageAPI
 				// We have to release the dc
 				if (release)
 				{
-					ReleaseDC(IntPtr.Zero, hdc);
+					Gdi.ReleaseDC(IntPtr.Zero, hdc);
 				}
 			}
 			return hBitmap;
@@ -83,11 +85,11 @@ namespace FreeImageAPI
 			bool release = false;
 			if (release = (hdc == IntPtr.Zero))
 			{
-				hdc = GetDC(IntPtr.Zero);
+				hdc = Gdi.GetDC(IntPtr.Zero);
 			}
 			if (hdc != IntPtr.Zero)
 			{
-				hbitmap = CreateDIBitmap(
+				hbitmap = Gdi.CreateDIBitmap(
 					hdc,
 					GetInfoHeader(dib),
 					CBM_INIT,
@@ -100,7 +102,7 @@ namespace FreeImageAPI
 				}
 				if (release)
 				{
-					ReleaseDC(IntPtr.Zero, hdc);
+					Gdi.ReleaseDC(IntPtr.Zero, hdc);
 				}
 			}
 			return hbitmap;
@@ -126,7 +128,7 @@ namespace FreeImageAPI
 			uint colors;
 			bool release;
 
-			if (GetObject(hbitmap, sizeof(BITMAP), (IntPtr)(&bm)) != 0)
+			if (Gdi.GetObject(hbitmap, sizeof(BITMAP), (IntPtr)(&bm)) != 0)
 			{
 				dib = Allocate(bm.bmWidth, bm.bmHeight, bm.bmBitsPixel, 0, 0, 0);
 				if (!dib.IsNull)
@@ -134,9 +136,9 @@ namespace FreeImageAPI
 					colors = GetColorsUsed(dib);
 					if (release = (hdc == IntPtr.Zero))
 					{
-						hdc = GetDC(IntPtr.Zero);
+						hdc = Gdi.GetDC(IntPtr.Zero);
 					}
-					if (GetDIBits(
+					if (Gdi.GetDIBits(
 						hdc,
 						hbitmap,
 						0,
@@ -157,7 +159,7 @@ namespace FreeImageAPI
 					}
 					if (release)
 					{
-						ReleaseDC(IntPtr.Zero, hdc);
+						Gdi.ReleaseDC(IntPtr.Zero, hdc);
 					}
 				}
 			}
@@ -172,7 +174,7 @@ namespace FreeImageAPI
 		/// <returns>True on success, false on failure.</returns>
 		public static bool FreeHbitmap(IntPtr hbitmap)
 		{
-			return DeleteObject(hbitmap);
+			return Gdi.DeleteObject(hbitmap);
 		}
 
 		#endregion
@@ -189,7 +191,7 @@ namespace FreeImageAPI
 		{
 			if (IsWindows)
 			{
-				MoveMemory(dst, src, checked((uint)size));
+				Win32.MoveMemory(dst, src, checked((uint)size));
 			}
 			else
 			{
@@ -207,7 +209,7 @@ namespace FreeImageAPI
 		{
 			if (IsWindows)
 			{
-				MoveMemory(dst.ToPointer(), src.ToPointer(), size);
+				Win32.MoveMemory(dst.ToPointer(), src.ToPointer(), size);
 			}
 			else
 			{
@@ -225,7 +227,7 @@ namespace FreeImageAPI
 		{
 			if (IsWindows)
 			{
-				MoveMemory(dst.ToPointer(), src.ToPointer(), checked((uint)size));
+				Win32.MoveMemory(dst.ToPointer(), src.ToPointer(), checked((uint)size));
 			}
 			else
 			{

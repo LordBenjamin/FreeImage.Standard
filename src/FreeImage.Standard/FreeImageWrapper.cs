@@ -43,6 +43,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using FreeImageAPI.IO;
 using FreeImageAPI.Metadata;
+using Win32 = FreeImageAPI.NativeMethods.Win32;
 
 namespace FreeImageAPI
 {
@@ -5012,7 +5013,7 @@ namespace FreeImageAPI
         private static unsafe uint PlatformCompareMemory(void* buf1, void* buf2, uint count)
         {
             if (IsWindows) {
-                return RtlCompareMemory(buf1, buf2, count);
+                return Win32.RtlCompareMemory(buf1, buf2, count);
             }
 
             return ManagedCompareMemory(buf1, buf2, count);
