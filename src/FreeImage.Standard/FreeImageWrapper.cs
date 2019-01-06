@@ -5016,31 +5016,7 @@ namespace FreeImageAPI
                 return Win32.RtlCompareMemory(buf1, buf2, count);
             }
 
-            return ManagedCompareMemory(buf1, buf2, count);
-        }
-
-        private static unsafe uint ManagedCompareMemory(void* buf1, void* buf2, uint count)
-        {
-            // TODO: there are probably builtin ways to do this in linux/mac...
-            // TODO: if not, there's probably a clever way of doing this as longs instead of byte by 
-            //       byte (count the bits not set when xor'ing each long?)
-
-            uint matching = 0;
-
-            byte* buf1Byte = (byte*)buf1;
-            byte* buf2Byte = (byte*)buf2;
-
-            byte* buf1ByteEnd = buf1Byte + count;
-
-            while (buf1Byte < buf1ByteEnd)
-            {
-                if (*buf1Byte++ == *buf2Byte++)
-                {
-                    matching += sizeof(byte);
-                }
-            }
-
-            return matching;
+            return UnsafeHelpers.CompareMemory(buf1, buf2, count);
         }
     }
 }
