@@ -16,7 +16,7 @@ namespace UnitTest.TestFixtures
 
 			fixed(byte* b1 = bytes1)
 			fixed(byte* b2 = bytes2) {
-				actualCount = UnsafeHelpers.CompareMemory(b1, b2, expectedCount);
+				actualCount = UnsafeHelpers.CompareMemory(b1, b2, (uint)bytes1.Length);
 			}
 
 			Assert.AreEqual(expectedCount, actualCount); ;
@@ -35,7 +35,7 @@ namespace UnitTest.TestFixtures
 			fixed (byte* b1 = bytes1)
 			fixed (byte* b2 = bytes2)
 			{
-				actualCount = UnsafeHelpers.CompareMemory(b1, b2, expectedCount);
+				actualCount = UnsafeHelpers.CompareMemory(b1, b2, (uint)bytes1.Length);
 			}
 
 			Assert.AreEqual(expectedCount, actualCount); ;

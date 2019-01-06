@@ -29,6 +29,10 @@
 				{
 					matching += sizeof(byte);
 				}
+				else
+				{
+					break;
+				}
 			}
 
 			return matching;
