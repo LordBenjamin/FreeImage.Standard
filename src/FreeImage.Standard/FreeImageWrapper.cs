@@ -5011,11 +5011,15 @@ namespace FreeImageAPI
 
         private static unsafe uint PlatformCompareMemory(void* buf1, void* buf2, uint count)
         {
-#if NET472 // TODO: This is Windows specific (P/Invoke), not a .NET FX / Core issue
             if (IsWindows) {
                 return RtlCompareMemory(buf1, buf2, count);
             }
-#endif
+
+            return ManagedCompareMemory(buf1, buf2, count);
+        }
+
+        private static unsafe uint ManagedCompareMemory(void* buf1, void* buf2, uint count)
+        {
             // TODO: there are probably builtin ways to do this in linux/mac...
             // TODO: if not, there's probably a clever way of doing this as longs instead of byte by 
             //       byte (count the bits not set when xor'ing each long?)
@@ -5035,7 +5039,7 @@ namespace FreeImageAPI
                 }
             }
 
-                return matching;
-            }
+            return matching;
         }
+    }
 }

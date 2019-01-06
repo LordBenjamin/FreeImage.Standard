@@ -1,5 +1,4 @@
-﻿#if NET472 // TODO: This is Windows specific (P/Invoke), not a .NET FX / Core issue
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
 namespace FreeImageAPI
@@ -143,4 +142,3 @@ namespace FreeImageAPI
 		private static unsafe extern uint RtlCompareMemory(void* buf1, void* buf2, uint count);
 	}
 }
-#endif
