@@ -43,6 +43,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using FreeImageAPI.IO;
 using FreeImageAPI.Metadata;
+using LibC = FreeImageAPI.NativeMethods.LibC;
 using Win32 = FreeImageAPI.NativeMethods.Win32;
 
 namespace FreeImageAPI
@@ -4603,7 +4604,7 @@ namespace FreeImageAPI
         /// <returns>true, if all bytes compare as equal, false otherwise.</returns>
         public static unsafe bool CompareMemory(void* buf1, void* buf2, uint length)
         {
-            return (length == PlatformCompareMemory(buf1, buf2, length));
+            return PlatformCompareMemory(buf1, buf2, length);
         }
 
         /// <summary>
@@ -4615,7 +4616,7 @@ namespace FreeImageAPI
         /// <returns>true, if all bytes compare as equal, false otherwise.</returns>
         public static unsafe bool CompareMemory(void* buf1, void* buf2, long length)
         {
-            return (length == PlatformCompareMemory(buf1, buf2, checked((uint)length)));
+            return PlatformCompareMemory(buf1, buf2, checked((uint)length));
         }
 
         /// <summary>
@@ -4627,7 +4628,7 @@ namespace FreeImageAPI
         /// <returns>true, if all bytes compare as equal, false otherwise.</returns>
         public static unsafe bool CompareMemory(IntPtr buf1, IntPtr buf2, uint length)
         {
-            return (length == PlatformCompareMemory(buf1.ToPointer(), buf2.ToPointer(), length));
+            return PlatformCompareMemory(buf1.ToPointer(), buf2.ToPointer(), length);
         }
 
         /// <summary>
@@ -4639,7 +4640,7 @@ namespace FreeImageAPI
         /// <returns>true, if all bytes compare as equal, false otherwise.</returns>
         public static unsafe bool CompareMemory(IntPtr buf1, IntPtr buf2, long length)
         {
-            return (length == PlatformCompareMemory(buf1.ToPointer(), buf2.ToPointer(), checked((uint)length)));
+            return PlatformCompareMemory(buf1.ToPointer(), buf2.ToPointer(), checked((uint)length));
         }
 
         /// <summary>
@@ -5010,13 +5011,17 @@ namespace FreeImageAPI
 
         #endregion
 
-        private static unsafe uint PlatformCompareMemory(void* buf1, void* buf2, uint count)
+        private static unsafe bool PlatformCompareMemory(void* buf1, void* buf2, uint count)
         {
             if (IsWindows) {
-                return Win32.RtlCompareMemory(buf1, buf2, count);
+                return Win32.RtlCompareMemory(buf1, buf2, count) == count;
+            }
+            else if(IsLinux)
+            {
+                return LibC.memcmp(buf1, buf2, count) == 0;
             }
 
-            return UnsafeHelpers.CompareMemory(buf1, buf2, count);
+            return UnsafeHelpers.CompareMemory(buf1, buf2, count) == count;
         }
     }
 }

@@ -148,5 +148,22 @@ namespace FreeImageAPI
 				uint uUsage);
 		}
 #endif
+
+		internal static class LibC
+		{
+			/// <summary>
+			/// The memcmp routine compares two blocks of memory.
+			/// </summary>
+			/// <param name="buf1">A pointer to a block of memory to compare.</param>
+			/// <param name="buf2">A pointer to a block of memory to compare.</param>
+			/// <param name="count">Specifies the number of bytes to be compared.</param>
+			/// <returns>
+			/// If the return value is &lt; 0, buf1 is less than buf2.
+			/// If the return value is &gt; 0, buf1 is greater than buf2.
+			/// If the return value is 0, buf1 and buf2 are equal.
+			/// </returns>
+			[DllImport(ExternDll.LibC, EntryPoint = "memcmp", SetLastError = false)]
+			internal static unsafe extern int memcmp(void* buf1, void* buf2, uint count);
+		}
 	}
 }
