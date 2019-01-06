@@ -1,4 +1,4 @@
-﻿#if NET472 // TODO: This is Windows specific (P/Invoke), not a .NET FX / Core issue
+﻿//#if NET472 // TODO: This is Windows specific (P/Invoke), not a .NET FX / Core issue
 using System;
 using System.Runtime.InteropServices;
 
@@ -14,7 +14,7 @@ namespace FreeImageAPI
 		/// If this value is IntPtr.Zero, GetDC retrieves the DC for the entire screen. </param>
 		/// <returns>If the function succeeds, the return value is a handle to the DC for the specified window's client area.
 		/// If the function fails, the return value is NULL.</returns>
-		[DllImport("user32.dll")]
+		[DllImport(ExternDll.User32)]
 		private static extern IntPtr GetDC(IntPtr hWnd);
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace FreeImageAPI
 		/// <param name="hWnd">Handle to the window whose DC is to be released.</param>
 		/// <param name="hDC">Handle to the DC to be released.</param>
 		/// <returns>Returns true on success, false on failure.</returns>
-		[DllImport("user32.dll")]
+		[DllImport(ExternDll.User32)]
 		private static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace FreeImageAPI
 		/// where storage for the bitmap bit values is to begin. This value is ignored if hSection is NULL.</param>
 		/// <returns>If the function succeeds, the return value is a handle to the newly created DIB,
 		/// and *ppvBits points to the bitmap bit values. If the function fails, the return value is NULL, and *ppvBits is NULL.</returns>
-		[DllImport("gdi32.dll")]
+		[DllImport(ExternDll.Gdi32)]
 		private static extern IntPtr CreateDIBSection(
 			IntPtr hdc,
 			[In] IntPtr pbmi,
@@ -61,7 +61,7 @@ namespace FreeImageAPI
 		/// </summary>
 		/// <param name="hObject">Handle to a logical pen, brush, font, bitmap, region, or palette.</param>
 		/// <returns>Returns true on success, false on failure.</returns>
-		[DllImport("gdi32.dll")]
+		[DllImport(ExternDll.Gdi32)]
 		private static extern bool DeleteObject(IntPtr hObject);
 
 		/// <summary>
@@ -76,7 +76,7 @@ namespace FreeImageAPI
 		/// <param name="fuUsage">Specifies whether the bmiColors member of the BITMAPINFO structure
 		/// was initialized - (use 0).</param>
 		/// <returns>Handle to a DIB or null on failure.</returns>
-		[DllImport("gdi32.dll")]
+		[DllImport(ExternDll.Gdi32)]
 		private static extern IntPtr CreateDIBitmap(
 			IntPtr hdc,
 			IntPtr lpbmih,
@@ -94,7 +94,7 @@ namespace FreeImageAPI
 		/// <param name="lpvObject">Pointer to a buffer that receives the information
 		/// about the specified graphics object.</param>
 		/// <returns>0 on failure.</returns>
-		[DllImport("gdi32.dll")]
+		[DllImport(ExternDll.Gdi32)]
 		private static extern int GetObject(IntPtr hgdiobj, int cbBuffer, IntPtr lpvObject);
 
 		/// <summary>
@@ -111,7 +111,7 @@ namespace FreeImageAPI
 		/// <param name="uUsage">Specifies the format of the bmiColors member of the
 		/// BITMAPINFO structure - (use 0).</param>
 		/// <returns>0 on failure.</returns>
-		[DllImport("gdi32.dll")]
+		[DllImport(ExternDll.Gdi32)]
 		private static extern unsafe int GetDIBits(
 			IntPtr hdc,
 			IntPtr hbmp,
@@ -127,7 +127,7 @@ namespace FreeImageAPI
 		/// <param name="dst">Pointer to the starting address of the move destination.</param>
 		/// <param name="src">Pointer to the starting address of the block of memory to be moved.</param>
 		/// <param name="size">Size of the block of memory to move, in bytes.</param>
-		[DllImport("Kernel32.dll", EntryPoint = "RtlMoveMemory", SetLastError = false)]
+		[DllImport(ExternDll.Kernel32, EntryPoint = "RtlMoveMemory", SetLastError = false)]
 		private static unsafe extern void MoveMemory(void* dst, void* src, uint size);
 
 		/// <summary>
@@ -139,8 +139,8 @@ namespace FreeImageAPI
 		/// <param name="count">Specifies the number of bytes to be compared.</param>
 		/// <returns>RtlCompareMemory returns the number of bytes that compare as equal.
 		/// If all bytes compare as equal, the input Length is returned.</returns>
-		[DllImport("ntdll.dll", EntryPoint = "RtlCompareMemory", SetLastError = false)]
+		[DllImport(ExternDll.Ntdll, EntryPoint = "RtlCompareMemory", SetLastError = false)]
 		private static unsafe extern uint RtlCompareMemory(void* buf1, void* buf2, uint count);
 	}
 }
-#endif
+//#endif
