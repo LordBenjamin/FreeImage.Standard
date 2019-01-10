@@ -43,6 +43,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using FreeImageAPI.IO;
 using FreeImageAPI.Metadata;
+using LibC = FreeImageAPI.NativeMethods.LibC;
+using Win32 = FreeImageAPI.NativeMethods.Win32;
 
 namespace FreeImageAPI
 {
@@ -168,11 +170,7 @@ namespace FreeImageAPI
 
         internal static Assembly GetAssembly(Type type)
         {
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
 			return Assembly.GetAssembly(type);
-#else
-            return type.GetTypeInfo().Assembly;
-#endif
         }
 
         /// <summary>
@@ -215,12 +213,10 @@ namespace FreeImageAPI
             {
                 throw new FreeImageException("FreeImage library not found", e);
             }
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
 			catch (EntryPointNotFoundException e)
 			{
 				throw new FreeImageException("FreeImage entry point not found", e);
 			}
-#endif
             catch (BadImageFormatException e)
             {
                 throw new FreeImageException("Incorrect FreeImage library format", e);
@@ -573,8 +569,6 @@ namespace FreeImageAPI
             }
         }
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
 		/// <summary>
 		/// Converts a FreeImage bitmap to a .NET <see cref="System.Drawing.Bitmap"/>.
 		/// </summary>
@@ -822,8 +816,6 @@ namespace FreeImageAPI
 			return result;
 		}
 
-#endif
-
         /// <summary>
         /// Converts a raw bitmap to a FreeImage bitmap.
         /// </summary>
@@ -931,8 +923,6 @@ namespace FreeImageAPI
             return dib;
         }
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
 		/// <summary>
 		/// Saves a .NET <see cref="System.Drawing.Bitmap"/> to a file.
 		/// </summary>
@@ -996,8 +986,6 @@ namespace FreeImageAPI
 			Unload(dib);
 			return result;
 		}
-
-#endif
 
         /// <summary>
         /// Loads a FreeImage bitmap.
@@ -1084,8 +1072,6 @@ namespace FreeImageAPI
             return dib;
         }
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
 		/// <summary>
 		/// Loads a .NET <see cref="System.Drawing.Bitmap"/> from a file.
 		/// </summary>
@@ -1105,8 +1091,6 @@ namespace FreeImageAPI
 			Unload(dib);
 			return result;
 		}
-
-#endif
 
         /// <summary>
         /// Deletes a previously loaded FreeImage bitmap from memory and resets the handle to 0.
@@ -2279,182 +2263,6 @@ namespace FreeImageAPI
 
         #endregion
 
-        #region Pixel access functions
-
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
-        /// <summary>
-        /// Retrieves an hBitmap for a FreeImage bitmap.
-        /// Call FreeHbitmap(IntPtr) to free the handle.
-        /// </summary>
-        /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        /// <param name="hdc">A reference device context.
-        /// Use IntPtr.Zero if no reference is available.</param>
-        /// <param name="unload">When true dib will be unloaded if the function succeeded.</param>
-        /// <returns>The hBitmap for the FreeImage bitmap.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="dib"/> is null.</exception>
-        public static unsafe IntPtr GetHbitmap(FIBITMAP dib, IntPtr hdc, bool unload)
-        {
-            if (dib.IsNull)
-            {
-                throw new ArgumentNullException("dib");
-            }
-            IntPtr hBitmap = IntPtr.Zero;
-            bool release = false;
-            IntPtr ppvBits = IntPtr.Zero;
-            // Check if we have destination
-            if (release = (hdc == IntPtr.Zero))
-            {
-                // We don't so request dc
-                hdc = GetDC(IntPtr.Zero);
-            }
-            if (hdc != IntPtr.Zero)
-            {
-                // Get pointer to the infoheader of the bitmap
-                IntPtr info = GetInfo(dib);
-                // Create a bitmap in the dc
-                hBitmap = CreateDIBSection(hdc, info, DIB_RGB_COLORS, out ppvBits, IntPtr.Zero, 0);
-                if (hBitmap != IntPtr.Zero && ppvBits != IntPtr.Zero)
-                {
-                    // Copy the data into the dc
-                    CopyMemory(ppvBits, GetBits(dib), (GetHeight(dib) * GetPitch(dib)));
-                    // Success: we unload the bitmap
-                    if (unload)
-                    {
-                        Unload(dib);
-                    }
-                }
-                // We have to release the dc
-                if (release)
-                {
-                    ReleaseDC(IntPtr.Zero, hdc);
-                }
-            }
-            return hBitmap;
-        }
-
-        /// <summary>
-        /// Returns an HBITMAP created by the <c>CreateDIBitmap()</c> function which in turn
-        /// has always the same color depth as the reference DC, which may be provided
-        /// through <paramref name="hdc"/>. The desktop DC will be used,
-        /// if <c>IntPtr.Zero</c> DC is specified.
-        /// Call <see cref="FreeImage.FreeHbitmap(IntPtr)"/> to free the handle.
-        /// </summary>
-        /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        /// <param name="hdc">Handle to a device context.</param>
-        /// <param name="unload">When true the structure will be unloaded on success.
-        /// If the function failed and returned false, the bitmap was not unloaded.</param>
-        /// <returns>If the function succeeds, the return value is a handle to the
-        /// compatible bitmap. If the function fails, the return value is <see cref="IntPtr.Zero"/>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="dib"/> is null.</exception>
-        public static IntPtr GetBitmapForDevice(FIBITMAP dib, IntPtr hdc, bool unload)
-        {
-            if (dib.IsNull)
-            {
-                throw new ArgumentNullException("dib");
-            }
-            IntPtr hbitmap = IntPtr.Zero;
-            bool release = false;
-            if (release = (hdc == IntPtr.Zero))
-            {
-                hdc = GetDC(IntPtr.Zero);
-            }
-            if (hdc != IntPtr.Zero)
-            {
-                hbitmap = CreateDIBitmap(
-                    hdc,
-                    GetInfoHeader(dib),
-                    CBM_INIT,
-                    GetBits(dib),
-                    GetInfo(dib),
-                    DIB_RGB_COLORS);
-                if (unload)
-                {
-                    Unload(dib);
-                }
-                if (release)
-                {
-                    ReleaseDC(IntPtr.Zero, hdc);
-                }
-            }
-            return hbitmap;
-        }
-
-        /// <summary>
-        /// Creates a FreeImage DIB from a Device Context/Compatible Bitmap.
-        /// </summary>
-        /// <param name="hbitmap">Handle to the bitmap.</param>
-        /// <param name="hdc">Handle to a device context.</param>
-        /// <returns>Handle to a FreeImage bitmap.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <paramref name="hbitmap"/> is null.</exception>
-        public unsafe static FIBITMAP CreateFromHbitmap(IntPtr hbitmap, IntPtr hdc)
-        {
-            if (hbitmap == IntPtr.Zero)
-            {
-                throw new ArgumentNullException("hbitmap");
-            }
-
-            FIBITMAP dib = new FIBITMAP();
-            BITMAP bm;
-            uint colors;
-            bool release;
-
-            if (GetObject(hbitmap, sizeof(BITMAP), (IntPtr)(&bm)) != 0)
-            {
-                dib = Allocate(bm.bmWidth, bm.bmHeight, bm.bmBitsPixel, 0, 0, 0);
-                if (!dib.IsNull)
-                {
-                    colors = GetColorsUsed(dib);
-                    if (release = (hdc == IntPtr.Zero))
-                    {
-                        hdc = GetDC(IntPtr.Zero);
-                    }
-                    if (GetDIBits(
-                        hdc,
-                        hbitmap,
-                        0,
-                        (uint)bm.bmHeight,
-                        GetBits(dib),
-                        GetInfo(dib),
-                        DIB_RGB_COLORS) != 0)
-                    {
-                        if (colors != 0)
-                        {
-                            BITMAPINFOHEADER* bmih = (BITMAPINFOHEADER*)GetInfo(dib);
-                            bmih[0].biClrImportant = bmih[0].biClrUsed = colors;
-                        }
-                    }
-                    else
-                    {
-                        UnloadEx(ref dib);
-                    }
-                    if (release)
-                    {
-                        ReleaseDC(IntPtr.Zero, hdc);
-                    }
-                }
-            }
-
-            return dib;
-        }
-
-        /// <summary>
-        /// Frees a bitmap handle.
-        /// </summary>
-        /// <param name="hbitmap">Handle to a bitmap.</param>
-        /// <returns>True on success, false on failure.</returns>
-        public static bool FreeHbitmap(IntPtr hbitmap)
-        {
-            return DeleteObject(hbitmap);
-        }
-        
-#endif
-
-        #endregion
-
         #region Bitmap information functions
 
         /// <summary>
@@ -2779,8 +2587,6 @@ namespace FreeImageAPI
             return result;
         }
 
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-
 		/// <summary>
 		/// Returns the <see cref="FREE_IMAGE_FORMAT"/> for the specified
 		/// <see cref="ImageFormat"/>.
@@ -2808,8 +2614,6 @@ namespace FreeImageAPI
 			}
 			return FREE_IMAGE_FORMAT.FIF_UNKNOWN;
 		}
-
-#endif
 
         /// <summary>
         /// Retrieves all parameters needed to create a new FreeImage bitmap from
@@ -4800,7 +4604,7 @@ namespace FreeImageAPI
         /// <returns>true, if all bytes compare as equal, false otherwise.</returns>
         public static unsafe bool CompareMemory(void* buf1, void* buf2, uint length)
         {
-            return (length == PlatformCompareMemory(buf1, buf2, length));
+            return PlatformCompareMemory(buf1, buf2, length);
         }
 
         /// <summary>
@@ -4812,7 +4616,7 @@ namespace FreeImageAPI
         /// <returns>true, if all bytes compare as equal, false otherwise.</returns>
         public static unsafe bool CompareMemory(void* buf1, void* buf2, long length)
         {
-            return (length == PlatformCompareMemory(buf1, buf2, checked((uint)length)));
+            return PlatformCompareMemory(buf1, buf2, checked((uint)length));
         }
 
         /// <summary>
@@ -4824,7 +4628,7 @@ namespace FreeImageAPI
         /// <returns>true, if all bytes compare as equal, false otherwise.</returns>
         public static unsafe bool CompareMemory(IntPtr buf1, IntPtr buf2, uint length)
         {
-            return (length == PlatformCompareMemory(buf1.ToPointer(), buf2.ToPointer(), length));
+            return PlatformCompareMemory(buf1.ToPointer(), buf2.ToPointer(), length);
         }
 
         /// <summary>
@@ -4836,40 +4640,7 @@ namespace FreeImageAPI
         /// <returns>true, if all bytes compare as equal, false otherwise.</returns>
         public static unsafe bool CompareMemory(IntPtr buf1, IntPtr buf2, long length)
         {
-            return (length == PlatformCompareMemory(buf1.ToPointer(), buf2.ToPointer(), checked((uint)length)));
-        }
-
-        /// <summary>
-        /// Moves a block of memory from one location to another.
-        /// </summary>
-        /// <param name="dst">A pointer to the starting address of the move destination.</param>
-        /// <param name="src">A pointer to the starting address of the block of memory to be moved.</param>
-        /// <param name="size">The size of the block of memory to move, in bytes.</param>
-        public static unsafe void MoveMemory(void* dst, void* src, long size)
-        {
-            MoveMemory(dst, src, checked((uint)size));
-        }
-
-        /// <summary>
-        /// Moves a block of memory from one location to another.
-        /// </summary>
-        /// <param name="dst">A pointer to the starting address of the move destination.</param>
-        /// <param name="src">A pointer to the starting address of the block of memory to be moved.</param>
-        /// <param name="size">The size of the block of memory to move, in bytes.</param>
-        public static unsafe void MoveMemory(IntPtr dst, IntPtr src, uint size)
-        {
-            MoveMemory(dst.ToPointer(), src.ToPointer(), size);
-        }
-
-        /// <summary>
-        /// Moves a block of memory from one location to another.
-        /// </summary>
-        /// <param name="dst">A pointer to the starting address of the move destination.</param>
-        /// <param name="src">A pointer to the starting address of the block of memory to be moved.</param>
-        /// <param name="size">The size of the block of memory to move, in bytes.</param>
-        public static unsafe void MoveMemory(IntPtr dst, IntPtr src, long size)
-        {
-            MoveMemory(dst.ToPointer(), src.ToPointer(), checked((uint)size));
+            return PlatformCompareMemory(buf1.ToPointer(), buf2.ToPointer(), checked((uint)length));
         }
 
         /// <summary>
@@ -5144,17 +4915,10 @@ namespace FreeImageAPI
 
         internal static string ColorToString(Color color)
         {
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
 			return string.Format(
 				System.Globalization.CultureInfo.CurrentCulture,
 				"{{Name={0}, ARGB=({1}, {2}, {3}, {4})}}",
 				new object[] { color.Name, color.A, color.R, color.G, color.B });
-#else
-            return string.Format(
-                System.Globalization.CultureInfo.CurrentCulture,
-                "{{ARGB=({0}, {1}, {2}, {3})}}",
-                new object[] { color.A, color.R, color.G, color.B });
-#endif
         }
 
         internal static void Resize(ref string str, int length)
@@ -5247,177 +5011,17 @@ namespace FreeImageAPI
 
         #endregion
 
-        #region Dll-Imports
-
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-        /// <summary>
-        /// Retrieves a handle to a display device context (DC) for the client area of a specified window
-        /// or for the entire screen. You can use the returned handle in subsequent GDI functions to draw in the DC.
-        /// </summary>
-        /// <param name="hWnd">Handle to the window whose DC is to be retrieved.
-        /// If this value is IntPtr.Zero, GetDC retrieves the DC for the entire screen. </param>
-        /// <returns>If the function succeeds, the return value is a handle to the DC for the specified window's client area.
-        /// If the function fails, the return value is NULL.</returns>
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetDC(IntPtr hWnd);
-
-        /// <summary>
-        /// Releases a device context (DC), freeing it for use by other applications.
-        /// The effect of the ReleaseDC function depends on the type of DC. It frees only common and window DCs.
-        /// It has no effect on class or private DCs.
-        /// </summary>
-        /// <param name="hWnd">Handle to the window whose DC is to be released.</param>
-        /// <param name="hDC">Handle to the DC to be released.</param>
-        /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport("user32.dll")]
-        private static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
-
-        /// <summary>
-        /// Creates a DIB that applications can write to directly.
-        /// The function gives you a pointer to the location of the bitmap bit values.
-        /// You can supply a handle to a file-mapping object that the function will use to create the bitmap,
-        /// or you can let the system allocate the memory for the bitmap.
-        /// </summary>
-        /// <param name="hdc">Handle to a device context.</param>
-        /// <param name="pbmi">Pointer to a BITMAPINFO structure that specifies various attributes of the DIB,
-        /// including the bitmap dimensions and colors.</param>
-        /// <param name="iUsage">Specifies the type of data contained in the bmiColors array member of the BITMAPINFO structure
-        /// pointed to by pbmi (either logical palette indexes or literal RGB values).</param>
-        /// <param name="ppvBits">Pointer to a variable that receives a pointer to the location of the DIB bit values.</param>
-        /// <param name="hSection">Handle to a file-mapping object that the function will use to create the DIB.
-        /// This parameter can be NULL.</param>
-        /// <param name="dwOffset">Specifies the offset from the beginning of the file-mapping object referenced by hSection
-        /// where storage for the bitmap bit values is to begin. This value is ignored if hSection is NULL.</param>
-        /// <returns>If the function succeeds, the return value is a handle to the newly created DIB,
-        /// and *ppvBits points to the bitmap bit values. If the function fails, the return value is NULL, and *ppvBits is NULL.</returns>
-        [DllImport("gdi32.dll")]
-        private static extern IntPtr CreateDIBSection(
-            IntPtr hdc,
-            [In] IntPtr pbmi,
-            uint iUsage,
-            out IntPtr ppvBits,
-            IntPtr hSection,
-            uint dwOffset);
-
-        /// <summary>
-        /// Deletes a logical pen, brush, font, bitmap, region, or palette, freeing all system resources associated with the object.
-        /// After the object is deleted, the specified handle is no longer valid.
-        /// </summary>
-        /// <param name="hObject">Handle to a logical pen, brush, font, bitmap, region, or palette.</param>
-        /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport("gdi32.dll")]
-        private static extern bool DeleteObject(IntPtr hObject);
-
-        /// <summary>
-        /// Creates a compatible bitmap (DDB) from a DIB and, optionally, sets the bitmap bits.
-        /// </summary>
-        /// <param name="hdc">Handle to a device context.</param>
-        /// <param name="lpbmih">Pointer to a bitmap information header structure.</param>
-        /// <param name="fdwInit">Specifies how the system initializes the bitmap bits - (use 4).</param>
-        /// <param name="lpbInit">Pointer to an array of bytes containing the initial bitmap data.</param>
-        /// <param name="lpbmi">Pointer to a BITMAPINFO structure that describes the dimensions
-        /// and color format of the array pointed to by the lpbInit parameter.</param>
-        /// <param name="fuUsage">Specifies whether the bmiColors member of the BITMAPINFO structure
-        /// was initialized - (use 0).</param>
-        /// <returns>Handle to a DIB or null on failure.</returns>
-        [DllImport("gdi32.dll")]
-        private static extern IntPtr CreateDIBitmap(
-            IntPtr hdc,
-            IntPtr lpbmih,
-            uint fdwInit,
-            IntPtr lpbInit,
-            IntPtr lpbmi,
-            uint fuUsage);
-
-        /// <summary>
-        /// Retrieves information for the specified graphics object.
-        /// </summary>
-        /// <param name="hgdiobj">Handle to the graphics object of interest.</param>
-        /// <param name="cbBuffer">Specifies the number of bytes of information to
-        /// be written to the buffer.</param>
-        /// <param name="lpvObject">Pointer to a buffer that receives the information
-        /// about the specified graphics object.</param>
-        /// <returns>0 on failure.</returns>
-        [DllImport("gdi32.dll")]
-        private static extern int GetObject(IntPtr hgdiobj, int cbBuffer, IntPtr lpvObject);
-
-        /// <summary>
-        /// Retrieves the bits of the specified compatible bitmap and copies them into a buffer
-        /// as a DIB using the specified format.
-        /// </summary>
-        /// <param name="hdc">Handle to the device context.</param>
-        /// <param name="hbmp">Handle to the bitmap. This must be a compatible bitmap (DDB).</param>
-        /// <param name="uStartScan">Specifies the first scan line to retrieve.</param>
-        /// <param name="cScanLines">Specifies the number of scan lines to retrieve.</param>
-        /// <param name="lpvBits">Pointer to a buffer to receive the bitmap data.</param>
-        /// <param name="lpbmi">Pointer to a BITMAPINFO structure that specifies the desired
-        /// format for the DIB data.</param>
-        /// <param name="uUsage">Specifies the format of the bmiColors member of the
-        /// BITMAPINFO structure - (use 0).</param>
-        /// <returns>0 on failure.</returns>
-        [DllImport("gdi32.dll")]
-        private static extern unsafe int GetDIBits(
-            IntPtr hdc,
-            IntPtr hbmp,
-            uint uStartScan,
-            uint cScanLines,
-            IntPtr lpvBits,
-            IntPtr lpbmi,
-            uint uUsage);
-
-        /// <summary>
-        /// Moves a block of memory from one location to another.
-        /// </summary>
-        /// <param name="dst">Pointer to the starting address of the move destination.</param>
-        /// <param name="src">Pointer to the starting address of the block of memory to be moved.</param>
-        /// <param name="size">Size of the block of memory to move, in bytes.</param>
-        [DllImport("Kernel32.dll", EntryPoint = "RtlMoveMemory", SetLastError = false)]
-        private static unsafe extern void MoveMemory(void* dst, void* src, uint size);
-#endif
-
-        private static unsafe uint PlatformCompareMemory(void* buf1, void* buf2, uint count)
+        private static unsafe bool PlatformCompareMemory(void* buf1, void* buf2, uint count)
         {
-            if (IsWindows)
-            {
-                return RtlCompareMemory(buf1, buf2, count);
+            if (IsWindows) {
+                return Win32.RtlCompareMemory(buf1, buf2, count) == count;
             }
-            else
+            else if(IsLinux)
             {
-                // TODO: there are probably builtin ways to do this in linux/mac...
-                // TODO: if not, there's probably a clever way of doing this as longs instead of byte by 
-                //       byte (count the bits not set when xor'ing each long?)
-
-                uint matching = 0;
-
-                byte* buf1Byte = (byte*)buf1;
-                byte* buf2Byte = (byte*)buf2;
-
-                byte* buf1ByteEnd = buf1Byte + count;
-
-                while (buf1Byte < buf1ByteEnd)
-                {
-                    if (*buf1Byte++ == *buf2Byte++)
-                    {
-                        matching += sizeof(byte);
-                    }
-                }
-
-                return matching;
+                return LibC.memcmp(buf1, buf2, count) == 0;
             }
+
+            return UnsafeHelpers.CompareMemory(buf1, buf2, count) == count;
         }
-
-        /// <summary>
-        /// The RtlCompareMemory routine compares blocks of memory
-        /// and returns the number of bytes that are equivalent.
-        /// </summary>
-        /// <param name="buf1">A pointer to a block of memory to compare.</param>
-        /// <param name="buf2">A pointer to a block of memory to compare.</param>
-        /// <param name="count">Specifies the number of bytes to be compared.</param>
-        /// <returns>RtlCompareMemory returns the number of bytes that compare as equal.
-        /// If all bytes compare as equal, the input Length is returned.</returns>
-        [DllImport("ntdll.dll", EntryPoint = "RtlCompareMemory", SetLastError = false)]
-        private static unsafe extern uint RtlCompareMemory(void* buf1, void* buf2, uint count);
-
-#endregion
     }
 }

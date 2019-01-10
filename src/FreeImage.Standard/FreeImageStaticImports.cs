@@ -42,21 +42,12 @@ namespace FreeImageAPI
 {
     public static partial class FreeImage
     {
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-        // this isn't really valid... could be Mono on another platform... how do we tell in this case?
-        public const bool IsWindows = true;
-#else
         public static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-#endif
+        public static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
 
         private static readonly bool SupportsUnicode = IsWindows;
 
         #region Constants
-
-        /// <summary>
-        /// Filename of the FreeImage library.
-        /// </summary>
-        private const string FreeImageLibrary = "FreeImage";
 
         /// <summary>
         /// Number of bytes to shift left within a 4 byte block.
@@ -193,13 +184,13 @@ namespace FreeImageAPI
         /// <param name="load_local_plugins_only">
         /// When the <paramref name="load_local_plugins_only"/> is true, FreeImage won't make use of external plugins.
         /// </param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Initialise")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Initialise")]
         private static extern void Initialise(bool load_local_plugins_only);
 
         /// <summary>
         /// Deinitialises the library.
         /// </summary>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_DeInitialise")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_DeInitialise")]
         private static extern void DeInitialise();
 
         /// <summary>
@@ -207,7 +198,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <returns>The current version of the library.</returns>
         public static unsafe string GetVersion() { return PtrToStr(GetVersion_()); }
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetVersion")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetVersion")]
         private static unsafe extern byte* GetVersion_();
 
         /// <summary>
@@ -215,7 +206,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <returns>A standard copyright message.</returns>
         public static unsafe string GetCopyrightMessage() { return PtrToStr(GetCopyrightMessage_()); }
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetCopyrightMessage")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetCopyrightMessage")]
         private static unsafe extern byte* GetCopyrightMessage_();
 
         /// <summary>
@@ -223,7 +214,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">Format of the bitmaps.</param>
         /// <param name="message">The error message.</param>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_OutputMessageProc")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_OutputMessageProc")]
         public static extern void OutputMessageProc(FREE_IMAGE_FORMAT fif, string message);
 
         /// <summary>
@@ -235,7 +226,7 @@ namespace FreeImageAPI
         /// callback function. To use the callback use the <see cref="FreeImageEngine.Message"/>
         /// event of this class.</remarks>
         /// <param name="omf">Handler to the callback function.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetOutputMessage")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetOutputMessage")]
         internal static extern void SetOutputMessage(OutputMessageFunction omf);
 
         #endregion
@@ -256,7 +247,7 @@ namespace FreeImageAPI
         /// <param name="blue_mask">Blue part of the color layout.
         /// eg: 0x0000FF</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Allocate")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Allocate")]
         public static extern FIBITMAP Allocate(int width, int height, int bpp,
             uint red_mask, uint green_mask, uint blue_mask);
 
@@ -275,16 +266,16 @@ namespace FreeImageAPI
         /// <param name="blue_mask">Blue part of the color layout.
         /// eg: 0x0000FF</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AllocateT")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AllocateT")]
         public static extern FIBITMAP AllocateT(FREE_IMAGE_TYPE type, int width, int height, int bpp,
             uint red_mask, uint green_mask, uint blue_mask);
 
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AllocateEx")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AllocateEx")]
         internal static extern FIBITMAP AllocateEx(int width, int height, int bpp,
             IntPtr color, FREE_IMAGE_COLOR_OPTIONS options, RGBQUAD[] palette,
             uint red_mask, uint green_mask, uint blue_mask);
 
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AllocateExT")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AllocateExT")]
         internal static extern FIBITMAP AllocateExT(FREE_IMAGE_TYPE type, int width, int height, int bpp,
             IntPtr color, FREE_IMAGE_COLOR_OPTIONS options, RGBQUAD[] palette,
             uint red_mask, uint green_mask, uint blue_mask);
@@ -294,14 +285,14 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Clone")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Clone")]
         public static extern FIBITMAP Clone(FIBITMAP dib);
 
         /// <summary>
         /// Deletes a previously loaded FIBITMAP from memory.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Unload")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Unload")]
         public static extern void Unload(FIBITMAP dib);
 
         /// <summary>
@@ -330,7 +321,7 @@ namespace FreeImageAPI
         /// <param name="filename">Name of the file to decode.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_Load")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_Load")]
         private static extern FIBITMAP LoadA(FREE_IMAGE_FORMAT fif, string filename, FREE_IMAGE_LOAD_FLAGS flags);
 
         /// <summary>
@@ -341,7 +332,7 @@ namespace FreeImageAPI
         /// <param name="filename">Name of the file to decode.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_LoadU")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_LoadU")]
         private static extern FIBITMAP LoadU(FREE_IMAGE_FORMAT fif, string filename, FREE_IMAGE_LOAD_FLAGS flags);
 
         /// <summary>
@@ -352,7 +343,7 @@ namespace FreeImageAPI
         /// <param name="handle">A handle to the source.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_LoadFromHandle")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_LoadFromHandle")]
         public static extern FIBITMAP LoadFromHandle(FREE_IMAGE_FORMAT fif, ref FreeImageIO io, fi_handle handle, FREE_IMAGE_LOAD_FLAGS flags);
 
         /// <summary>
@@ -383,7 +374,7 @@ namespace FreeImageAPI
         /// <param name="filename">Name of the file to save to.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_Save")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_Save")]
         private static extern bool SaveA(FREE_IMAGE_FORMAT fif, FIBITMAP dib, string filename, FREE_IMAGE_SAVE_FLAGS flags);
 
         /// <summary>
@@ -395,7 +386,7 @@ namespace FreeImageAPI
         /// <param name="filename">Name of the file to save to.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_SaveU")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_SaveU")]
         private static extern bool SaveU(FREE_IMAGE_FORMAT fif, FIBITMAP dib, string filename, FREE_IMAGE_SAVE_FLAGS flags);
 
         /// <summary>
@@ -407,7 +398,7 @@ namespace FreeImageAPI
         /// <param name="handle">A handle to the source.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SaveToHandle")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SaveToHandle")]
         public static extern bool SaveToHandle(FREE_IMAGE_FORMAT fif, FIBITMAP dib, ref FreeImageIO io, fi_handle handle,
             FREE_IMAGE_SAVE_FLAGS flags);
 
@@ -421,17 +412,17 @@ namespace FreeImageAPI
         /// <param name="data">Pointer to the data in memory.</param>
         /// <param name="size_in_bytes">Length of the data in byte.</param>
         /// <returns>Handle to a memory stream.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_OpenMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_OpenMemory")]
         public static extern FIMEMORY OpenMemory(IntPtr data, uint size_in_bytes);
 
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_OpenMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_OpenMemory")]
         internal static extern FIMEMORY OpenMemoryEx(byte[] data, uint size_in_bytes);
 
         /// <summary>
         /// Close and free a memory stream.
         /// </summary>
         /// <param name="stream">Handle to a memory stream.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_CloseMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_CloseMemory")]
         public static extern void CloseMemory(FIMEMORY stream);
 
         /// <summary>
@@ -441,7 +432,7 @@ namespace FreeImageAPI
         /// <param name="stream">Handle to a memory stream.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_LoadFromMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_LoadFromMemory")]
         public static extern FIBITMAP LoadFromMemory(FREE_IMAGE_FORMAT fif, FIMEMORY stream, FREE_IMAGE_LOAD_FLAGS flags);
 
         /// <summary>
@@ -452,7 +443,7 @@ namespace FreeImageAPI
         /// <param name="stream">Handle to a memory stream.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SaveToMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SaveToMemory")]
         public static extern bool SaveToMemory(FREE_IMAGE_FORMAT fif, FIBITMAP dib, FIMEMORY stream, FREE_IMAGE_SAVE_FLAGS flags);
 
         /// <summary>
@@ -460,7 +451,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="stream">Handle to a memory stream.</param>
         /// <returns>The current file position if successful, -1 otherwise.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_TellMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_TellMemory")]
         public static extern int TellMemory(FIMEMORY stream);
 
         /// <summary>
@@ -470,7 +461,7 @@ namespace FreeImageAPI
         /// <param name="offset">Number of bytes from origin.</param>
         /// <param name="origin">Initial position.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SeekMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SeekMemory")]
         public static extern bool SeekMemory(FIMEMORY stream, int offset, System.IO.SeekOrigin origin);
 
         /// <summary>
@@ -480,7 +471,7 @@ namespace FreeImageAPI
         /// <param name="data">Pointer to the data in memory.</param>
         /// <param name="size_in_bytes">Size of the data in bytes.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AcquireMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AcquireMemory")]
         public static extern bool AcquireMemory(FIMEMORY stream, ref IntPtr data, ref uint size_in_bytes);
 
         /// <summary>
@@ -493,7 +484,7 @@ namespace FreeImageAPI
         /// The memory pointer associated with stream is increased by the number of bytes actually read.</param>
         /// <returns>The number of full items actually read.
         /// May be less than count on error or stream-end.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ReadMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ReadMemory")]
         public static extern uint ReadMemory(byte[] buffer, uint size, uint count, FIMEMORY stream);
 
         /// <summary>
@@ -506,7 +497,7 @@ namespace FreeImageAPI
         /// The memory pointer associated with stream is increased by the number of bytes actually written.</param>
         /// <returns>The number of full items actually written.
         /// May be less than count on error or stream-end.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_WriteMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_WriteMemory")]
         public static extern uint WriteMemory(byte[] buffer, uint size, uint count, FIMEMORY stream);
 
         /// <summary>
@@ -516,7 +507,7 @@ namespace FreeImageAPI
         /// <param name="stream">The stream to decode.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Handle to a FreeImage multi-paged bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_LoadMultiBitmapFromMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_LoadMultiBitmapFromMemory")]
         public static extern FIMULTIBITMAP LoadMultiBitmapFromMemory(FREE_IMAGE_FORMAT fif, FIMEMORY stream, FREE_IMAGE_LOAD_FLAGS flags);
 
         #endregion
@@ -532,7 +523,7 @@ namespace FreeImageAPI
         /// <param name="extension">A string witha comma sperated list of extensions. f.e: "pl,pl2,pl4"</param>
         /// <param name="regexpr">A regular expression used to identify the bitmap.</param>
         /// <returns>The format idientifier assigned by FreeImage.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_RegisterLocalPlugin")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_RegisterLocalPlugin")]
         public static extern FREE_IMAGE_FORMAT RegisterLocalPlugin(InitProc proc_address,
             string format, string description, string extension, string regexpr);
 
@@ -546,7 +537,7 @@ namespace FreeImageAPI
         /// <param name="extension">A string witha comma sperated list of extensions. f.e: "pl,pl2,pl4"</param>
         /// <param name="regexpr">A regular expression used to identify the bitmap.</param>
         /// <returns>The format idientifier assigned by FreeImage.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_RegisterExternalPlugin")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_RegisterExternalPlugin")]
         public static extern FREE_IMAGE_FORMAT RegisterExternalPlugin(string path,
             string format, string description, string extension, string regexpr);
 
@@ -554,7 +545,7 @@ namespace FreeImageAPI
         /// Retrieves the number of FREE_IMAGE_FORMAT identifiers being currently registered.
         /// </summary>
         /// <returns>The number of registered formats.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetFIFCount")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFIFCount")]
         public static extern int GetFIFCount();
 
         /// <summary>
@@ -564,7 +555,7 @@ namespace FreeImageAPI
         /// <param name="enable">True: enable the plugin. false: disable the plugin.</param>
         /// <returns>The previous state of the plugin.
         /// 1 - enabled. 0 - disables. -1 plugin does not exist.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetPluginEnabled")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetPluginEnabled")]
         public static extern int SetPluginEnabled(FREE_IMAGE_FORMAT fif, bool enable);
 
         /// <summary>
@@ -572,7 +563,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">The plugin to check.</param>
         /// <returns>1 - enabled. 0 - disables. -1 plugin does not exist.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_IsPluginEnabled")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_IsPluginEnabled")]
         public static extern int IsPluginEnabled(FREE_IMAGE_FORMAT fif);
 
         /// <summary>
@@ -580,7 +571,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="format">The string that was used to register the plugin.</param>
         /// <returns>A <see cref="FREE_IMAGE_FORMAT"/> identifier from the format.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetFIFFromFormat")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetFIFFromFormat")]
         public static extern FREE_IMAGE_FORMAT GetFIFFromFormat(string format);
 
         /// <summary>
@@ -589,7 +580,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="mime">A MIME content type.</param>
         /// <returns>A <see cref="FREE_IMAGE_FORMAT"/> identifier from the MIME.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetFIFFromMime")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetFIFFromMime")]
         public static extern FREE_IMAGE_FORMAT GetFIFFromMime(string mime);
 
         /// <summary>
@@ -598,7 +589,7 @@ namespace FreeImageAPI
         /// <param name="fif">The assigned <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>The string that was used to register the plugin.</returns>
         public static unsafe string GetFormatFromFIF(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFormatFromFIF_(fif)); }
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetFormatFromFIF")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFormatFromFIF")]
         private static unsafe extern byte* GetFormatFromFIF_(FREE_IMAGE_FORMAT fif);
 
         /// <summary>
@@ -607,7 +598,7 @@ namespace FreeImageAPI
         /// <param name="fif">The desired <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>A comma-delimited file extension list.</returns>
         public static unsafe string GetFIFExtensionList(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFIFExtensionList_(fif)); }
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetFIFExtensionList")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFIFExtensionList")]
         private static unsafe extern byte* GetFIFExtensionList_(FREE_IMAGE_FORMAT fif);
 
         /// <summary>
@@ -616,7 +607,7 @@ namespace FreeImageAPI
         /// <param name="fif">The desired <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>A descriptive string that describes the bitmap formats.</returns>
         public static unsafe string GetFIFDescription(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFIFDescription_(fif)); }
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetFIFDescription")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFIFDescription")]
         private static unsafe extern byte* GetFIFDescription_(FREE_IMAGE_FORMAT fif);
 
         /// <summary>
@@ -626,7 +617,7 @@ namespace FreeImageAPI
         /// <param name="fif">The desired <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>A regular expression string.</returns>
         public static unsafe string GetFIFRegExpr(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFIFRegExpr_(fif)); }
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetFIFRegExpr")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFIFRegExpr")]
         private static unsafe extern byte* GetFIFRegExpr_(FREE_IMAGE_FORMAT fif);
 
         /// <summary>
@@ -635,7 +626,7 @@ namespace FreeImageAPI
         /// <param name="fif">The desired <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>A MIME content type string.</returns>
         public static unsafe string GetFIFMimeType(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFIFMimeType_(fif)); }
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetFIFMimeType")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFIFMimeType")]
         private static unsafe extern byte* GetFIFMimeType_(FREE_IMAGE_FORMAT fif);
 
         /// <summary>
@@ -662,7 +653,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="filename">The filename or -extension.</param>
         /// <returns>The <see cref="FREE_IMAGE_FORMAT"/> of the plugin.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetFIFFromFilename")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetFIFFromFilename")]
         private static extern FREE_IMAGE_FORMAT GetFIFFromFilenameA(string filename);
 
         /// <summary>
@@ -672,7 +663,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="filename">The filename or -extension.</param>
         /// <returns>The <see cref="FREE_IMAGE_FORMAT"/> of the plugin.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_GetFIFFromFilenameU")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_GetFIFFromFilenameU")]
         private static extern FREE_IMAGE_FORMAT GetFIFFromFilenameU(string filename);
 
         /// <summary>
@@ -680,7 +671,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">The <see cref="FREE_IMAGE_FORMAT"/> of the plugin.</param>
         /// <returns>True if the plugin can load bitmaps, else false.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FIFSupportsReading")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FIFSupportsReading")]
         public static extern bool FIFSupportsReading(FREE_IMAGE_FORMAT fif);
 
         /// <summary>
@@ -688,7 +679,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">The <see cref="FREE_IMAGE_FORMAT"/> of the plugin.</param>
         /// <returns>True if the plugin can save bitmaps, else false.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FIFSupportsWriting")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FIFSupportsWriting")]
         public static extern bool FIFSupportsWriting(FREE_IMAGE_FORMAT fif);
 
         /// <summary>
@@ -697,7 +688,7 @@ namespace FreeImageAPI
         /// <param name="fif">The <see cref="FREE_IMAGE_FORMAT"/> of the plugin.</param>
         /// <param name="bpp">The desired bit depth.</param>
         /// <returns>True if the plugin can save bitmaps in the desired bit depth, else false.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FIFSupportsExportBPP")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FIFSupportsExportBPP")]
         public static extern bool FIFSupportsExportBPP(FREE_IMAGE_FORMAT fif, int bpp);
 
         /// <summary>
@@ -706,7 +697,7 @@ namespace FreeImageAPI
         /// <param name="fif">The <see cref="FREE_IMAGE_FORMAT"/> of the plugin.</param>
         /// <param name="type">The desired image type.</param>
         /// <returns>True if the plugin can save bitmaps as the desired type, else false.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FIFSupportsExportType")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FIFSupportsExportType")]
         public static extern bool FIFSupportsExportType(FREE_IMAGE_FORMAT fif, FREE_IMAGE_TYPE type);
 
         /// <summary>
@@ -714,7 +705,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">The <see cref="FREE_IMAGE_FORMAT"/> of the plugin.</param>
         /// <returns>True if the plugin can load or save an ICC profile, else false.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FIFSupportsICCProfiles")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FIFSupportsICCProfiles")]
         public static extern bool FIFSupportsICCProfiles(FREE_IMAGE_FORMAT fif);
 
         #endregion
@@ -732,7 +723,7 @@ namespace FreeImageAPI
         /// <param name="keep_cache_in_memory">When true performance is increased at the cost of memory.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Handle to a FreeImage multi-paged bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_OpenMultiBitmap")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_OpenMultiBitmap")]
         public static extern FIMULTIBITMAP OpenMultiBitmap(FREE_IMAGE_FORMAT fif, string filename, bool create_new,
             bool read_only, bool keep_cache_in_memory, FREE_IMAGE_LOAD_FLAGS flags);
 
@@ -746,7 +737,7 @@ namespace FreeImageAPI
         /// <param name="handle">The handle to load the bitmap from.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Handle to a FreeImage multi-paged bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_OpenMultiBitmapFromHandle")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_OpenMultiBitmapFromHandle")]
         public static extern FIMULTIBITMAP OpenMultiBitmapFromHandle(FREE_IMAGE_FORMAT fif, ref FreeImageIO io,
             fi_handle handle, FREE_IMAGE_LOAD_FLAGS flags);
 
@@ -756,7 +747,7 @@ namespace FreeImageAPI
         /// <param name="bitmap">Handle to a FreeImage multi-paged bitmap.</param>
         /// <param name="flags">Flags to enable or disable plugin-features.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_CloseMultiBitmap")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_CloseMultiBitmap")]
         private static extern bool CloseMultiBitmap_(FIMULTIBITMAP bitmap, FREE_IMAGE_SAVE_FLAGS flags);
 
         /// <summary>
@@ -764,7 +755,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="bitmap">Handle to a FreeImage multi-paged bitmap.</param>
         /// <returns>Number of pages.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetPageCount")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetPageCount")]
         public static extern int GetPageCount(FIMULTIBITMAP bitmap);
 
         /// <summary>
@@ -772,7 +763,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="bitmap">Handle to a FreeImage multi-paged bitmap.</param>
         /// <param name="data">Handle to a FreeImage bitmap.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AppendPage")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AppendPage")]
         public static extern void AppendPage(FIMULTIBITMAP bitmap, FIBITMAP data);
 
         /// <summary>
@@ -781,7 +772,7 @@ namespace FreeImageAPI
         /// <param name="bitmap">Handle to a FreeImage multi-paged bitmap.</param>
         /// <param name="page">Page has to be a number smaller than the current number of pages available in the bitmap.</param>
         /// <param name="data">Handle to a FreeImage bitmap.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_InsertPage")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_InsertPage")]
         public static extern void InsertPage(FIMULTIBITMAP bitmap, int page, FIBITMAP data);
 
         /// <summary>
@@ -789,7 +780,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="bitmap">Handle to a FreeImage multi-paged bitmap.</param>
         /// <param name="page">Number of the page to delete.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_DeletePage")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_DeletePage")]
         public static extern void DeletePage(FIMULTIBITMAP bitmap, int page);
 
         /// <summary>
@@ -798,7 +789,7 @@ namespace FreeImageAPI
         /// <param name="bitmap">Handle to a FreeImage multi-paged bitmap.</param>
         /// <param name="page">Number of the page to lock.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_LockPage")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_LockPage")]
         public static extern FIBITMAP LockPage(FIMULTIBITMAP bitmap, int page);
 
         /// <summary>
@@ -807,7 +798,7 @@ namespace FreeImageAPI
         /// <param name="bitmap">Handle to a FreeImage multi-paged bitmap.</param>
         /// <param name="data">Handle to a FreeImage bitmap.</param>
         /// <param name="changed">If true, the page is applied to the multi-page bitmap.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_UnlockPage")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_UnlockPage")]
         public static extern void UnlockPage(FIMULTIBITMAP bitmap, FIBITMAP data, bool changed);
 
         /// <summary>
@@ -817,7 +808,7 @@ namespace FreeImageAPI
         /// <param name="target">New position of the page.</param>
         /// <param name="source">Old position of the page.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_MovePage")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_MovePage")]
         public static extern bool MovePage(FIMULTIBITMAP bitmap, int target, int source);
 
         /// <summary>
@@ -838,7 +829,7 @@ namespace FreeImageAPI
         /// If set to null, count will contain the number of pages.</param>
         /// <param name="count">If <paramref name="pages"/> is set to null count will contain the number of locked pages.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetLockedPageNumbers")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetLockedPageNumbers")]
         public static extern bool GetLockedPageNumbers(FIMULTIBITMAP bitmap, int[] pages, ref int count);
 
         #endregion
@@ -869,7 +860,7 @@ namespace FreeImageAPI
         /// <param name="filename">Name of the file to analyze.</param>
         /// <param name="size">Reserved parameter - use 0.</param>
         /// <returns>Type of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetFileType")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetFileType")]
         private static extern FREE_IMAGE_FORMAT GetFileTypeA(string filename, int size);
 
         /// <summary>
@@ -879,7 +870,7 @@ namespace FreeImageAPI
         /// <param name="filename">Name of the file to analyze.</param>
         /// <param name="size">Reserved parameter - use 0.</param>
         /// <returns>Type of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_GetFileTypeU")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_GetFileTypeU")]
         private static extern FREE_IMAGE_FORMAT GetFileTypeU(string filename, int size);
 
         /// <summary>
@@ -890,7 +881,7 @@ namespace FreeImageAPI
         /// <param name="handle">A handle to the source.</param>
         /// <param name="size">Size in bytes of the source.</param>
         /// <returns>Type of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetFileTypeFromHandle")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFileTypeFromHandle")]
         public static extern FREE_IMAGE_FORMAT GetFileTypeFromHandle(ref FreeImageIO io, fi_handle handle, int size);
 
         /// <summary>
@@ -899,7 +890,7 @@ namespace FreeImageAPI
         /// <param name="stream">Pointer to the stream.</param>
         /// <param name="size">Size in bytes of the source.</param>
         /// <returns>Type of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetFileTypeFromMemory")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFileTypeFromMemory")]
         public static extern FREE_IMAGE_FORMAT GetFileTypeFromMemory(FIMEMORY stream, int size);
 
         #endregion
@@ -910,7 +901,7 @@ namespace FreeImageAPI
         /// Returns whether the platform is using Little Endian.
         /// </summary>
         /// <returns>Returns true if the platform is using Litte Endian, else false.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_IsLittleEndian")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_IsLittleEndian")]
         public static extern bool IsLittleEndian();
 
         /// <summary>
@@ -921,7 +912,7 @@ namespace FreeImageAPI
         /// <param name="nGreen">Green component.</param>
         /// <param name="nBlue">Blue component.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_LookupX11Color")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_LookupX11Color")]
         public static extern bool LookupX11Color(string szColor, out byte nRed, out byte nGreen, out byte nBlue);
 
         /// <summary>
@@ -932,7 +923,7 @@ namespace FreeImageAPI
         /// <param name="nGreen">Green component.</param>
         /// <param name="nBlue">Blue component.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_LookupSVGColor")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_LookupSVGColor")]
         public static extern bool LookupSVGColor(string szColor, out byte nRed, out byte nGreen, out byte nBlue);
 
         #endregion
@@ -944,7 +935,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Pointer to the data-bits.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetBits")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetBits")]
         public static extern IntPtr GetBits(FIBITMAP dib);
 
         /// <summary>
@@ -953,7 +944,7 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="scanline">Number of the scanline.</param>
         /// <returns>Pointer to the scanline.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetScanLine")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetScanLine")]
         public static extern IntPtr GetScanLine(FIBITMAP dib, int scanline);
 
         /// <summary>
@@ -964,7 +955,7 @@ namespace FreeImageAPI
         /// <param name="y">Pixel position in vertical direction.</param>
         /// <param name="value">The pixel index.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetPixelIndex")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetPixelIndex")]
         public static extern bool GetPixelIndex(FIBITMAP dib, uint x, uint y, out byte value);
 
         /// <summary>
@@ -975,7 +966,7 @@ namespace FreeImageAPI
         /// <param name="y">Pixel position in vertical direction.</param>
         /// <param name="value">The pixel color.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetPixelColor")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetPixelColor")]
         public static extern bool GetPixelColor(FIBITMAP dib, uint x, uint y, out RGBQUAD value);
 
         /// <summary>
@@ -986,7 +977,7 @@ namespace FreeImageAPI
         /// <param name="y">Pixel position in vertical direction.</param>
         /// <param name="value">The new pixel index.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetPixelIndex")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetPixelIndex")]
         public static extern bool SetPixelIndex(FIBITMAP dib, uint x, uint y, ref byte value);
 
         /// <summary>
@@ -997,7 +988,7 @@ namespace FreeImageAPI
         /// <param name="y">Pixel position in vertical direction.</param>
         /// <param name="value">The new pixel color.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetPixelColor")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetPixelColor")]
         public static extern bool SetPixelColor(FIBITMAP dib, uint x, uint y, ref RGBQUAD value);
 
         #endregion
@@ -1009,7 +1000,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Type of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetImageType")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetImageType")]
         public static extern FREE_IMAGE_TYPE GetImageType(FIBITMAP dib);
 
         /// <summary>
@@ -1017,7 +1008,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Palette-size for palletised bitmaps, and 0 for high-colour bitmaps.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetColorsUsed")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetColorsUsed")]
         public static extern uint GetColorsUsed(FIBITMAP dib);
 
         /// <summary>
@@ -1025,7 +1016,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Size of one pixel in the bitmap in bits.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetBPP")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetBPP")]
         public static extern uint GetBPP(FIBITMAP dib);
 
         /// <summary>
@@ -1033,7 +1024,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>With of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetWidth")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetWidth")]
         public static extern uint GetWidth(FIBITMAP dib);
 
         /// <summary>
@@ -1041,7 +1032,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Height of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetHeight")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetHeight")]
         public static extern uint GetHeight(FIBITMAP dib);
 
         /// <summary>
@@ -1049,7 +1040,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>With of the bitmap in bytes.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetLine")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetLine")]
         public static extern uint GetLine(FIBITMAP dib);
 
         /// <summary>
@@ -1058,7 +1049,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>With of the bitmap in bytes.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetPitch")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetPitch")]
         public static extern uint GetPitch(FIBITMAP dib);
 
         /// <summary>
@@ -1066,7 +1057,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Size of the DIB-element</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetDIBSize")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetDIBSize")]
         public static extern uint GetDIBSize(FIBITMAP dib);
 
         /// <summary>
@@ -1074,7 +1065,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Pointer to the bitmap's palette.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetPalette")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetPalette")]
         public static extern IntPtr GetPalette(FIBITMAP dib);
 
         /// <summary>
@@ -1082,7 +1073,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>The horizontal resolution, in pixels-per-meter.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetDotsPerMeterX")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetDotsPerMeterX")]
         public static extern uint GetDotsPerMeterX(FIBITMAP dib);
 
         /// <summary>
@@ -1090,7 +1081,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>The vertical resolution, in pixels-per-meter.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetDotsPerMeterY")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetDotsPerMeterY")]
         public static extern uint GetDotsPerMeterY(FIBITMAP dib);
 
         /// <summary>
@@ -1098,7 +1089,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="res">The new horizontal resolution.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetDotsPerMeterX")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetDotsPerMeterX")]
         public static extern void SetDotsPerMeterX(FIBITMAP dib, uint res);
 
         /// <summary>
@@ -1106,7 +1097,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="res">The new vertical resolution.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetDotsPerMeterY")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetDotsPerMeterY")]
         public static extern void SetDotsPerMeterY(FIBITMAP dib, uint res);
 
         /// <summary>
@@ -1114,7 +1105,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Poiter to the header of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetInfoHeader")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetInfoHeader")]
         public static extern IntPtr GetInfoHeader(FIBITMAP dib);
 
         /// <summary>
@@ -1123,7 +1114,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Pointer to the <see cref="BITMAPINFO"/> structure for the bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetInfo")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetInfo")]
         public static extern IntPtr GetInfo(FIBITMAP dib);
 
         /// <summary>
@@ -1131,7 +1122,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>The color type of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetColorType")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetColorType")]
         public static extern FREE_IMAGE_COLOR_TYPE GetColorType(FIBITMAP dib);
 
         /// <summary>
@@ -1139,7 +1130,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>The bit pattern for RED.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetRedMask")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetRedMask")]
         public static extern uint GetRedMask(FIBITMAP dib);
 
         /// <summary>
@@ -1147,7 +1138,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>The bit pattern for green.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetGreenMask")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetGreenMask")]
         public static extern uint GetGreenMask(FIBITMAP dib);
 
         /// <summary>
@@ -1155,7 +1146,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>The bit pattern for blue.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetBlueMask")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetBlueMask")]
         public static extern uint GetBlueMask(FIBITMAP dib);
 
         /// <summary>
@@ -1163,7 +1154,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>The number of transparent colors in a palletised bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetTransparencyCount")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetTransparencyCount")]
         public static extern uint GetTransparencyCount(FIBITMAP dib);
 
         /// <summary>
@@ -1171,7 +1162,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Pointer to the bitmap's transparency table.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetTransparencyTable")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetTransparencyTable")]
         public static extern IntPtr GetTransparencyTable(FIBITMAP dib);
 
         /// <summary>
@@ -1180,7 +1171,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="enabled">True to enable the transparency, false to disable.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetTransparent")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetTransparent")]
         public static extern void SetTransparent(FIBITMAP dib, bool enabled);
 
         /// <summary>
@@ -1189,7 +1180,7 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="table">Pointer to the bitmap's new transparency table.</param>
         /// <param name="count">The number of transparent colors in the new transparency table.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetTransparencyTable")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetTransparencyTable")]
         internal static extern void SetTransparencyTable(FIBITMAP dib, byte[] table, int count);
 
         /// <summary>
@@ -1198,7 +1189,7 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Returns true when the transparency table is enabled (1-, 4- or 8-bit images)
         /// or when the input dib contains alpha values (32-bit images). Returns false otherwise.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_IsTransparent")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_IsTransparent")]
         public static extern bool IsTransparent(FIBITMAP dib);
 
         /// <summary>
@@ -1206,7 +1197,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Returns true when the image has a file background color, false otherwise.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_HasBackgroundColor")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_HasBackgroundColor")]
         public static extern bool HasBackgroundColor(FIBITMAP dib);
 
         /// <summary>
@@ -1217,7 +1208,7 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="bkcolor">The background color.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetBackgroundColor")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetBackgroundColor")]
         public static extern bool GetBackgroundColor(FIBITMAP dib, out RGBQUAD bkcolor);
 
         /// <summary>
@@ -1227,7 +1218,7 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="bkcolor">The new background color.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetBackgroundColor")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetBackgroundColor")]
         public static unsafe extern bool SetBackgroundColor(FIBITMAP dib, ref RGBQUAD bkcolor);
 
         /// <summary>
@@ -1257,7 +1248,7 @@ namespace FreeImageAPI
         /// FreeImage.SetBackgroundColor(dib, null);
         /// </code>
         /// </example>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetBackgroundColor")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetBackgroundColor")]
         public static unsafe extern bool SetBackgroundColor(FIBITMAP dib, RGBQUAD[] bkcolor);
 
         /// <summary>
@@ -1266,7 +1257,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="index">The index of the palette entry to be set as transparent color.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetTransparentIndex")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetTransparentIndex")]
         public static extern void SetTransparentIndex(FIBITMAP dib, int index);
 
         /// <summary>
@@ -1278,7 +1269,7 @@ namespace FreeImageAPI
         /// <returns>the index of the palette entry used as transparent color for
         /// the image specified or -1 if there is no transparent color found
         /// (e.g. the image is a high color image).</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetTransparentIndex")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetTransparentIndex")]
         public static extern int GetTransparentIndex(FIBITMAP dib);
 
         #endregion
@@ -1299,7 +1290,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Pointer to the <see cref="FIICCPROFILE"/> data of the bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetICCProfile")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetICCProfile")]
         public static extern IntPtr GetICCProfile(FIBITMAP dib);
 
         /// <summary>
@@ -1310,7 +1301,7 @@ namespace FreeImageAPI
         /// <param name="data">Pointer to the new <see cref="FIICCPROFILE"/> data.</param>
         /// <param name="size">Size of the <see cref="FIICCPROFILE"/> data.</param>
         /// <returns>Pointer to the created <see cref="FIICCPROFILE"/> structure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_CreateICCProfile")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_CreateICCProfile")]
         public static extern IntPtr CreateICCProfile(FIBITMAP dib, byte[] data, int size);
 
         /// <summary>
@@ -1319,7 +1310,7 @@ namespace FreeImageAPI
         /// This function should be called to ensure that a stored bitmap will not contain any profile information.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_DestroyICCProfile")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_DestroyICCProfile")]
         public static extern void DestroyICCProfile(FIBITMAP dib);
 
         #endregion
@@ -1334,7 +1325,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertTo4Bits")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertTo4Bits")]
         public static extern FIBITMAP ConvertTo4Bits(FIBITMAP dib);
 
         /// <summary>
@@ -1344,7 +1335,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertTo8Bits")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertTo8Bits")]
         public static extern FIBITMAP ConvertTo8Bits(FIBITMAP dib);
 
         /// <summary>
@@ -1352,7 +1343,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertToGreyscale")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertToGreyscale")]
         public static extern FIBITMAP ConvertToGreyscale(FIBITMAP dib);
 
         /// <summary>
@@ -1361,7 +1352,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertTo16Bits555")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertTo16Bits555")]
         public static extern FIBITMAP ConvertTo16Bits555(FIBITMAP dib);
 
         /// <summary>
@@ -1370,7 +1361,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertTo16Bits565")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertTo16Bits565")]
         public static extern FIBITMAP ConvertTo16Bits565(FIBITMAP dib);
 
         /// <summary>
@@ -1378,7 +1369,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertTo24Bits")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertTo24Bits")]
         public static extern FIBITMAP ConvertTo24Bits(FIBITMAP dib);
 
         /// <summary>
@@ -1386,7 +1377,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertTo32Bits")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertTo32Bits")]
         public static extern FIBITMAP ConvertTo32Bits(FIBITMAP dib);
 
         /// <summary>
@@ -1395,7 +1386,7 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="quantize">Specifies the color reduction algorithm to be used.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ColorQuantize")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ColorQuantize")]
         public static extern FIBITMAP ColorQuantize(FIBITMAP dib, FREE_IMAGE_QUANTIZE quantize);
 
         /// <summary>
@@ -1410,7 +1401,7 @@ namespace FreeImageAPI
         /// <param name="ReserveSize">Size of the provided palette of ReservePalette.</param>
         /// <param name="ReservePalette">The provided palette.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ColorQuantizeEx")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ColorQuantizeEx")]
         public static extern FIBITMAP ColorQuantizeEx(FIBITMAP dib, FREE_IMAGE_QUANTIZE quantize, int PaletteSize, int ReserveSize, RGBQUAD[] ReservePalette);
 
         /// <summary>
@@ -1422,7 +1413,7 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="t">The threshold.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Threshold")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Threshold")]
         public static extern FIBITMAP Threshold(FIBITMAP dib, byte t);
 
         /// <summary>
@@ -1432,7 +1423,7 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="algorithm">The dithering algorithm to use.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Dither")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Dither")]
         public static extern FIBITMAP Dither(FIBITMAP dib, FREE_IMAGE_DITHER algorithm);
 
         /// <summary>
@@ -1453,7 +1444,7 @@ namespace FreeImageAPI
         /// <param name="topdown">If true, the raw bitmap is stored in top-down order (top-left pixel first)
         /// and in bottom-up order (bottom-left pixel first) otherwise.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertFromRawBits")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertFromRawBits")]
         public static extern FIBITMAP ConvertFromRawBits(IntPtr bits, int width, int height, int pitch,
             uint bpp, uint red_mask, uint green_mask, uint blue_mask, bool topdown);
 
@@ -1475,7 +1466,7 @@ namespace FreeImageAPI
         /// <param name="topdown">If true, the raw bitmap is stored in top-down order (top-left pixel first)
         /// and in bottom-up order (bottom-left pixel first) otherwise.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertFromRawBits")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertFromRawBits")]
         public static extern FIBITMAP ConvertFromRawBits(byte[] bits, int width, int height, int pitch,
             uint bpp, uint red_mask, uint green_mask, uint blue_mask, bool topdown);
 
@@ -1495,7 +1486,7 @@ namespace FreeImageAPI
         /// pixel's blue component in the raw bitmap. This is only applied to 16-bpp raw bitmaps.</param>
         /// <param name="topdown">If true, the raw bitmap will be stored in top-down order (top-left pixel first)
         /// and in bottom-up order (bottom-left pixel first) otherwise.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertToRawBits")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertToRawBits")]
         public static extern void ConvertToRawBits(IntPtr bits, FIBITMAP dib, int pitch, uint bpp,
             uint red_mask, uint green_mask, uint blue_mask, bool topdown);
 
@@ -1515,7 +1506,7 @@ namespace FreeImageAPI
         /// pixel's blue component in the raw bitmap. This is only applied to 16-bpp raw bitmaps.</param>
         /// <param name="topdown">If true, the raw bitmap will be stored in top-down order (top-left pixel first)
         /// and in bottom-up order (bottom-left pixel first) otherwise.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertToRawBits")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertToRawBits")]
         public static extern void ConvertToRawBits(byte[] bits, FIBITMAP dib, int pitch, uint bpp,
             uint red_mask, uint green_mask, uint blue_mask, bool topdown);
 
@@ -1524,7 +1515,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertToRGBF")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertToRGBF")]
         public static extern FIBITMAP ConvertToRGBF(FIBITMAP dib);
 
         /// <summary>
@@ -1541,7 +1532,7 @@ namespace FreeImageAPI
         ///
         /// dst_pixel = (BYTE) MIN(255, MAX(0, q)) where int q = int(src_pixel + 0.5);</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertToStandardType")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertToStandardType")]
         public static extern FIBITMAP ConvertToStandardType(FIBITMAP src, bool scale_linear);
 
         /// <summary>
@@ -1551,7 +1542,7 @@ namespace FreeImageAPI
         /// <param name="dst_type">Destination type.</param>
         /// <param name="scale_linear">True to scale linear, else false.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ConvertToType")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ConvertToType")]
         public static extern FIBITMAP ConvertToType(FIBITMAP src, FREE_IMAGE_TYPE dst_type, bool scale_linear);
 
         #endregion
@@ -1566,7 +1557,7 @@ namespace FreeImageAPI
         /// <param name="first_param">Parmeter depending on the used algorithm</param>
         /// <param name="second_param">Parmeter depending on the used algorithm</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ToneMapping")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ToneMapping")]
         public static extern FIBITMAP ToneMapping(FIBITMAP dib, FREE_IMAGE_TMO tmo, double first_param, double second_param);
 
         /// <summary>
@@ -1578,7 +1569,7 @@ namespace FreeImageAPI
         /// A value of 1 means no correction.</param>
         /// <param name="exposure">Scale factor allowing to adjust the brightness of the output image.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_TmoDrago03")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_TmoDrago03")]
         public static extern FIBITMAP TmoDrago03(FIBITMAP src, double gamma, double exposure);
 
         /// <summary>
@@ -1589,7 +1580,7 @@ namespace FreeImageAPI
         /// <param name="intensity">Controls the overall image intensity in the range [-8, 8].</param>
         /// <param name="contrast">Controls the overall image contrast in the range [0.3, 1.0[.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_TmoReinhard05")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_TmoReinhard05")]
         public static extern FIBITMAP TmoReinhard05(FIBITMAP src, double intensity, double contrast);
 
         /// <summary>
@@ -1599,7 +1590,7 @@ namespace FreeImageAPI
         /// <param name="color_saturation">Color saturation (s parameter in the paper) in [0.4..0.6]</param>
         /// <param name="attenuation">Atenuation factor (beta parameter in the paper) in [0.8..0.9]</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_TmoFattal02")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_TmoFattal02")]
         public static extern FIBITMAP TmoFattal02(FIBITMAP src, double color_saturation, double attenuation);
 
         #endregion
@@ -1615,7 +1606,7 @@ namespace FreeImageAPI
         /// <param name="source">Pointer to the source buffer.</param>
         /// <param name="source_size">Size of the source buffer.</param>
         /// <returns>The actual size of the compressed buffer, or 0 if an error occurred.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ZLibCompress")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ZLibCompress")]
         public static extern uint ZLibCompress(byte[] target, uint target_size, byte[] source, uint source_size);
 
         /// <summary>
@@ -1627,7 +1618,7 @@ namespace FreeImageAPI
         /// <param name="source">Pointer to the source buffer.</param>
         /// <param name="source_size">Size of the source buffer.</param>
         /// <returns>The actual size of the uncompressed buffer, or 0 if an error occurred.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ZLibUncompress")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ZLibUncompress")]
         public static extern uint ZLibUncompress(byte[] target, uint target_size, byte[] source, uint source_size);
 
         /// <summary>
@@ -1639,7 +1630,7 @@ namespace FreeImageAPI
         /// <param name="source">Pointer to the source buffer.</param>
         /// <param name="source_size">Size of the source buffer.</param>
         /// <returns>The actual size of the compressed buffer, or 0 if an error occurred.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ZLibGZip")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ZLibGZip")]
         public static extern uint ZLibGZip(byte[] target, uint target_size, byte[] source, uint source_size);
 
         /// <summary>
@@ -1651,7 +1642,7 @@ namespace FreeImageAPI
         /// <param name="source">Pointer to the source buffer.</param>
         /// <param name="source_size">Size of the source buffer.</param>
         /// <returns>The actual size of the uncompressed buffer, or 0 if an error occurred.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ZLibGUnzip")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ZLibGUnzip")]
         public static extern uint ZLibGUnzip(byte[] target, uint target_size, byte[] source, uint source_size);
 
         /// <summary>
@@ -1662,7 +1653,7 @@ namespace FreeImageAPI
         /// If the value is 0, the function returns the required initial value for the crc.</param>
         /// <param name="source_size">Size of the source buffer.</param>
         /// <returns></returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ZLibCRC32")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ZLibCRC32")]
         public static extern uint ZLibCRC32(uint crc, byte[] source, uint source_size);
 
         #endregion
@@ -1675,14 +1666,14 @@ namespace FreeImageAPI
         /// <see cref="FreeImageAPI.FreeImage.DeleteTag(FITAG)"/> when no longer in use.
         /// </summary>
         /// <returns>The new <see cref="FITAG"/>.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_CreateTag")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_CreateTag")]
         public static extern FITAG CreateTag();
 
         /// <summary>
         /// Delete a previously allocated <see cref="FITAG"/> object.
         /// </summary>
         /// <param name="tag">The <see cref="FITAG"/> to destroy.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_DeleteTag")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_DeleteTag")]
         public static extern void DeleteTag(FITAG tag);
 
         /// <summary>
@@ -1690,7 +1681,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="tag">The <see cref="FITAG"/> to clone.</param>
         /// <returns>The new <see cref="FITAG"/>.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_CloneTag")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_CloneTag")]
         public static extern FITAG CloneTag(FITAG tag);
 
         #endregion
@@ -1703,7 +1694,7 @@ namespace FreeImageAPI
         /// <param name="tag">The tag field.</param>
         /// <returns>The field name.</returns>
         public static unsafe string GetTagKey(FITAG tag) { return PtrToStr(GetTagKey_(tag)); }
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetTagKey")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetTagKey")]
         private static unsafe extern byte* GetTagKey_(FITAG tag);
 
         /// <summary>
@@ -1712,7 +1703,7 @@ namespace FreeImageAPI
         /// <param name="tag">The tag field.</param>
         /// <returns>The description or NULL if unavailable.</returns>
         public static unsafe string GetTagDescription(FITAG tag) { return PtrToStr(GetTagDescription_(tag)); }
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetTagDescription")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetTagDescription")]
         private static unsafe extern byte* GetTagDescription_(FITAG tag);
 
         /// <summary>
@@ -1720,7 +1711,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="tag">The tag field.</param>
         /// <returns>The ID or 0 if unavailable.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetTagID")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetTagID")]
         public static extern ushort GetTagID(FITAG tag);
 
         /// <summary>
@@ -1728,7 +1719,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="tag">The tag field.</param>
         /// <returns>The tag type.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetTagType")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetTagType")]
         public static extern FREE_IMAGE_MDTYPE GetTagType(FITAG tag);
 
         /// <summary>
@@ -1736,7 +1727,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="tag">The tag field.</param>
         /// <returns>The number of components.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetTagCount")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetTagCount")]
         public static extern uint GetTagCount(FITAG tag);
 
         /// <summary>
@@ -1744,7 +1735,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="tag">The tag field.</param>
         /// <returns>The length of the tag value.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetTagLength")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetTagLength")]
         public static extern uint GetTagLength(FITAG tag);
 
         /// <summary>
@@ -1754,7 +1745,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="tag">The tag field.</param>
         /// <returns>Pointer to the value.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetTagValue")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetTagValue")]
         public static extern IntPtr GetTagValue(FITAG tag);
 
         /// <summary>
@@ -1763,7 +1754,7 @@ namespace FreeImageAPI
         /// <param name="tag">The tag field.</param>
         /// <param name="key">The new name.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_SetTagKey")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_SetTagKey")]
         public static extern bool SetTagKey(FITAG tag, string key);
 
         /// <summary>
@@ -1772,7 +1763,7 @@ namespace FreeImageAPI
         /// <param name="tag">The tag field.</param>
         /// <param name="description">The new description.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_SetTagDescription")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_SetTagDescription")]
         public static extern bool SetTagDescription(FITAG tag, string description);
 
         /// <summary>
@@ -1781,7 +1772,7 @@ namespace FreeImageAPI
         /// <param name="tag">The tag field.</param>
         /// <param name="id">The new ID.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetTagID")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetTagID")]
         public static extern bool SetTagID(FITAG tag, ushort id);
 
         /// <summary>
@@ -1790,7 +1781,7 @@ namespace FreeImageAPI
         /// <param name="tag">The tag field.</param>
         /// <param name="type">The new type.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetTagType")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetTagType")]
         public static extern bool SetTagType(FITAG tag, FREE_IMAGE_MDTYPE type);
 
         /// <summary>
@@ -1799,7 +1790,7 @@ namespace FreeImageAPI
         /// <param name="tag">The tag field.</param>
         /// <param name="count">New number of data.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetTagCount")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetTagCount")]
         public static extern bool SetTagCount(FITAG tag, uint count);
 
         /// <summary>
@@ -1808,7 +1799,7 @@ namespace FreeImageAPI
         /// <param name="tag">The tag field.</param>
         /// <param name="length">The new length.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetTagLength")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetTagLength")]
         public static extern bool SetTagLength(FITAG tag, uint length);
 
         /// <summary>
@@ -1817,7 +1808,7 @@ namespace FreeImageAPI
         /// <param name="tag">The tag field.</param>
         /// <param name="value">Pointer to the new value.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetTagValue")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetTagValue")]
         public static extern bool SetTagValue(FITAG tag, byte[] value);
 
         #endregion
@@ -1832,7 +1823,7 @@ namespace FreeImageAPI
         /// <param name="tag">Tag that matches the metadata model.</param>
         /// <returns>Unique search handle that can be used to call FindNextMetadata or FindCloseMetadata.
         /// Null if the metadata model does not exist.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FindFirstMetadata")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FindFirstMetadata")]
         public static extern FIMETADATA FindFirstMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP dib, out FITAG tag);
 
         /// <summary>
@@ -1842,14 +1833,14 @@ namespace FreeImageAPI
         /// <param name="mdhandle">Unique search handle provided by FindFirstMetadata.</param>
         /// <param name="tag">Tag that matches the metadata model.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FindNextMetadata")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FindNextMetadata")]
         public static extern bool FindNextMetadata(FIMETADATA mdhandle, out FITAG tag);
 
         /// <summary>
         /// Closes the specified metadata search handle and releases associated resources.
         /// </summary>
         /// <param name="mdhandle">The handle to close.</param>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FindCloseMetadata")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FindCloseMetadata")]
         private static extern void FindCloseMetadata_(FIMETADATA mdhandle);
 
         #endregion
@@ -1864,7 +1855,7 @@ namespace FreeImageAPI
         /// <param name="key">The metadata field name.</param>
         /// <param name="tag">A FITAG structure returned by the function.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetMetadata")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetMetadata")]
         public static extern bool GetMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP dib, string key, out FITAG tag);
 
         /// <summary>
@@ -1875,7 +1866,7 @@ namespace FreeImageAPI
         /// <param name="key">The tag field name.</param>
         /// <param name="tag">The FreeImage tag to be attached.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_SetMetadata")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_SetMetadata")]
         public static extern bool SetMetadata(FREE_IMAGE_MDMODEL model, FIBITMAP dib, string key, FITAG tag);
 
         #endregion
@@ -1888,7 +1879,7 @@ namespace FreeImageAPI
         /// <param name="model">The metadata model.</param>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Number of tags contained in the metadata model.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetMetadataCount")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetMetadataCount")]
         public static extern uint GetMetadataCount(FREE_IMAGE_MDMODEL model, FIBITMAP dib);
 
         /// <summary>
@@ -1897,7 +1888,7 @@ namespace FreeImageAPI
         /// <param name="dst">The FreeImage bitmap to copy the metadata to.</param>
         /// <param name="src">The FreeImage bitmap to copy the metadata from.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_CloneMetadata")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_CloneMetadata")]
         public static extern bool CloneMetadata(FIBITMAP dst, FIBITMAP src);
 
         /// <summary>
@@ -1909,7 +1900,7 @@ namespace FreeImageAPI
         /// <param name="Make">Reserved.</param>
         /// <returns>The representing string.</returns>
         public static unsafe string TagToString(FREE_IMAGE_MDMODEL model, FITAG tag, uint Make) { return PtrToStr(TagToString_(model, tag, Make)); }
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_TagToString")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_TagToString")]
         private static unsafe extern byte* TagToString_(FREE_IMAGE_MDMODEL model, FITAG tag, uint Make);
 
         #endregion
@@ -1924,11 +1915,11 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="angle">The angle of rotation.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_RotateClassic")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_RotateClassic")]
         [Obsolete("RotateClassic is deprecated (use Rotate instead).")]
         public static extern FIBITMAP RotateClassic(FIBITMAP dib, double angle);
 
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Rotate")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Rotate")]
         internal static extern FIBITMAP Rotate(FIBITMAP dib, double angle, IntPtr backgroundColor);
 
         /// <summary>
@@ -1944,7 +1935,7 @@ namespace FreeImageAPI
         /// <param name="use_mask">When true the irrelevant part of the image is set to a black color,
         /// otherwise, a mirroring technique is used to fill irrelevant pixels.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_RotateEx")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_RotateEx")]
         public static extern FIBITMAP RotateEx(FIBITMAP dib, double angle,
             double x_shift, double y_shift, double x_origin, double y_origin, bool use_mask);
 
@@ -1953,7 +1944,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FlipHorizontal")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FlipHorizontal")]
         public static extern bool FlipHorizontal(FIBITMAP dib);
 
         /// <summary>
@@ -1961,7 +1952,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FlipVertical")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FlipVertical")]
         public static extern bool FlipVertical(FIBITMAP dib);
 
         /// <summary>
@@ -1993,7 +1984,7 @@ namespace FreeImageAPI
         /// <param name="operation">The operation to apply.</param>
         /// <param name="perfect">To avoid lossy transformation, you can set the perfect parameter to true.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_JPEGTransform")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_JPEGTransform")]
         private static extern bool JPEGTransformA(string src_file, string dst_file,
             FREE_IMAGE_JPEG_OPERATION operation, bool perfect);
 
@@ -2006,7 +1997,7 @@ namespace FreeImageAPI
         /// <param name="operation">The operation to apply.</param>
         /// <param name="perfect">To avoid lossy transformation, you can set the perfect parameter to true.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_JPEGTransformU")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_JPEGTransformU")]
         private static extern bool JPEGTransformU(string src_file, string dst_file,
             FREE_IMAGE_JPEG_OPERATION operation, bool perfect);
 
@@ -2023,7 +2014,7 @@ namespace FreeImageAPI
         /// <param name="dst_height">Destination height.</param>
         /// <param name="filter">The filter to apply.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Rescale")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Rescale")]
         public static extern FIBITMAP Rescale(FIBITMAP dib, int dst_width, int dst_height, FREE_IMAGE_FILTER filter);
 
         /// <summary>
@@ -2033,10 +2024,10 @@ namespace FreeImageAPI
         /// <param name="max_pixel_size">Thumbnail square size.</param>
         /// <param name="convert">When true HDR images are transperantly converted to standard images.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_MakeThumbnail")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_MakeThumbnail")]
         public static extern FIBITMAP MakeThumbnail(FIBITMAP dib, int max_pixel_size, bool convert);
 
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_EnlargeCanvas")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_EnlargeCanvas")]
         internal static extern FIBITMAP EnlargeCanvas(FIBITMAP dib,
             int left, int top, int right, int bottom, IntPtr color, FREE_IMAGE_COLOR_OPTIONS options);
 
@@ -2052,7 +2043,7 @@ namespace FreeImageAPI
         /// It's size is assumed to be 256 in length.</param>
         /// <param name="channel">The color channel to be transformed.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AdjustCurve")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AdjustCurve")]
         public static extern bool AdjustCurve(FIBITMAP dib, byte[] lookUpTable, FREE_IMAGE_COLOR_CHANNEL channel);
 
         /// <summary>
@@ -2062,7 +2053,7 @@ namespace FreeImageAPI
         /// <param name="gamma">The parameter represents the gamma value to use (gamma > 0).
         /// A value of 1.0 leaves the image alone, less than one darkens it, and greater than one lightens it.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AdjustGamma")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AdjustGamma")]
         public static extern bool AdjustGamma(FIBITMAP dib, double gamma);
 
         /// <summary>
@@ -2072,7 +2063,7 @@ namespace FreeImageAPI
         /// <param name="percentage">A value 0 means no change,
         /// less than 0 will make the image darker and greater than 0 will make the image brighter.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AdjustBrightness")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AdjustBrightness")]
         public static extern bool AdjustBrightness(FIBITMAP dib, double percentage);
 
         /// <summary>
@@ -2082,7 +2073,7 @@ namespace FreeImageAPI
         /// <param name="percentage">A value 0 means no change,
         /// less than 0 will decrease the contrast and greater than 0 will increase the contrast of the image.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AdjustContrast")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AdjustContrast")]
         public static extern bool AdjustContrast(FIBITMAP dib, double percentage);
 
         /// <summary>
@@ -2090,7 +2081,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Invert")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Invert")]
         public static extern bool Invert(FIBITMAP dib);
 
         /// <summary>
@@ -2100,7 +2091,7 @@ namespace FreeImageAPI
         /// <param name="histo">Array of integers with a size of 256.</param>
         /// <param name="channel">Channel to compute from.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetHistogram")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetHistogram")]
         public static extern bool GetHistogram(FIBITMAP dib, int[] histo, FREE_IMAGE_COLOR_CHANNEL channel);
 
         #endregion
@@ -2113,7 +2104,7 @@ namespace FreeImageAPI
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <param name="channel">The color channel to extract.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetChannel")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetChannel")]
         public static extern FIBITMAP GetChannel(FIBITMAP dib, FREE_IMAGE_COLOR_CHANNEL channel);
 
         /// <summary>
@@ -2124,7 +2115,7 @@ namespace FreeImageAPI
         /// <param name="dib8">Handle to the bitmap to insert.</param>
         /// <param name="channel">The color channel to replace.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetChannel")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetChannel")]
         public static extern bool SetChannel(FIBITMAP dib, FIBITMAP dib8, FREE_IMAGE_COLOR_CHANNEL channel);
 
         /// <summary>
@@ -2133,7 +2124,7 @@ namespace FreeImageAPI
         /// <param name="src">Handle to a FreeImage bitmap.</param>
         /// <param name="channel">The color channel to extract.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetComplexChannel")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetComplexChannel")]
         public static extern FIBITMAP GetComplexChannel(FIBITMAP src, FREE_IMAGE_COLOR_CHANNEL channel);
 
         /// <summary>
@@ -2144,7 +2135,7 @@ namespace FreeImageAPI
         /// <param name="src">Handle to a FreeImage bitmap.</param>
         /// <param name="channel">The color channel to replace.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SetComplexChannel")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SetComplexChannel")]
         public static extern bool SetComplexChannel(FIBITMAP dst, FIBITMAP src, FREE_IMAGE_COLOR_CHANNEL channel);
 
         #endregion
@@ -2160,7 +2151,7 @@ namespace FreeImageAPI
         /// <param name="right">Specifies the right position of the cropped rectangle.</param>
         /// <param name="bottom">Specifies the bottom position of the cropped rectangle.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Copy")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Copy")]
         public static extern FIBITMAP Copy(FIBITMAP dib, int left, int top, int right, int bottom);
 
         /// <summary>
@@ -2175,7 +2166,7 @@ namespace FreeImageAPI
         /// The source and destination images are alpha blended if alpha=0..255.
         /// If alpha > 255, then the source image is combined to the destination image.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Paste")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Paste")]
         public static extern bool Paste(FIBITMAP dst, FIBITMAP src, int left, int top, int alpha);
 
         /// <summary>
@@ -2188,7 +2179,7 @@ namespace FreeImageAPI
         /// <param name="bg">Image used as background when useFileBkg is false or fg has no background
         /// and appBkColor is null.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Composite")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Composite")]
         public static extern FIBITMAP Composite(FIBITMAP fg, bool useFileBkg, ref RGBQUAD appBkColor, FIBITMAP bg);
 
         /// <summary>
@@ -2202,7 +2193,7 @@ namespace FreeImageAPI
         /// <param name="bg">Image used as background when useFileBkg is false or fg has no background
         /// and appBkColor is null.</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_Composite")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_Composite")]
         public static extern FIBITMAP Composite(FIBITMAP fg, bool useFileBkg, RGBQUAD[] appBkColor, FIBITMAP bg);
 
         /// <summary>
@@ -2237,7 +2228,7 @@ namespace FreeImageAPI
         /// <param name="right">Specifies the right position of the cropped rectangle.</param>
         /// <param name="bottom">Specifies the bottom position of the cropped rectangle.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_JPEGCrop")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_JPEGCrop")]
         private static extern bool JPEGCropA(string src_file, string dst_file, int left, int top, int right, int bottom);
 
         /// <summary>
@@ -2251,7 +2242,7 @@ namespace FreeImageAPI
         /// <param name="right">Specifies the right position of the cropped rectangle.</param>
         /// <param name="bottom">Specifies the bottom position of the cropped rectangle.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_JPEGCropU")]
+        [DllImport(ExternDll.FreeImage, CharSet = CharSet.Unicode, EntryPoint = "FreeImage_JPEGCropU")]
         private static extern bool JPEGCropU(string src_file, string dst_file, int left, int top, int right, int bottom);
 
         /// <summary>
@@ -2261,7 +2252,7 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>Returns true on success, false on failure.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_PreMultiplyWithAlpha")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_PreMultiplyWithAlpha")]
         public static extern bool PreMultiplyWithAlpha(FIBITMAP dib);
 
         #endregion
@@ -2274,7 +2265,7 @@ namespace FreeImageAPI
         /// <param name="Laplacian">Handle to a FreeImage bitmap.</param>
         /// <param name="ncycle">Number of cycles in the multigrid algorithm (usually 2 or 3)</param>
         /// <returns>Handle to a FreeImage bitmap.</returns>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_MultigridPoissonSolver")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_MultigridPoissonSolver")]
         public static extern FIBITMAP MultigridPoissonSolver(FIBITMAP Laplacian, int ncycle);
 
         #endregion
@@ -2337,7 +2328,7 @@ namespace FreeImageAPI
         /// This function is also used internally by <see cref="AdjustColors"/>, which does not return the
         /// lookup table, but uses it to call <see cref="AdjustCurve"/> on the passed image.
         /// </remarks>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_GetAdjustColorsLookupTable")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetAdjustColorsLookupTable")]
         public static extern int GetAdjustColorsLookupTable(byte[] lookUpTable, double brightness, double contrast, double gamma, bool invert);
 
         /// <summary>
@@ -2393,7 +2384,7 @@ namespace FreeImageAPI
         /// AdjustColors(dib, 50.0, 15.0, 1.0, false);
         /// </code>
         /// </remarks>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_AdjustColors")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_AdjustColors")]
         public static extern bool AdjustColors(FIBITMAP dib, double brightness, double contrast, double gamma, bool invert);
 
         /// <summary>
@@ -2430,7 +2421,7 @@ namespace FreeImageAPI
         /// <b>Note, that this behaviour is different from what <see cref="ApplyPaletteIndexMapping"/> does,
         /// which modifies the actual image data on palletized images.</b>
         /// </remarks>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ApplyColorMapping")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ApplyColorMapping")]
         public static extern uint ApplyColorMapping(FIBITMAP dib, RGBQUAD[] srccolors, RGBQUAD[] dstcolors, uint count, bool ignore_alpha, bool swap);
 
         /// <summary>
@@ -2457,7 +2448,7 @@ namespace FreeImageAPI
         /// return ApplyColorMapping(dib, color_a, color_b, 1, ignore_alpha, true);
         /// </code>
         /// </remarks>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SwapColors")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SwapColors")]
         public static extern uint SwapColors(FIBITMAP dib, ref RGBQUAD color_a, ref RGBQUAD color_b, bool ignore_alpha);
 
         /// <summary>
@@ -2487,7 +2478,7 @@ namespace FreeImageAPI
         /// <b>Note, that this behaviour is different from what <see cref="ApplyColorMapping"/> does, which
         /// modifies the actual image data on palletized images.</b>
         /// </remarks>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_ApplyPaletteIndexMapping")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_ApplyPaletteIndexMapping")]
         public static extern uint ApplyPaletteIndexMapping(FIBITMAP dib, byte[] srcindices, byte[] dstindices, uint count, bool swap);
 
         /// <summary>
@@ -2511,10 +2502,10 @@ namespace FreeImageAPI
         /// return ApplyPaletteIndexMapping(dib, index_a, index_b, 1, true);
         /// </code>
         /// </remarks>
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_SwapPaletteIndices")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_SwapPaletteIndices")]
         public static extern uint SwapPaletteIndices(FIBITMAP dib, ref byte index_a, ref byte index_b);
 
-        [DllImport(FreeImageLibrary, EntryPoint = "FreeImage_FillBackground")]
+        [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_FillBackground")]
         internal static extern bool FillBackground(FIBITMAP dib, IntPtr color, FREE_IMAGE_COLOR_OPTIONS options);
 
         #endregion

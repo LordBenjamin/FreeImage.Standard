@@ -54,9 +54,6 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.DoesNotThrow(() => FreeImage.ValidateAvailability());
         }
 
-
-#if NET461
-
         [Test]
         public void FreeImage_GetBitmap()
         {
@@ -128,8 +125,6 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.IsFalse(File.Exists(@"test.png"));
             bitmap.Dispose();
         }
-
-#endif
 
         [Test]
         public void FreeImage_LoadEx()
@@ -225,9 +220,7 @@ namespace FreeImageNETUnitTest.TestFixtures
 
             FreeImage.UnloadEx(ref dib);
 
-#if NET461
             fStream.Close();
-#endif
             fStream.Dispose();
 
             fStream = new FileStream(iManager.GetBitmapPath(ImageType.Metadata, ImageColorType.Type_01_Dither), FileMode.Open);
@@ -240,9 +233,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.That(format == FREE_IMAGE_FORMAT.FIF_JPEG);
             FreeImage.UnloadEx(ref dib);
 
-#if NET461
             fStream.Close();
-#endif
             fStream.Dispose();
 
             fStream = new FileStream(iManager.GetBitmapPath(ImageType.Even, ImageColorType.Type_32), FileMode.Open);
@@ -264,9 +255,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.That(dib.IsNull);
             Assert.AreEqual(FREE_IMAGE_FORMAT.FIF_BMP, format);
 
-#if NET461
             fStream.Close();
-#endif
             fStream.Dispose();
         }
 
@@ -448,15 +437,11 @@ namespace FreeImageNETUnitTest.TestFixtures
             fStream = new FileStream(iManager.GetBitmapPath(ImageType.Odd, ImageColorType.Type_16_565), FileMode.Open);
             Assert.AreEqual(FREE_IMAGE_FORMAT.FIF_BMP, FreeImage.GetFileTypeFromStream(fStream));
 
-#if NET461
             fStream.Close();
-#endif
             fStream.Dispose();
         }
 
-
-#if NET461
-
+#if NET472
         [Test]
         public void FreeImage_GetHbitmap()
         {
@@ -482,7 +467,6 @@ namespace FreeImageNETUnitTest.TestFixtures
             {
             }
         }
-
 #endif
 
         [Test]

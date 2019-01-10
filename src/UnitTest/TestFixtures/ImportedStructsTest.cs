@@ -31,7 +31,6 @@ namespace FreeImageNETUnitTest.TestFixtures
             return true;
         }
 
-#if NET461
         [Test]
         public void RGBQUAD()
         {
@@ -265,8 +264,6 @@ namespace FreeImageNETUnitTest.TestFixtures
             Color color = rgb;
             Assert.That(EqualColors(Color.DarkGoldenrod, color));
         }
-
-#endif
 
         [Ignore("Ignoring FICOMPLEX")]
         public void FICOMPLEX()

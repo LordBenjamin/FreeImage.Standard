@@ -5,10 +5,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using FreeImageAPI;
 using NUnit.Framework;
-
-#if NET461
 using System.Runtime.Serialization.Formatters.Binary;
-#endif
 
 namespace FreeImageNETUnitTest.TestFixtures
 {
@@ -27,8 +24,6 @@ namespace FreeImageNETUnitTest.TestFixtures
 		public void DeInitEachTime()
 		{
 		}
-
-#if NET461
 
 		[Test]
 		public void FreeImageBitmapConstructors()
@@ -244,8 +239,6 @@ namespace FreeImageNETUnitTest.TestFixtures
 			fib.Dispose();
 		}
 
-#endif
-
         [Test]
 		public void GetBounds()
 		{
@@ -265,8 +258,6 @@ namespace FreeImageNETUnitTest.TestFixtures
 			Assert.AreEqual(height, (int)rect.Height);
 			fib.Dispose();
 		}
-
-#if NET461
 
 		[Test]
 		public void GetPropertyItem()
@@ -301,7 +292,6 @@ namespace FreeImageNETUnitTest.TestFixtures
 			fib.Dispose();
 		}
 
-#endif
 
 		[Test]
 		public unsafe void RotateFlip()

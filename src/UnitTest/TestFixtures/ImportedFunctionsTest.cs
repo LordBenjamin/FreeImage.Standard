@@ -182,8 +182,8 @@ namespace FreeImageNETUnitTest.TestFixtures
 			FreeImage.UnloadEx(ref dib);
 		}
 
-		// TODO: not really NET461 only, maybe just Windows only?
-#if NET461
+		// TODO: not really NET472 only, maybe just Windows only?
+#if NET472
 		[Test]
 		public void FreeImage_RegisterLocalPlugin()
 		{
@@ -204,8 +204,8 @@ namespace FreeImageNETUnitTest.TestFixtures
 			Assert.AreNotEqual(0, FreeImage.GetFIFCount());
 		}
 
-		// TODO: not really NET461 only, maybe just Windows only?
-#if NET461
+		// TODO: not really NET472 only, maybe just Windows only?
+#if NET472
 		[Test]
 		public void FreeImage_SetPluginEnabled_IsPluginEnabled()
 		{
@@ -468,11 +468,9 @@ namespace FreeImageNETUnitTest.TestFixtures
 			Assert.IsFalse(FreeImage.IsTransparent(dib));
 			Assert.IsFalse(FreeImage.HasBackgroundColor(dib));
 
-#if NET461
 			RGBQUAD rgb = Color.Teal;
 			Assert.IsTrue(FreeImage.SetBackgroundColor(dib, ref rgb));
 			Assert.IsTrue(FreeImage.GetBackgroundColor(dib, out rgb));
-#endif
 
 			FreeImage.UnloadEx(ref dib);
 		}
