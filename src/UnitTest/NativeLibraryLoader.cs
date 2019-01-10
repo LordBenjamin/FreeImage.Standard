@@ -9,7 +9,7 @@ namespace FreeImageNETUnitTest
 
 		public static void CopyFreeImageNativeDll()
 		{
-			string solutionFolder = Utility.GetSolutionFolder();
+			string solutionFolder = GetSolutionFolder();
 			string runtimesFolder = Path.Combine(solutionFolder, "runtimes");
 
 			const string freeImageLibraryName = "FreeImage";
@@ -22,7 +22,7 @@ namespace FreeImageNETUnitTest
 				throw new FileNotFoundException(libraryPath);
 			}
 
-			string executingFolder = Utility.GetExecutingFolder();
+			string executingFolder = GetExecutingFolder();
 			string targetLibraryPath = Path.Combine(executingFolder, $"{freeImageLibraryName}{libraryFileExtension}");
 
 			if (File.Exists(targetLibraryPath))
@@ -67,6 +67,23 @@ namespace FreeImageNETUnitTest
 		{
 			int ptrSize = Marshal.SizeOf<IntPtr>();
 			return (ptrSize == 4) ? "win-x86" : "win-x64";
+		}
+
+		private static string GetExecutingFolder()
+		{
+			return Path.GetDirectoryName(typeof(NativeLibraryLoader).Assembly.Locati‌​on);
+		}
+
+		public static string GetSolutionFolder()
+		{
+			string currentFolder = GetExecutingFolder();
+
+			while (Path.GetFileName(currentFolder) != "src")
+			{
+				currentFolder = Path.GetFullPath(Path.Combine(currentFolder, ".."));
+			}
+
+			return Path.GetFullPath(Path.Combine(currentFolder, ".."));
 		}
 	}
 }

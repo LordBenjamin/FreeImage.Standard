@@ -159,7 +159,7 @@ namespace FreeImageNETUnitTest
 
 		private static string GetImageDataFolder()
 		{			
-			string solutionFolder = Utility.GetSolutionFolder();
+			string solutionFolder = NativeLibraryLoader.GetSolutionFolder();
 			string imagesFolder = Path.Combine(solutionFolder, "UnitTestData", "Images");
 
 			return Path.GetFullPath(imagesFolder);
