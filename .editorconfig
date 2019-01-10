@@ -8,8 +8,8 @@ root = true
 # Use 4 spaces as indentation
 [*]
 insert_final_newline = true
-indent_style = tab
-indent_size = tab
+indent_style = spaces
+indent_size = 4
 
 # C# files
 [*.cs]
