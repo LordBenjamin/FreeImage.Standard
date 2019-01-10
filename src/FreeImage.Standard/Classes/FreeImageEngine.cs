@@ -11,7 +11,7 @@ namespace FreeImageAPI
 		// TODO: ideally FreeImage would provide this... either way, it should probably be cleared before any call to the API...
 		[ThreadStatic]
 		public static string LastErrorMessage;
-		
+
 		#region Callback
 
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -73,7 +73,7 @@ namespace FreeImageAPI
 
 									// Get a local copy of the multicast-delegate
 									OutputMessageFunction m = FreeImageEngine.message;
-									
+
 									// Check the local copy instead of the static instance
 									// to prevent a second thread from setting the delegate
 									// to null, which would cause a nullreference exception

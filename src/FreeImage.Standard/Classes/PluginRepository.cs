@@ -12,7 +12,7 @@ namespace FreeImageAPI.Plugins
 	{
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		private static readonly List<FreeImagePlugin> plugins = null;
-		
+
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		private static readonly List<FreeImagePlugin> localPlugins = null;
 
@@ -149,9 +149,9 @@ namespace FreeImageAPI.Plugins
 				List<FreeImagePlugin> list = new List<FreeImagePlugin>();
 				foreach (FreeImagePlugin p in plugins)
 				{
-					if (p.SupportsReading && !p.SupportsWriting) 
+					if (p.SupportsReading && !p.SupportsWriting)
 					{
-						list.Add(p); 
+						list.Add(p);
 					}
 				}
 				return list;
@@ -243,7 +243,7 @@ namespace FreeImageAPI.Plugins
 		{
 			get
 			{
-				return localPlugins.AsReadOnly();  
+				return localPlugins.AsReadOnly();
 			}
 		}
 
@@ -265,7 +265,7 @@ namespace FreeImageAPI.Plugins
 				return list;
 			}
 		}
-		
+
 		/// <summary>
 		/// Windows or OS/2 Bitmap File (*.BMP)
 		/// </summary>

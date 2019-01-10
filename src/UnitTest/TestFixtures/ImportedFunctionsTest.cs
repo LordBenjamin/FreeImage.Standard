@@ -15,10 +15,10 @@ namespace FreeImageNETUnitTest.TestFixtures
 		ImageManager iManager = new ImageManager();
 		FIBITMAP dib;
 
-        [SetUp]
+		[SetUp]
 		public void InitEachTime()
-        {
-        }
+		{
+		}
 
 		[TearDown]
 		public void DeInitEachTime()
@@ -39,9 +39,9 @@ namespace FreeImageNETUnitTest.TestFixtures
 			Assert.IsNotEmpty(copyright);
 		}
 
-        string freeImageCallback = null;
+		string freeImageCallback = null;
 
-        [Test]
+		[Test]
 		public void FreeImage_OutputMessageProc_SetOutputMessage()
 		{
 			Assert.IsNull(freeImageCallback);
@@ -50,14 +50,14 @@ namespace FreeImageNETUnitTest.TestFixtures
 			FreeImage.SetOutputMessage(null);
 			Assert.IsNotNull(freeImageCallback);
 			freeImageCallback = null;
-        }
+		}
 
-        void FreeImage_Message(FREE_IMAGE_FORMAT fif, string message)
-        {
-            freeImageCallback = message;
-        }
+		void FreeImage_Message(FREE_IMAGE_FORMAT fif, string message)
+		{
+			freeImageCallback = message;
+		}
 
-        [Test]
+		[Test]
 		public void FreeImage_Allocate()
 		{
 			dib = FreeImage.Allocate(
@@ -1318,8 +1318,8 @@ namespace FreeImageNETUnitTest.TestFixtures
 			Assert.That(!dib.IsNull);
 			FIBITMAP dib8 = iManager.GetBitmap(ImageType.Even, ImageColorType.Type_08_Greyscale_MinIsBlack);
 			Assert.AreNotEqual(0, dib8);
-            Assert.AreEqual(FreeImage.GetWidth(dib), FreeImage.GetWidth(dib8));
-            Assert.AreEqual(FreeImage.GetHeight(dib), FreeImage.GetHeight(dib8));
+			Assert.AreEqual(FreeImage.GetWidth(dib), FreeImage.GetWidth(dib8));
+			Assert.AreEqual(FreeImage.GetHeight(dib), FreeImage.GetHeight(dib8));
 
 			Assert.IsTrue(FreeImage.SetChannel(dib, dib8, FREE_IMAGE_COLOR_CHANNEL.FICC_BLUE));
 

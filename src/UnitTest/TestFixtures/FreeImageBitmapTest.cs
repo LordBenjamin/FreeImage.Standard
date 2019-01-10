@@ -13,7 +13,7 @@ namespace FreeImageNETUnitTest.TestFixtures
 	public class FreeImageBitmapTest
 	{
 		ImageManager iManager = new ImageManager();
-		FIBITMAP dib = new FIBITMAP();        
+		FIBITMAP dib = new FIBITMAP();
 
 		[SetUp]
 		public void InitEachTime()
@@ -239,7 +239,7 @@ namespace FreeImageNETUnitTest.TestFixtures
 			fib.Dispose();
 		}
 
-        [Test]
+		[Test]
 		public void GetBounds()
 		{
 			Random rand = new Random();

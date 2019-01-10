@@ -406,7 +406,7 @@ namespace FreeImageAPI
 			return base.GetHashCode();
 		}
 
-#region Operators
+		#region Operators
 
 		/// <summary>
 		/// Standard implementation of the operator.
@@ -575,9 +575,9 @@ namespace FreeImageAPI
 			return (r1.numerator * (denominator / r1.denominator)) <= (r2.numerator * (denominator / r2.denominator));
 		}
 
-#endregion
+		#endregion
 
-#region Conversions
+		#region Conversions
 
 		/// <summary>
 		/// Converts the value of a <see cref="FIRational"/> structure to a <see cref="Boolean"/> structure.
@@ -841,9 +841,9 @@ namespace FreeImageAPI
 			return new FIRational((int)value, 1);
 		}
 
-#endregion
+		#endregion
 
-#region IConvertible Member
+		#region IConvertible Member
 
 		TypeCode IConvertible.GetTypeCode()
 		{
@@ -930,9 +930,9 @@ namespace FreeImageAPI
 			return (ulong)this;
 		}
 
-#endregion
+		#endregion
 
-#region IComparable Member
+		#region IComparable Member
 
 		/// <summary>
 		/// Compares this instance with a specified <see cref="Object"/>.
@@ -953,9 +953,9 @@ namespace FreeImageAPI
 			return CompareTo((FIRational)obj);
 		}
 
-#endregion
+		#endregion
 
-#region IFormattable Member
+		#region IFormattable Member
 
 		/// <summary>
 		/// Formats the value of the current instance using the specified format.
@@ -972,9 +972,9 @@ namespace FreeImageAPI
 			return String.Format(formatProvider, format, ((IConvertible)this).ToDouble(formatProvider));
 		}
 
-#endregion
+		#endregion
 
-#region IEquatable<FIRational> Member
+		#region IEquatable<FIRational> Member
 
 		/// <summary>
 		/// Tests whether the specified <see cref="FIRational"/> structure is equivalent to this <see cref="FIRational"/> structure.
@@ -987,9 +987,9 @@ namespace FreeImageAPI
 			return (this == other);
 		}
 
-#endregion
+		#endregion
 
-#region IComparable<FIRational> Member
+		#region IComparable<FIRational> Member
 
 		/// <summary>
 		/// Compares this instance with a specified <see cref="FIRational"/> object.
@@ -1001,11 +1001,14 @@ namespace FreeImageAPI
 		{
 			FIRational difference = this - other;
 			difference.Normalize();
-			if (difference.numerator > 0) return 1;
-			if (difference.numerator < 0) return -1;
-			else return 0;
+			if (difference.numerator > 0)
+				return 1;
+			if (difference.numerator < 0)
+				return -1;
+			else
+				return 0;
 		}
 
-#endregion
+		#endregion
 	}
 }

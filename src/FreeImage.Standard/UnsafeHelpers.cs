@@ -1,4 +1,5 @@
-﻿namespace FreeImageAPI {
+﻿namespace FreeImageAPI
+{
 	internal unsafe class UnsafeHelpers
 	{
 		// TODO: This is 5-6x slower than calling RtlCompareMemory on Windows.
