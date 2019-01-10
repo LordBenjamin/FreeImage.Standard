@@ -6,3 +6,4 @@ csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
 csharp_new_line_before_catch = true
 csharp_new_line_before_finally = true
+dotnet_sort_system_directives_first = true
