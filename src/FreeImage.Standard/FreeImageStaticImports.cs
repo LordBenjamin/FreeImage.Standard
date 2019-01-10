@@ -42,14 +42,8 @@ namespace FreeImageAPI
 {
     public static partial class FreeImage
     {
-#if NET462 || NET461 || NET46 || NET452 || NET451 || NET45 || NET40 || NET35 || NET20
-        // this isn't really valid... could be Mono on another platform... how do we tell in this case?
-        public const bool IsWindows = true;
-        public const bool IsLinux = false;
-#else
         public static readonly bool IsWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         public static readonly bool IsLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
-#endif
 
         private static readonly bool SupportsUnicode = IsWindows;
 

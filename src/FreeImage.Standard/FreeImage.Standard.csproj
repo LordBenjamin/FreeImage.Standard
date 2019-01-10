@@ -5,7 +5,7 @@
     <AssemblyTitle>FreeImage.Standard</AssemblyTitle>
     <VersionPrefix>4.3.7</VersionPrefix>
     <Authors>FreeImage contributors; matgr1; lordbenjamin</Authors>
-    <TargetFrameworks>netstandard2.0;net472;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>FreeImage.Standard</AssemblyName>
     <PackageId>FreeImage.Standard</PackageId>
@@ -65,10 +65,6 @@
 	  <Pack>true</Pack>
 	</None>
   </ItemGroup>-->
-
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common">
