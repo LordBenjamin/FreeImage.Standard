@@ -57,13 +57,6 @@
 
   </ItemGroup>
 
-  <!--<ItemGroup>
-	<None Include="PackageTargets\FreeImage-dotnet-core.targets">
-	  <PackagePath>build/FreeImage-dotnet-core.targets</PackagePath>
-	  <Pack>true</Pack>
-	</None>
-  </ItemGroup>-->
-
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common">
       <Version>4.5.1</Version>
