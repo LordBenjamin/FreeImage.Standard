@@ -1,11 +1,6 @@
-﻿using System;
+﻿using FreeImageAPI;
+using System;
 using System.IO;
-using FreeImageAPI;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 
 namespace Sample01
 {
@@ -14,11 +9,7 @@ namespace Sample01
 		static void Main(string[] args)
 		{
 			// Check if FreeImage.dll is available (can be in %path%).
-			if (!FreeImage.IsAvailable())
-			{
-				Console.WriteLine("FreeImage.dll seems to be missing. Aborting.");
-				return;
-			}
+			FreeImage.ValidateAvailability();
 
 			Sample sample = new Sample();
 			// This example shows the basic loading and saving operations offered by FreeImage.
@@ -29,6 +20,8 @@ namespace Sample01
 
 			// This example shows the FreeImage-Errormessage-Callback
 			sample.Example03();
+
+			Console.ReadKey();
 		}
 	}
 
