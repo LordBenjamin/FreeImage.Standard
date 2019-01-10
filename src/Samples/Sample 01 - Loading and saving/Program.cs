@@ -1,4 +1,5 @@
 ﻿using FreeImageAPI;
+using FreeImageNETUnitTest;
 using System;
 using System.IO;
 
@@ -8,6 +9,8 @@ namespace Sample01
 	{
 		static void Main(string[] args)
 		{
+			NativeLibraryLoader.CopyFreeImageNativeDll();
+
 			// Check if FreeImage.dll is available (can be in %path%).
 			FreeImage.ValidateAvailability();
 

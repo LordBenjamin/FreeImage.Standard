@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\UnitTest\NativeLibraryLoader.cs" Link="NativeLibraryLoader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\FreeImage.Standard\FreeImage.Standard.csproj" />
   </ItemGroup>
 
