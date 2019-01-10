@@ -23,6 +23,7 @@ namespace UnitTest.TestFixtures
             Assert.AreEqual(expectedCount, actualCount);
             ;
         }
+
         [Test]
         public void CompareMemory_Different()
         {

@@ -35,10 +35,12 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             if (FreeImage.GetImageType(dib) != FREE_IMAGE_TYPE.FIT_BITMAP)
             {
                 throw new ArgumentException("dib");
             }
+
             if (FreeImage.GetBPP(dib) > 8u)
             {
                 throw new ArgumentException("dib");
@@ -157,6 +159,7 @@ namespace FreeImageAPI
                 {
                     data[i] = Color.FromArgb((int)(((uint*)baseAddress)[i] | 0xFF000000));
                 }
+
                 return data;
             }
         }
@@ -310,6 +313,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("palette");
             }
+
             CopyFrom(palette.Data, 0, 0, Math.Min(palette.Length, this.Length));
         }
 
@@ -413,7 +417,10 @@ namespace FreeImageAPI
         protected override void Dispose(bool disposing)
         {
             if (paletteHandle.IsAllocated)
+            {
                 paletteHandle.Free();
+            }
+
             array = null;
 
             base.Dispose(disposing);

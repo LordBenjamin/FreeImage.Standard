@@ -99,6 +99,7 @@ namespace FreeImageAPI.IO
             {
                 throw new ArgumentNullException("obj");
             }
+
             GCHandle gch = GCHandle.Alloc(obj, GCHandleType.Normal);
             handle = GCHandle.ToIntPtr(gch);
         }
@@ -158,6 +159,7 @@ namespace FreeImageAPI.IO
                 {
                 }
             }
+
             return result;
         }
 
@@ -214,10 +216,12 @@ namespace FreeImageAPI.IO
             {
                 return 1;
             }
+
             if (!(obj is fi_handle))
             {
                 throw new ArgumentException("obj");
             }
+
             return CompareTo((fi_handle)obj);
         }
 

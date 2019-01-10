@@ -97,6 +97,7 @@ namespace FreeImageNETUnitTest.TestFixtures
                     fib = new FreeImageBitmap(100, 100, g);
                 }
             }
+
             fib.Dispose();
 
             fib = new FreeImageBitmap(100, 100, PixelFormat.Format1bppIndexed);
@@ -272,6 +273,7 @@ namespace FreeImageNETUnitTest.TestFixtures
                 PropertyItem item = fib.GetPropertyItem(list[i]);
                 Assert.IsNotNull(item);
             }
+
             fib.Dispose();
         }
 
@@ -362,10 +364,12 @@ namespace FreeImageNETUnitTest.TestFixtures
                 palette[i] = (uint)rand.Next(int.MinValue, int.MaxValue);
                 fib.SetPixel(i, 0, palette[i]);
             }
+
             for (int i = 0; i < palette.Length; i++)
             {
                 Assert.AreEqual(fib.GetPixel(i, 0), palette[i].Color);
             }
+
             fib.Dispose();
 
             fib = new FreeImageBitmap(16, 1, PixelFormat.Format4bppIndexed);
@@ -375,10 +379,12 @@ namespace FreeImageNETUnitTest.TestFixtures
                 palette[i] = (uint)rand.Next(int.MinValue, int.MaxValue);
                 fib.SetPixel(i, 0, palette[i]);
             }
+
             for (int i = 0; i < palette.Length; i++)
             {
                 Assert.AreEqual(fib.GetPixel(i, 0), palette[i].Color);
             }
+
             fib.Dispose();
 
             fib = new FreeImageBitmap(256, 1, PixelFormat.Format8bppIndexed);
@@ -388,10 +394,12 @@ namespace FreeImageNETUnitTest.TestFixtures
                 palette[i] = (uint)rand.Next(int.MinValue, int.MaxValue);
                 fib.SetPixel(i, 0, palette[i]);
             }
+
             for (int i = 0; i < palette.Length; i++)
             {
                 Assert.AreEqual(fib.GetPixel(i, 0), palette[i].Color);
             }
+
             fib.Dispose();
 
             fib = new FreeImageBitmap(1000, 1, PixelFormat.Format16bppRgb555);
@@ -404,6 +412,7 @@ namespace FreeImageNETUnitTest.TestFixtures
                 Assert.That(Math.Abs(orgColor.G - newColor.G) <= 8);
                 Assert.That(Math.Abs(orgColor.R - newColor.R) <= 8);
             }
+
             fib.Dispose();
 
             fib = new FreeImageBitmap(1000, 1, PixelFormat.Format24bppRgb);
@@ -416,6 +425,7 @@ namespace FreeImageNETUnitTest.TestFixtures
                 Assert.AreEqual(orgColor.G, newColor.G);
                 Assert.AreEqual(orgColor.R, newColor.R);
             }
+
             fib.Dispose();
 
             fib = new FreeImageBitmap(1000, 1, PixelFormat.Format32bppArgb);
@@ -429,6 +439,7 @@ namespace FreeImageNETUnitTest.TestFixtures
                 Assert.AreEqual(orgColor.R, newColor.R);
                 Assert.AreEqual(orgColor.A, newColor.A);
             }
+
             fib.Dispose();
         }
 
@@ -437,12 +448,16 @@ namespace FreeImageNETUnitTest.TestFixtures
         {
             string filename = @"saveadd.tif";
             FreeImageBitmap fib = new FreeImageBitmap(100, 100, PixelFormat.Format24bppRgb);
+
             try
             {
                 fib.SaveAdd();
                 Assert.Fail();
             }
-            catch { }
+            catch
+            {
+            }
+
             Assert.IsFalse(File.Exists(filename));
             fib.Save(filename);
             fib.AdjustBrightness(0.3d);
@@ -455,6 +470,7 @@ namespace FreeImageNETUnitTest.TestFixtures
                     scanline[i] = new RGBTRIPLE(Color.FromArgb(0x339955));
                 }
             }
+
             fib.SaveAdd(other);
             other.SaveAdd(filename);
             other.Dispose();

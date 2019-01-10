@@ -68,6 +68,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("dib");
             }
+
             this.dib = dib;
         }
 
@@ -95,10 +96,12 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("tag");
             }
+
             if (tag.Model != Model)
             {
                 throw new ArgumentException("tag.Model");
             }
+
             return tag.AddToImage(dib);
         }
 
@@ -116,6 +119,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("list");
             }
+
             int count = 0;
             foreach (MetadataTag tag in list)
             {
@@ -124,6 +128,7 @@ namespace FreeImageAPI.Metadata
                     count++;
                 }
             }
+
             return count;
         }
 
@@ -140,6 +145,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("key");
             }
+
             return FreeImage.SetMetadata(Model, dib, key, FITAG.Zero);
         }
 
@@ -166,6 +172,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("key");
             }
+
             MetadataTag tag;
             return FreeImage.GetMetadata(Model, dib, key, out tag) ? tag : null;
         }
@@ -183,6 +190,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("key");
             }
+
             MetadataTag tag;
             return FreeImage.GetMetadata(Model, dib, key, out tag);
         }
@@ -206,6 +214,7 @@ namespace FreeImageAPI.Metadata
                     while (FreeImage.FindNextMetadata(mdHandle, out tag));
                     FreeImage.FindCloseMetadata(mdHandle);
                 }
+
                 return list;
             }
         }
@@ -221,6 +230,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentOutOfRangeException("index");
             }
+
             MetadataTag tag;
             int count = 0;
             FIMETADATA mdHandle = FreeImage.FindFirstMetadata(Model, dib, out tag);
@@ -242,6 +252,7 @@ namespace FreeImageAPI.Metadata
                     FreeImage.FindCloseMetadata(mdHandle);
                 }
             }
+
             return tag;
         }
 
@@ -306,10 +317,12 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("searchString");
             }
+
             if (searchPattern.Length == 0)
             {
                 throw new ArgumentException("searchString is empty");
             }
+
             List<MetadataTag> result = new List<MetadataTag>(Count);
             Regex regex = new Regex(searchPattern);
             List<MetadataTag> list = List;
@@ -320,17 +333,20 @@ namespace FreeImageAPI.Metadata
                     result.Add(tag);
                     continue;
                 }
+
                 if (((flags & MD_SEARCH_FLAGS.DESCRIPTION) > 0) && regex.Match(tag.Description).Success)
                 {
                     result.Add(tag);
                     continue;
                 }
+
                 if (((flags & MD_SEARCH_FLAGS.TOSTRING) > 0) && regex.Match(tag.ToString()).Success)
                 {
                     result.Add(tag);
                     continue;
                 }
             }
+
             result.Capacity = result.Count;
             return result;
         }
@@ -347,6 +363,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("key");
             }
+
             MetadataTag tag = GetTag(key);
             if (tag != null)
             {
@@ -356,6 +373,7 @@ namespace FreeImageAPI.Metadata
                     return value[0];
                 }
             }
+
             return null;
         }
 
@@ -371,6 +389,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("key");
             }
+
             MetadataTag tag = GetTag(key);
             return (tag == null) ? null : tag.Value as T[];
         }
@@ -386,6 +405,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("key");
             }
+
             MetadataTag tag = GetTag(key);
             return (tag == null) ? null : tag.Value as string;
         }
@@ -403,6 +423,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("key");
             }
+
             uint[] result = null;
             MetadataTag tag = GetTag(key);
             if (tag != null)
@@ -425,6 +446,7 @@ namespace FreeImageAPI.Metadata
                     }
                 }
             }
+
             return result;
         }
 
@@ -461,6 +483,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("key");
             }
+
             if (value == null)
             {
                 RemoveTag(key);
@@ -493,6 +516,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("key");
             }
+
             if (value == null)
             {
                 RemoveTag(key);
@@ -524,7 +548,10 @@ namespace FreeImageAPI.Metadata
         protected static DirectionReference? ToDirectionType(string s)
         {
             if (string.IsNullOrEmpty(s))
+            {
                 return null;
+            }
+
             switch (s[0])
             {
                 case 'T':
@@ -557,6 +584,7 @@ namespace FreeImageAPI.Metadata
                         return "\0";
                 }
             }
+
             return null;
         }
 
@@ -570,7 +598,10 @@ namespace FreeImageAPI.Metadata
         protected static VelocityUnit? ToUnitType(string s)
         {
             if (string.IsNullOrEmpty(s))
+            {
                 return null;
+            }
+
             switch (s[0])
             {
                 case 'K':
@@ -607,6 +638,7 @@ namespace FreeImageAPI.Metadata
                         return "\0";
                 }
             }
+
             return null;
         }
 
@@ -620,7 +652,10 @@ namespace FreeImageAPI.Metadata
         protected static LongitudeType? ToLongitudeType(string s)
         {
             if (string.IsNullOrEmpty(s))
+            {
                 return null;
+            }
+
             switch (s[0])
             {
                 case 'E':
@@ -653,6 +688,7 @@ namespace FreeImageAPI.Metadata
                         return "\0";
                 }
             }
+
             return null;
         }
 
@@ -666,7 +702,10 @@ namespace FreeImageAPI.Metadata
         protected static LatitudeType? ToLatitudeType(string s)
         {
             if (string.IsNullOrEmpty(s))
+            {
                 return null;
+            }
+
             switch (s[0])
             {
                 case 'N':
@@ -699,6 +738,7 @@ namespace FreeImageAPI.Metadata
                         return "\0";
                 }
             }
+
             return null;
         }
 
@@ -712,11 +752,20 @@ namespace FreeImageAPI.Metadata
         protected static InteroperabilityMode? ToInteroperabilityType(string s)
         {
             if (string.IsNullOrEmpty(s))
+            {
                 return null;
+            }
+
             if (s.StartsWith("R98"))
+            {
                 return InteroperabilityMode.R98;
+            }
+
             if (s.StartsWith("THM"))
+            {
                 return InteroperabilityMode.THM;
+            }
+
             return InteroperabilityMode.Undefined;
         }
 
@@ -741,6 +790,7 @@ namespace FreeImageAPI.Metadata
                         return "\0\0\0";
                 }
             }
+
             return null;
         }
 

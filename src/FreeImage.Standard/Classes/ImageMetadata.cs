@@ -58,7 +58,10 @@ namespace FreeImageAPI.Metadata
         /// showing all known models.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public ImageMetadata(FIBITMAP dib) : this(dib, false) { }
+        public ImageMetadata(FIBITMAP dib)
+            : this(dib, false)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance based on the specified <see cref="FIBITMAP"/>,
@@ -70,7 +73,10 @@ namespace FreeImageAPI.Metadata
         public ImageMetadata(FIBITMAP dib, bool hideEmptyModels)
         {
             if (dib.IsNull)
+            {
                 throw new ArgumentNullException("dib");
+            }
+
             data = new List<MetadataModel>(FreeImage.FREE_IMAGE_MDMODELS.Length);
             this.dib = dib;
             this.hideEmptyModels = hideEmptyModels;
@@ -109,9 +115,11 @@ namespace FreeImageAPI.Metadata
                         {
                             return null;
                         }
+
                         return data[i];
                     }
                 }
+
                 return null;
             }
         }
@@ -134,6 +142,7 @@ namespace FreeImageAPI.Metadata
                 {
                     throw new ArgumentOutOfRangeException("index");
                 }
+
                 return (hideEmptyModels && !data[index].Exists) ? null : data[index];
             }
         }
@@ -156,6 +165,7 @@ namespace FreeImageAPI.Metadata
                             result.Add(data[i]);
                         }
                     }
+
                     return result;
                 }
                 else
@@ -182,6 +192,7 @@ namespace FreeImageAPI.Metadata
                     return data[i].AddTag(tag);
                 }
             }
+
             return false;
         }
 
@@ -203,6 +214,7 @@ namespace FreeImageAPI.Metadata
                             count++;
                         }
                     }
+
                     return count;
                 }
                 else
@@ -246,6 +258,7 @@ namespace FreeImageAPI.Metadata
                         tempList.Add(data[i]);
                     }
                 }
+
                 return tempList.GetEnumerator();
             }
             else
@@ -266,10 +279,12 @@ namespace FreeImageAPI.Metadata
             {
                 return 1;
             }
+
             if (!(obj is ImageMetadata))
             {
                 throw new ArgumentException("obj");
             }
+
             return CompareTo((ImageMetadata)obj);
         }
 

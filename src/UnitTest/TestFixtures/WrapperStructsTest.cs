@@ -30,13 +30,25 @@ namespace FreeImageNETUnitTest.TestFixtures
         public bool EqualColors(Color color1, Color color2)
         {
             if (color1.A != color2.A)
+            {
                 return false;
+            }
+
             if (color1.R != color2.R)
+            {
                 return false;
+            }
+
             if (color1.G != color2.G)
+            {
                 return false;
+            }
+
             if (color1.B != color2.B)
+            {
                 return false;
+            }
+
             return true;
         }
 
@@ -256,6 +268,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             {
                 return;
             }
+
             Assert.IsNotNull(resp);
 
             Stream stream = resp.GetResponseStream();
@@ -273,7 +286,8 @@ namespace FreeImageNETUnitTest.TestFixtures
             {
                 read = wrapper.Read(buffer, count, buffer.Length - count);
                 count += read;
-            } while (read != 0);
+            }
+            while (read != 0);
 
             Assert.AreEqual(7972, count);
             Assert.AreEqual(7972, wrapper.Length);
@@ -288,13 +302,18 @@ namespace FreeImageNETUnitTest.TestFixtures
             {
                 read = wrapper.Read(test, countTest, test.Length - countTest);
                 countTest += read;
-            } while (read != 0);
+            }
+            while (read != 0);
 
             Assert.AreEqual(count, countTest);
 
             for (int i = 0; i < countTest; i++)
+            {
                 if (buffer[i] != test[i])
+                {
                     Assert.Fail();
+                }
+            }
 
             resp.Close();
             wrapper.Dispose();
@@ -390,7 +409,6 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.IsNotNull(stream);
             using (fi_handle handle = new fi_handle(stream))
             {
-
                 FreeImageIO io = FreeImageAPI.IO.FreeImageStreamIO.io;
                 Assert.IsNotNull(io.readProc);
                 Assert.IsNotNull(io.writeProc);
@@ -412,7 +430,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 // Read one block
                 Assert.That(io.readProc(buffer, (uint)bBuffer.Length, 1, handle) == 1);
                 for (int i = 0; i < bBuffer.Length; i++)
+                {
                     Assert.That(Marshal.ReadByte(buffer, i) == bBuffer[i]);
+                }
 
                 Assert.That(io.tellProc(handle) == stream.Position);
                 Assert.That(io.seekProc(handle, 0, SeekOrigin.Begin) == 0);
@@ -421,7 +441,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 // Read 1 byte block
                 Assert.That(io.readProc(buffer, 1, (uint)bBuffer.Length, handle) == bBuffer.Length);
                 for (int i = 0; i < bBuffer.Length; i++)
+                {
                     Assert.That(Marshal.ReadByte(buffer, i) == bBuffer[i]);
+                }
 
                 Assert.That(io.tellProc(handle) == stream.Position);
                 Assert.That(io.seekProc(handle, 0, SeekOrigin.Begin) == 0);
@@ -429,13 +451,18 @@ namespace FreeImageNETUnitTest.TestFixtures
 
                 rand.NextBytes(bBuffer);
                 for (int i = 0; i < bBuffer.Length; i++)
+                {
                     Marshal.WriteByte(buffer, i, bBuffer[i]);
+                }
 
                 // Write one block
 
                 Assert.That(io.writeProc(buffer, (uint)bBuffer.Length, 1, handle) == 1);
                 for (int i = 0; i < bBuffer.Length; i++)
+                {
                     Assert.That(Marshal.ReadByte(buffer, i) == bBuffer[i]);
+                }
+
                 Assert.That(io.tellProc(handle) == stream.Position);
 
                 Assert.That(io.seekProc(handle, 0, SeekOrigin.Begin) == 0);
@@ -445,7 +472,10 @@ namespace FreeImageNETUnitTest.TestFixtures
 
                 Assert.That(io.writeProc(buffer, 1, (uint)bBuffer.Length, handle) == bBuffer.Length);
                 for (int i = 0; i < bBuffer.Length; i++)
+                {
                     Assert.That(Marshal.ReadByte(buffer, i) == bBuffer[i]);
+                }
+
                 Assert.That(io.tellProc(handle) == stream.Position);
 
                 // Seek and tell
@@ -581,7 +611,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testByteArray = new byte[rand.Next(0, 31)];
 
                 for (int j = 0; j < testByteArray.Length; j++)
+                {
                     testByteArray[j] = (byte)rand.Next();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testByte, FREE_IMAGE_MDTYPE.FIDT_BYTE));
                 Assert.IsNotNull(metaTag.Value);
@@ -600,7 +632,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 byte[] value = (byte[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testByteArray[j] == value[j]);
+                }
             }
 
             //
@@ -626,7 +660,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testDoubleArray = new double[rand.Next(0, 31)];
 
                 for (int j = 0; j < testDoubleArray.Length; j++)
+                {
                     testDoubleArray[j] = rand.NextDouble();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testDouble, FREE_IMAGE_MDTYPE.FIDT_DOUBLE));
                 Assert.IsNotNull(metaTag.Value);
@@ -645,7 +681,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 double[] value = (double[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testDoubleArray[j] == value[j]);
+                }
             }
 
             //
@@ -671,7 +709,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testFloatArray = new float[rand.Next(0, 31)];
 
                 for (int j = 0; j < testFloatArray.Length; j++)
+                {
                     testFloatArray[j] = (float)rand.NextDouble();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testfloat, FREE_IMAGE_MDTYPE.FIDT_FLOAT));
                 Assert.IsNotNull(metaTag.Value);
@@ -690,7 +730,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 float[] value = (float[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testFloatArray[j] == value[j]);
+                }
             }
 
             //
@@ -716,7 +758,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testUintArray = new uint[rand.Next(0, 31)];
 
                 for (int j = 0; j < testUintArray.Length; j++)
+                {
                     testUintArray[j] = (uint)rand.Next();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testUint, FREE_IMAGE_MDTYPE.FIDT_IFD));
                 Assert.IsNotNull(metaTag.Value);
@@ -735,7 +779,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 uint[] value = (uint[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testUintArray[j] == value[j]);
+                }
             }
 
             //
@@ -758,7 +804,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testUintArray = new uint[rand.Next(0, 31)];
 
                 for (int j = 0; j < testUintArray.Length; j++)
+                {
                     testUintArray[j] = (uint)rand.Next();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testUint, FREE_IMAGE_MDTYPE.FIDT_LONG));
                 Assert.IsNotNull(metaTag.Value);
@@ -777,7 +825,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 uint[] value = (uint[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testUintArray[j] == value[j]);
+                }
             }
 
             //
@@ -806,7 +856,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testRGBQUADArray = new RGBQUAD[rand.Next(0, 31)];
 
                 for (int j = 0; j < testRGBQUADArray.Length; j++)
+                {
                     testRGBQUADArray[j] = new RGBQUAD(Color.FromArgb(rand.Next()));
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testRGBQUAD, FREE_IMAGE_MDTYPE.FIDT_PALETTE));
                 Assert.IsNotNull(metaTag.Value);
@@ -825,7 +877,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 RGBQUAD[] value = (RGBQUAD[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testRGBQUADArray[j] == value[j]);
+                }
             }
 
             //
@@ -841,7 +895,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testFIURationalArray = new FIURational[rand.Next(0, 31)];
 
                 for (int j = 0; j < testFIURationalArray.Length; j++)
+                {
                     testFIURationalArray[j] = new FIURational((uint)rand.Next(), (uint)rand.Next());
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testFIURational, FREE_IMAGE_MDTYPE.FIDT_RATIONAL));
                 Assert.IsNotNull(metaTag.Value);
@@ -860,7 +916,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 FIURational[] value = (FIURational[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testFIURationalArray[j] == value[j]);
+                }
             }
 
             //
@@ -886,7 +944,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testSByteArray = new sbyte[rand.Next(0, 31)];
 
                 for (int j = 0; j < testSByteArray.Length; j++)
+                {
                     testSByteArray[j] = (sbyte)rand.Next();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testSByte, FREE_IMAGE_MDTYPE.FIDT_SBYTE));
                 Assert.IsNotNull(metaTag.Value);
@@ -905,7 +965,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 sbyte[] value = (sbyte[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testSByteArray[j] == value[j]);
+                }
             }
 
             //
@@ -931,7 +993,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testUShortArray = new ushort[rand.Next(0, 31)];
 
                 for (int j = 0; j < testUShortArray.Length; j++)
+                {
                     testUShortArray[j] = (ushort)rand.Next();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testUShort, FREE_IMAGE_MDTYPE.FIDT_SHORT));
                 Assert.IsNotNull(metaTag.Value);
@@ -950,7 +1014,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 ushort[] value = (ushort[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testUShortArray[j] == value[j]);
+                }
             }
 
             //
@@ -976,7 +1042,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testIntArray = new int[rand.Next(0, 31)];
 
                 for (int j = 0; j < testIntArray.Length; j++)
+                {
                     testIntArray[j] = rand.Next();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testInt, FREE_IMAGE_MDTYPE.FIDT_SLONG));
                 Assert.IsNotNull(metaTag.Value);
@@ -995,7 +1063,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 int[] value = (int[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testIntArray[j] == value[j]);
+                }
             }
 
             //
@@ -1011,7 +1081,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testFIRationalArray = new FIRational[rand.Next(0, 31)];
 
                 for (int j = 0; j < testFIRationalArray.Length; j++)
+                {
                     testFIRationalArray[j] = new FIRational(rand.Next(), rand.Next());
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testFIRational, FREE_IMAGE_MDTYPE.FIDT_SRATIONAL));
                 Assert.IsNotNull(metaTag.Value);
@@ -1030,7 +1102,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 FIRational[] value = (FIRational[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testFIRationalArray[j] == value[j]);
+                }
             }
 
             //
@@ -1056,7 +1130,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testShortArray = new short[rand.Next(0, 31)];
 
                 for (int j = 0; j < testShortArray.Length; j++)
+                {
                     testShortArray[j] = (short)rand.Next();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testShort, FREE_IMAGE_MDTYPE.FIDT_SSHORT));
                 Assert.IsNotNull(metaTag.Value);
@@ -1075,7 +1151,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 short[] value = (short[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testShortArray[j] == value[j]);
+                }
             }
 
             //
@@ -1098,7 +1176,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 testByteArray = new byte[rand.Next(0, 31)];
 
                 for (int j = 0; j < testByteArray.Length; j++)
+                {
                     testByteArray[j] = (byte)rand.Next();
+                }
 
                 Assert.IsTrue(metaTag.SetValue(testByte, FREE_IMAGE_MDTYPE.FIDT_UNDEFINED));
                 Assert.IsNotNull(metaTag.Value);
@@ -1117,7 +1197,9 @@ namespace FreeImageNETUnitTest.TestFixtures
                 byte[] value = (byte[])metaTag.Value;
 
                 for (int j = 0; j < value.Length; j++)
+                {
                     Assert.That(testByteArray[j] == value[j]);
+                }
             }
 
             FreeImage.UnloadEx(ref dib);
@@ -1137,7 +1219,9 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.AreEqual(model.Model, FREE_IMAGE_MDMODEL.FIMD_GEOTIFF);
             Assert.IsTrue(model.DestoryModel());
             foreach (MetadataTag m in model)
+            {
                 Assert.Fail();
+            }
 
             tag = new MetadataTag(FREE_IMAGE_MDMODEL.FIMD_GEOTIFF);
             tag.Key = "KEY";

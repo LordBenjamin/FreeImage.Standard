@@ -6,7 +6,6 @@ namespace FreeImageNETUnitTest
 {
     internal class NativeLibraryLoader
     {
-
         public static void CopyFreeImageNativeDll()
         {
             string solutionFolder = GetSolutionFolder();
@@ -43,13 +42,11 @@ namespace FreeImageNETUnitTest
                 runtimeFolderName = GetWindowsRuntimeFolder();
                 libraryFileName = $"{libraryName}.dll";
             }
-
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 runtimeFolderName = "osx.10.10-x64";
                 libraryFileName = "libfreeimage.3.17.0.dylib";
             }
-
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 runtimeFolderName = "linux-x64";

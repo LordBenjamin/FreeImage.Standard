@@ -7,7 +7,6 @@ namespace FreeImageNETUnitTest
     [SetUpFixture]
     public class SetUpFixture
     {
-
         [OneTimeSetUp]
         public void Init()
         {

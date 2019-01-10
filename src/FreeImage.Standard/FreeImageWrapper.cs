@@ -383,7 +383,9 @@ namespace FreeImageAPI
             uint red_mask, uint green_mask, uint blue_mask)
         {
             if ((palette != null) && (bpp <= 8) && (palette.Length < (1 << bpp)))
+            {
                 return FIBITMAP.Zero;
+            }
 
             if (color.HasValue)
             {
@@ -398,7 +400,9 @@ namespace FreeImageAPI
                 finally
                 {
                     if (handle.IsAllocated)
+                    {
                         handle.Free();
+                    }
                 }
             }
             else
@@ -541,12 +545,16 @@ namespace FreeImageAPI
             uint red_mask, uint green_mask, uint blue_mask) where T : struct
         {
             if ((palette != null) && (bpp <= 8) && (palette.Length < (1 << bpp)))
+            {
                 return FIBITMAP.Zero;
+            }
 
             if (color.HasValue)
             {
                 if (!CheckColorType(type, color.Value))
+                {
                     return FIBITMAP.Zero;
+                }
 
                 GCHandle handle = new GCHandle();
                 try
@@ -559,7 +567,9 @@ namespace FreeImageAPI
                 finally
                 {
                     if (handle.IsAllocated)
+                    {
                         handle.Free();
+                    }
                 }
             }
             else
@@ -603,6 +613,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             if (GetImageType(dib) != FREE_IMAGE_TYPE.FIT_BITMAP)
             {
                 throw new ArgumentException("Only bitmaps with type of FIT_BITMAP can be converted.");
@@ -634,6 +645,7 @@ namespace FreeImageAPI
                 // SetResolution will throw an exception when zero values are given on input 
                 result.SetResolution(GetResolutionX(dib), GetResolutionY(dib));
             }
+
             // Check whether the bitmap has a palette
             if (GetPalette(dib) != IntPtr.Zero)
             {
@@ -655,6 +667,7 @@ namespace FreeImageAPI
                     {
                         palette.Entries[i] = Color.FromArgb(transTable[i], colorPalette[i]);
                     }
+
                     // Copy palette entries and that have no transparancy
                     for (; i < entriesToCopy; i++)
                     {
@@ -672,6 +685,7 @@ namespace FreeImageAPI
                 // Set the bitmaps palette
                 result.Palette = palette;
             }
+
             // Copy metadata
             if (copyMetadata)
             {
@@ -686,7 +700,11 @@ namespace FreeImageAPI
                         // Get a unique search handle
                         mData = FindFirstMetadata(model, dib, out tag);
                         // Check if metadata exists for this type
-                        if (mData.IsNull) continue;
+                        if (mData.IsNull)
+                        {
+                            continue;
+                        }
+
                         do
                         {
                             PropertyItem propItem = CreatePropertyItem();
@@ -710,6 +728,7 @@ namespace FreeImageAPI
                         while (FindNextMetadata(mData, out tag));
                         FindCloseMetadata(mData);
                     }
+
                     foreach (PropertyItem propItem in list)
                     {
                         result.SetPropertyItem(propItem);
@@ -719,6 +738,7 @@ namespace FreeImageAPI
                 {
                 }
             }
+
             return result;
         }
 
@@ -756,6 +776,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("bitmap");
             }
+
             uint bpp, red_mask, green_mask, blue_mask;
             FREE_IMAGE_TYPE type;
             if (!GetFormatParameters(bitmap.PixelFormat, out type, out bpp, out red_mask, out green_mask, out blue_mask))
@@ -794,11 +815,13 @@ namespace FreeImageAPI
                     palette[i] = color;
                     transTable[i] = colors[i].A;
                 }
+
                 if ((bitmap.Flags & (int)ImageFlags.HasAlpha) != 0)
                 {
                     FreeImage.SetTransparencyTable(result, transTable);
                 }
             }
+
             // Handle meta data
             // Disabled
             //if (copyMetadata)
@@ -920,6 +943,7 @@ namespace FreeImageAPI
                     }
                 }
             }
+
             return dib;
         }
 
@@ -1058,17 +1082,20 @@ namespace FreeImageAPI
             {
                 throw new FileNotFoundException(filename + " could not be found.");
             }
+
             FIBITMAP dib = new FIBITMAP();
             if (format == FREE_IMAGE_FORMAT.FIF_UNKNOWN)
             {
                 // query all plugins to see if one can read the file
                 format = GetFileType(filename, 0);
             }
+
             // check if the plugin is capable of loading files
             if (FIFSupportsReading(format))
             {
                 dib = Load(format, filename, flags);
             }
+
             return dib;
         }
 
@@ -1349,16 +1376,19 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             if (filename == null)
             {
                 throw new ArgumentNullException("filename");
             }
+
             bool result = false;
             // Gets format from filename if the format is unknown
             if (format == FREE_IMAGE_FORMAT.FIF_UNKNOWN)
             {
                 format = GetFIFFromFilename(filename);
             }
+
             if (format != FREE_IMAGE_FORMAT.FIF_UNKNOWN)
             {
                 // Checks writing support
@@ -1383,6 +1413,7 @@ namespace FreeImageAPI
                         {
                             UnloadEx(ref dibToSave);
                         }
+
                         // On success unload the bitmap
                         if (result && unloadSource)
                         {
@@ -1391,6 +1422,7 @@ namespace FreeImageAPI
                     }
                 }
             }
+
             return result;
         }
 
@@ -1472,10 +1504,12 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("stream");
             }
+
             if (!stream.CanRead)
             {
                 throw new ArgumentException("stream is not capable of reading.");
             }
+
             // Wrap the source stream if it is unable to seek (which is required by FreeImage)
             stream = (stream.CanSeek) ? stream : new StreamWrapper(stream, true);
 
@@ -1487,10 +1521,12 @@ namespace FreeImageAPI
                 // Restore the streams position
                 stream.Position = 0L;
             }
+
             if (!FIFSupportsReading(format))
             {
                 return FIBITMAP.Zero;
             }
+
             // Create a 'FreeImageIO' structure for calling 'LoadFromHandle'
             // using the internal structure 'FreeImageStreamIO'.
             FreeImageIO io = FreeImageStreamIO.io;
@@ -1676,14 +1712,17 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             if (stream == null)
             {
                 throw new ArgumentNullException("stream");
             }
+
             if (!stream.CanWrite)
             {
                 throw new ArgumentException("stream is not capable of writing.");
             }
+
             if ((!FIFSupportsWriting(format)) || (!FIFSupportsExportType(format, GetImageType(dib))))
             {
                 return false;
@@ -1709,6 +1748,7 @@ namespace FreeImageAPI
                 {
                     UnloadEx(ref dibToSave);
                 }
+
                 // On success unload the bitmap
                 if (result && unloadSource)
                 {
@@ -1751,6 +1791,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("extension");
             }
+
             bool result = false;
             // Split up the string and compare each with the given extension
             string tempList = GetFIFExtensionList(fif);
@@ -1766,6 +1807,7 @@ namespace FreeImageAPI
                     }
                 }
             }
+
             return result;
         }
 
@@ -1797,6 +1839,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("filename");
             }
+
             bool result = false;
             // Extract the filenames extension if it exists
             string extension = Path.GetExtension(filename);
@@ -1805,6 +1848,7 @@ namespace FreeImageAPI
                 extension = extension.Remove(0, 1);
                 result = IsExtensionValidForFIF(fif, extension, comparisonType);
             }
+
             return result;
         }
 
@@ -1831,6 +1875,7 @@ namespace FreeImageAPI
                     result = extensions.Substring(0, position);
                 }
             }
+
             return result;
         }
 
@@ -1989,16 +2034,19 @@ namespace FreeImageAPI
             {
                 throw new FileNotFoundException(filename + " could not be found.");
             }
+
             if (format == FREE_IMAGE_FORMAT.FIF_UNKNOWN)
             {
                 // Check if a plugin can read the data
                 format = GetFileType(filename, 0);
             }
+
             FIMULTIBITMAP dib = new FIMULTIBITMAP();
             if (FIFSupportsReading(format))
             {
                 dib = OpenMultiBitmap(format, filename, create_new, read_only, keep_cache_in_memory, flags);
             }
+
             return dib;
         }
 
@@ -2028,10 +2076,14 @@ namespace FreeImageAPI
         public static FIMULTIBITMAP OpenMultiBitmapFromStream(Stream stream, ref FREE_IMAGE_FORMAT format, FREE_IMAGE_LOAD_FLAGS flags)
         {
             if (stream == null)
+            {
                 return FIMULTIBITMAP.Zero;
+            }
 
             if (!stream.CanSeek)
+            {
                 stream = new StreamWrapper(stream, true);
+            }
 
             FIMULTIBITMAP mdib = FIMULTIBITMAP.Zero;
             FreeImageIO io = FreeImageStreamIO.io;
@@ -2063,10 +2115,14 @@ namespace FreeImageAPI
             catch
             {
                 if (!mdib.IsNull)
+                {
                     CloseMultiBitmap(mdib, FREE_IMAGE_SAVE_FLAGS.DEFAULT);
+                }
 
                 if (handle != null)
+                {
                     handle.Dispose();
+                }
 
                 throw;
             }
@@ -2091,8 +2147,10 @@ namespace FreeImageAPI
                         handle.Dispose();
                     }
                 }
+
                 return true;
             }
+
             return false;
         }
 
@@ -2127,6 +2185,7 @@ namespace FreeImageAPI
                     result = true;
                 }
             }
+
             return result;
         }
 
@@ -2143,6 +2202,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             int result = 0;
             GetLockedPageNumbers(dib, null, ref result);
             return result;
@@ -2161,6 +2221,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             // Get the number of pages and create an array to save the information
             int count = 0;
             int[] result = null;
@@ -2174,6 +2235,7 @@ namespace FreeImageAPI
                     result = null;
                 }
             }
+
             return result;
         }
 
@@ -2205,10 +2267,12 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("stream");
             }
+
             if (!stream.CanRead)
             {
                 throw new ArgumentException("stream");
             }
+
             const int blockSize = 1024;
             int bytesRead;
             byte[] buffer = new byte[blockSize];
@@ -2247,10 +2311,12 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("stream");
             }
+
             if (!stream.CanRead)
             {
                 throw new ArgumentException("stream is not capable of reading.");
             }
+
             // Wrap the stream if it cannot seek
             stream = (stream.CanSeek) ? stream : new StreamWrapper(stream, true);
             // Create a 'FreeImageIO' structure for the stream
@@ -2279,6 +2345,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             return (uint)(0.5d + 0.0254d * GetDotsPerMeterX(dib));
         }
 
@@ -2296,6 +2363,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             return (uint)(0.5d + 0.0254d * GetDotsPerMeterY(dib));
         }
 
@@ -2313,6 +2381,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             SetDotsPerMeterX(dib, (uint)((double)res / 0.0254d + 0.5d));
         }
 
@@ -2330,6 +2399,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             SetDotsPerMeterY(dib, (uint)((double)res / 0.0254d + 0.5d));
         }
 
@@ -2349,6 +2419,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             bool result = true;
             uint bpp = GetBPP(dib);
             switch (bpp)
@@ -2367,11 +2438,13 @@ namespace FreeImageAPI
                             break;
                         }
                     }
+
                     break;
                 default:
                     result = false;
                     break;
             }
+
             return result;
         }
 
@@ -2402,6 +2475,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             return *(BITMAPINFOHEADER*)GetInfoHeader(dib);
         }
 
@@ -2420,6 +2494,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             BITMAPINFO result = new BITMAPINFO();
             result.bmiHeader = GetInfoHeaderEx(dib);
             IntPtr ptr = GetPalette(dib);
@@ -2431,6 +2506,7 @@ namespace FreeImageAPI
             {
                 result.bmiColors = new MemoryArray<RGBQUAD>(ptr, (int)result.bmiHeader.biClrUsed).Data;
             }
+
             return result;
         }
 
@@ -2470,12 +2546,14 @@ namespace FreeImageAPI
                         {
                             result = PixelFormat.Format16bppRgb565;
                         }
+
                         if ((GetBlueMask(dib) == FI16_555_BLUE_MASK) &&
                             (GetGreenMask(dib) == FI16_555_GREEN_MASK) &&
                             (GetRedMask(dib) == FI16_555_RED_MASK))
                         {
                             result = PixelFormat.Format16bppRgb555;
                         }
+
                         break;
                     case 24:
                         result = PixelFormat.Format24bppRgb;
@@ -2485,6 +2563,7 @@ namespace FreeImageAPI
                         break;
                 }
             }
+
             return result;
         }
 
@@ -2584,6 +2663,7 @@ namespace FreeImageAPI
                     result = true;
                     break;
             }
+
             return result;
         }
 
@@ -2600,18 +2680,36 @@ namespace FreeImageAPI
             if (imageFormat != null)
             {
                 if (imageFormat.Equals(ImageFormat.Bmp))
+                {
                     return FREE_IMAGE_FORMAT.FIF_BMP;
+                }
+
                 if (imageFormat.Equals(ImageFormat.Gif))
+                {
                     return FREE_IMAGE_FORMAT.FIF_GIF;
+                }
+
                 if (imageFormat.Equals(ImageFormat.Icon))
+                {
                     return FREE_IMAGE_FORMAT.FIF_ICO;
+                }
+
                 if (imageFormat.Equals(ImageFormat.Jpeg))
+                {
                     return FREE_IMAGE_FORMAT.FIF_JPEG;
+                }
+
                 if (imageFormat.Equals(ImageFormat.Png))
+                {
                     return FREE_IMAGE_FORMAT.FIF_PNG;
+                }
+
                 if (imageFormat.Equals(ImageFormat.Tiff))
+                {
                     return FREE_IMAGE_FORMAT.FIF_TIFF;
+                }
             }
+
             return FREE_IMAGE_FORMAT.FIF_UNKNOWN;
         }
 
@@ -2662,6 +2760,7 @@ namespace FreeImageAPI
                             blue_mask = FI_RGBA_BLUE_MASK;
                             break;
                     }
+
                     break;
                 case FREE_IMAGE_TYPE.FIT_UNKNOWN:
                     break;
@@ -2669,6 +2768,7 @@ namespace FreeImageAPI
                     result = true;
                     break;
             }
+
             return result;
         }
 
@@ -2686,27 +2786,33 @@ namespace FreeImageAPI
             {
                 return false;
             }
+
             // Check whether both pointers are the same
             if (dib1 == dib2)
             {
                 return true;
             }
+
             if (((flags & FREE_IMAGE_COMPARE_FLAGS.HEADER) > 0) && (!CompareHeader(dib1, dib2)))
             {
                 return false;
             }
+
             if (((flags & FREE_IMAGE_COMPARE_FLAGS.PALETTE) > 0) && (!ComparePalette(dib1, dib2)))
             {
                 return false;
             }
+
             if (((flags & FREE_IMAGE_COMPARE_FLAGS.DATA) > 0) && (!CompareData(dib1, dib2)))
             {
                 return false;
             }
+
             if (((flags & FREE_IMAGE_COMPARE_FLAGS.METADATA) > 0) && (!CompareMetadata(dib1, dib2)))
             {
                 return false;
             }
+
             return true;
         }
 
@@ -2726,15 +2832,18 @@ namespace FreeImageAPI
             {
                 return false;
             }
+
             if (!hasPalette1)
             {
                 return true;
             }
+
             uint colors = GetColorsUsed(dib1);
             if (colors != GetColorsUsed(dib2))
             {
                 return false;
             }
+
             return CompareMemory((void*)pal1, (void*)pal2, sizeof(RGBQUAD) * colors);
         }
 
@@ -2745,33 +2854,40 @@ namespace FreeImageAPI
             {
                 return false;
             }
+
             uint height = GetHeight(dib1);
             if (height != GetHeight(dib2))
             {
                 return false;
             }
+
             uint bpp = GetBPP(dib1);
             if (bpp != GetBPP(dib2))
             {
                 return false;
             }
+
             if (GetColorType(dib1) != GetColorType(dib2))
             {
                 return false;
             }
+
             FREE_IMAGE_TYPE type = GetImageType(dib1);
             if (type != GetImageType(dib2))
             {
                 return false;
             }
+
             if (GetRedMask(dib1) != GetRedMask(dib2))
             {
                 return false;
             }
+
             if (GetGreenMask(dib1) != GetGreenMask(dib2))
             {
                 return false;
             }
+
             if (GetBlueMask(dib1) != GetBlueMask(dib2))
             {
                 return false;
@@ -2796,6 +2912,7 @@ namespace FreeImageAPI
                                 return false;
                             }
                         }
+
                         break;
                     case 24:
                         for (int i = 0; i < height; i++)
@@ -2807,6 +2924,7 @@ namespace FreeImageAPI
                                 return false;
                             }
                         }
+
                         break;
                     case 16:
                         short* sPtr1, sPtr2;
@@ -2838,6 +2956,7 @@ namespace FreeImageAPI
                                 }
                             }
                         }
+
                         break;
                     case 8:
                         for (int i = 0; i < height; i++)
@@ -2849,6 +2968,7 @@ namespace FreeImageAPI
                                 return false;
                             }
                         }
+
                         break;
                     case 4:
                         fullBytes = (int)width / 2;
@@ -2863,9 +2983,11 @@ namespace FreeImageAPI
                                 {
                                     return false;
                                 }
+
                                 ptr1 += fullBytes;
                                 ptr2 += fullBytes;
                             }
+
                             if (shift != 8)
                             {
                                 if ((ptr1[0] >> shift) != (ptr2[0] >> shift))
@@ -2874,6 +2996,7 @@ namespace FreeImageAPI
                                 }
                             }
                         }
+
                         break;
                     case 1:
                         fullBytes = (int)width / 8;
@@ -2888,9 +3011,11 @@ namespace FreeImageAPI
                                 {
                                     return false;
                                 }
+
                                 ptr1 += fullBytes;
                                 ptr2 += fullBytes;
                             }
+
                             if (shift != 8)
                             {
                                 if ((ptr1[0] >> shift) != (ptr2[0] >> shift))
@@ -2899,6 +3024,7 @@ namespace FreeImageAPI
                                 }
                             }
                         }
+
                         break;
                     default:
                         throw new NotSupportedException("Only 1, 4, 8, 16, 24 and 32 bpp bitmaps are supported.");
@@ -2916,6 +3042,7 @@ namespace FreeImageAPI
                     }
                 }
             }
+
             return true;
         }
 
@@ -2930,6 +3057,7 @@ namespace FreeImageAPI
                 {
                     return false;
                 }
+
                 if (GetMetadataCount(metadataModel, dib1) == 0)
                 {
                     continue;
@@ -2940,6 +3068,7 @@ namespace FreeImageAPI
                 {
                     continue;
                 }
+
                 do
                 {
                     if ((!GetMetadata(metadataModel, dib2, tag1.Key, out tag2)) || (tag1 != tag2))
@@ -2969,6 +3098,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             uint count = GetTransparencyCount(dib);
             byte[] result = new byte[count];
             byte* ptr = (byte*)GetTransparencyTable(dib);
@@ -2976,6 +3106,7 @@ namespace FreeImageAPI
             {
                 CopyMemory(dst, ptr, count);
             }
+
             return result;
         }
 
@@ -2992,10 +3123,12 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             if (table == null)
             {
                 throw new ArgumentNullException("table");
             }
+
             SetTransparencyTable(dib, table, table.Length);
         }
 
@@ -3052,6 +3185,7 @@ namespace FreeImageAPI
                                     {
                                         return 2;
                                     }
+
                                     mask = (mask == 0x1) ? 0x80 : (mask >> 1);
                                 }
                             }
@@ -3068,10 +3202,12 @@ namespace FreeImageAPI
                                     {
                                         return 2;
                                     }
+
                                     mask = (mask == 0x1) ? 0x80 : (mask >> 1);
                                 }
                             }
                         }
+
                         break;
 
                     case 4:
@@ -3098,6 +3234,7 @@ namespace FreeImageAPI
                                 {
                                     hashcode = lut[scanline[x / 2] & 0xF];
                                 }
+
                                 top = !top;
                                 if (!bitArray[hashcode])
                                 {
@@ -3106,6 +3243,7 @@ namespace FreeImageAPI
                                 }
                             }
                         }
+
                         break;
 
                     case 8:
@@ -3131,6 +3269,7 @@ namespace FreeImageAPI
                                 }
                             }
                         }
+
                         break;
 
                     case 16:
@@ -3150,6 +3289,7 @@ namespace FreeImageAPI
                                 }
                             }
                         }
+
                         break;
 
                     case 24:
@@ -3169,6 +3309,7 @@ namespace FreeImageAPI
                                 }
                             }
                         }
+
                         break;
 
                     case 32:
@@ -3188,9 +3329,11 @@ namespace FreeImageAPI
                                 }
                             }
                         }
+
                         break;
                 }
             }
+
             return result;
         }
 
@@ -3517,6 +3660,7 @@ namespace FreeImageAPI
                                 result = Threshold(dib, threshold);
                             }
                         }
+
                         break;
 
                     case FREE_IMAGE_COLOR_DEPTH.FICD_01_BPP_DITHER:
@@ -3543,6 +3687,7 @@ namespace FreeImageAPI
                                 result = Dither(dib, ditherMethod);
                             }
                         }
+
                         break;
 
                     case FREE_IMAGE_COLOR_DEPTH.FICD_04_BPP:
@@ -3601,6 +3746,7 @@ namespace FreeImageAPI
                                 result = ConvertToGreyscale(dib);
                             }
                         }
+
                         break;
 
                     case FREE_IMAGE_COLOR_DEPTH.FICD_16_BPP_555:
@@ -3615,6 +3761,7 @@ namespace FreeImageAPI
                         {
                             result = ConvertTo16Bits555(dib);
                         }
+
                         break;
 
                     case FREE_IMAGE_COLOR_DEPTH.FICD_16_BPP:
@@ -3629,6 +3776,7 @@ namespace FreeImageAPI
                         {
                             result = ConvertTo16Bits565(dib);
                         }
+
                         break;
 
                     case FREE_IMAGE_COLOR_DEPTH.FICD_24_BPP:
@@ -3643,6 +3791,7 @@ namespace FreeImageAPI
                         {
                             result = ConvertTo24Bits(dib);
                         }
+
                         break;
 
                     case FREE_IMAGE_COLOR_DEPTH.FICD_32_BPP:
@@ -3657,6 +3806,7 @@ namespace FreeImageAPI
                         {
                             result = ConvertTo32Bits(dib);
                         }
+
                         break;
                 }
             }
@@ -3665,6 +3815,7 @@ namespace FreeImageAPI
             {
                 return dib;
             }
+
             if (unloadSource)
             {
                 Unload(dib);
@@ -3693,17 +3844,25 @@ namespace FreeImageAPI
             {
                 int bpp;
                 if (PaletteSize >= 256)
+                {
                     bpp = 8;
+                }
                 else if (PaletteSize > 2)
+                {
                     bpp = 4;
+                }
                 else
+                {
                     bpp = 1;
+                }
+
                 result = ColorQuantizeEx(dib, quantize, PaletteSize, ReservePalette, bpp);
             }
             else
             {
                 result = ColorQuantizeEx(dib, quantize, PaletteSize, ReservePalette, 8);
             }
+
             return result;
         }
 
@@ -3798,6 +3957,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("src");
             }
+
             if (dst.IsNull)
             {
                 throw new ArgumentNullException("dst");
@@ -3823,7 +3983,11 @@ namespace FreeImageAPI
             foreach (FREE_IMAGE_MDMODEL model in FREE_IMAGE_MDMODELS)
             {
                 FIMETADATA mData = FindFirstMetadata(model, src, out tag);
-                if (mData.IsNull) continue;
+                if (mData.IsNull)
+                {
+                    continue;
+                }
+
                 do
                 {
                     string key = GetTagKey(tag);
@@ -3856,12 +4020,14 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             FITAG tag;
             if (GetMetadata(FREE_IMAGE_MDMODEL.FIMD_COMMENTS, dib, "Comment", out tag))
             {
                 MetadataTag metadataTag = new MetadataTag(tag, FREE_IMAGE_MDMODEL.FIMD_COMMENTS);
                 result = metadataTag.Value as string;
             }
+
             return result;
         }
 
@@ -3880,6 +4046,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             bool result;
             if (comment != null)
             {
@@ -3893,6 +4060,7 @@ namespace FreeImageAPI
             {
                 result = SetMetadata(FREE_IMAGE_MDMODEL.FIMD_COMMENTS, dib, "Comment", FITAG.Zero);
             }
+
             return result;
         }
 
@@ -3929,6 +4097,7 @@ namespace FreeImageAPI
                 tag = null;
                 result = false;
             }
+
             return result;
         }
 
@@ -3952,6 +4121,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             return SetMetadata(model, dib, key, tag.tag);
         }
 
@@ -3974,6 +4144,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             FITAG _tag;
             FIMETADATA result = FindFirstMetadata(model, dib, out _tag);
             if (result.IsNull)
@@ -3981,6 +4152,7 @@ namespace FreeImageAPI
                 tag = null;
                 return result;
             }
+
             tag = new MetadataTag(_tag, model);
             if (metaDataSearchHandler.ContainsKey(result))
             {
@@ -3990,6 +4162,7 @@ namespace FreeImageAPI
             {
                 metaDataSearchHandler.Add(result, model);
             }
+
             return result;
         }
 
@@ -4014,6 +4187,7 @@ namespace FreeImageAPI
                 tag = null;
                 result = false;
             }
+
             return result;
         }
 
@@ -4027,6 +4201,7 @@ namespace FreeImageAPI
             {
                 metaDataSearchHandler.Remove(mdhandle);
             }
+
             FindCloseMetadata_(mdhandle);
         }
 
@@ -4077,7 +4252,9 @@ namespace FreeImageAPI
                 finally
                 {
                     if (handle.IsAllocated)
+                    {
                         handle.Free();
+                    }
                 }
             }
             else
@@ -4130,6 +4307,7 @@ namespace FreeImageAPI
                         {
                             break;
                         }
+
                         CopyPalette(dib, result);
                         src = Get04BitScanlines(dib);
                         dst = Get04BitScanlines(result);
@@ -4142,6 +4320,7 @@ namespace FreeImageAPI
                                 dst[y][x] = index;
                             }
                         }
+
                         break;
                     case 180:
                         result = Allocate(width, height, 4, 0, 0, 0);
@@ -4149,6 +4328,7 @@ namespace FreeImageAPI
                         {
                             break;
                         }
+
                         CopyPalette(dib, result);
                         src = Get04BitScanlines(dib);
                         dst = Get04BitScanlines(result);
@@ -4163,6 +4343,7 @@ namespace FreeImageAPI
                                 dst[y][x] = index;
                             }
                         }
+
                         break;
                     case 270:
                         result = Allocate(height, width, 4, 0, 0, 0);
@@ -4170,6 +4351,7 @@ namespace FreeImageAPI
                         {
                             break;
                         }
+
                         CopyPalette(dib, result);
                         src = Get04BitScanlines(dib);
                         dst = Get04BitScanlines(result);
@@ -4182,6 +4364,7 @@ namespace FreeImageAPI
                                 dst[y][x] = index;
                             }
                         }
+
                         break;
                     case 0:
                     case 360:
@@ -4189,6 +4372,7 @@ namespace FreeImageAPI
                         break;
                 }
             }
+
             return result;
         }
 
@@ -4264,12 +4448,16 @@ namespace FreeImageAPI
             T? color, FREE_IMAGE_COLOR_OPTIONS options) where T : struct
         {
             if (dib.IsNull)
+            {
                 return FIBITMAP.Zero;
+            }
 
             if (color.HasValue)
             {
                 if (!CheckColorType(GetImageType(dib), color.Value))
+                {
                     return FIBITMAP.Zero;
+                }
 
                 GCHandle handle = new GCHandle();
                 try
@@ -4281,7 +4469,9 @@ namespace FreeImageAPI
                 finally
                 {
                     if (handle.IsAllocated)
+                    {
                         handle.Free();
+                    }
                 }
             }
             else
@@ -4377,10 +4567,14 @@ namespace FreeImageAPI
             where T : struct
         {
             if (dib.IsNull)
+            {
                 return false;
+            }
 
             if (!CheckColorType(GetImageType(dib), color))
+            {
                 return false;
+            }
 
             GCHandle handle = new GCHandle();
             try
@@ -4392,7 +4586,9 @@ namespace FreeImageAPI
             finally
             {
                 if (handle.IsAllocated)
+                {
                     handle.Free();
+                }
             }
         }
 
@@ -4426,6 +4622,7 @@ namespace FreeImageAPI
                     result = 32;
                     break;
             }
+
             return result;
         }
 
@@ -4455,6 +4652,7 @@ namespace FreeImageAPI
                     result = 1;
                     break;
             }
+
             return result;
         }
 
@@ -4474,8 +4672,10 @@ namespace FreeImageAPI
                 {
                     sb.Append((char)(*(ptr++)));
                 }
+
                 result = sb.ToString();
             }
+
             return result;
         }
 
@@ -4509,9 +4709,11 @@ namespace FreeImageAPI
                         lut.Add((byte)index);
                     }
                 }
+
                 result = lut.ToArray();
                 uniqueColors = newPalette.Count;
             }
+
             return result;
         }
 
@@ -4536,6 +4738,7 @@ namespace FreeImageAPI
             {
                 array[i] = new Scanline<FI4BIT>(dib, i);
             }
+
             return array;
         }
 
@@ -4582,16 +4785,19 @@ namespace FreeImageAPI
                                 dibToSave = ConvertColorDepth(dibToSave, (FREE_IMAGE_COLOR_DEPTH)bppUpper, false);
                                 break;
                             }
+
                             bppLower = GetPrevousColorDepth(bppLower);
                             if (FIFSupportsExportBPP(format, bppLower))
                             {
                                 dibToSave = ConvertColorDepth(dibToSave, (FREE_IMAGE_COLOR_DEPTH)bppLower, false);
                                 break;
                             }
-                        } while (!((bppLower == 0) && (bppUpper == 0)));
+                        }
+                        while (!((bppLower == 0) && (bppUpper == 0)));
                     }
                 }
             }
+
             return dibToSave;
         }
 
@@ -4668,6 +4874,7 @@ namespace FreeImageAPI
                 }
                 while ((len -= 0x10) >= 0x10);
             }
+
             if (len > 0)
             {
                 if ((len & 8) != 0)
@@ -4677,18 +4884,21 @@ namespace FreeImageAPI
                     dest += 8;
                     src += 8;
                 }
+
                 if ((len & 4) != 0)
                 {
                     *((int*)dest) = *((int*)src);
                     dest += 4;
                     src += 4;
                 }
+
                 if ((len & 2) != 0)
                 {
                     *((short*)dest) = *((short*)src);
                     dest += 2;
                     src += 2;
                 }
+
                 if ((len & 1) != 0)
                 {
                     *dest = *src;
@@ -5006,6 +5216,7 @@ namespace FreeImageAPI
                 default:
                     result = false; break;
             }
+
             return result;
         }
 

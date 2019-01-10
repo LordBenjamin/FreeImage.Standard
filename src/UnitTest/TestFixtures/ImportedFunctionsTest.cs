@@ -810,8 +810,12 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.AreNotEqual(0, FreeImage.ZLibCompress(compressed, (uint)compressed.Length, source, (uint)source.Length));
             Assert.AreNotEqual(0, FreeImage.ZLibUncompress(uncompressed, (uint)source.Length, compressed, (uint)compressed.Length));
             for (int i = 0; i < source.Length; i++)
+            {
                 if (source[i] != uncompressed[i])
+                {
                     Assert.Fail();
+                }
+            }
         }
 
         [Test]
@@ -825,8 +829,12 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.AreNotEqual(0, FreeImage.ZLibGZip(compressed, (uint)compressed.Length, source, (uint)source.Length));
             Assert.AreNotEqual(0, FreeImage.ZLibGUnzip(uncompressed, (uint)source.Length, compressed, (uint)compressed.Length));
             for (int i = 0; i < source.Length; i++)
+            {
                 if (source[i] != uncompressed[i])
+                {
                     Assert.Fail();
+                }
+            }
         }
 
         [Test]

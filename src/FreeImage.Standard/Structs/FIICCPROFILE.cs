@@ -74,6 +74,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             FIICCPROFILE prof;
             size = Math.Min(size, (int)data.Length);
             prof = *(FIICCPROFILE*)FreeImage.CreateICCProfile(dib, data, size);

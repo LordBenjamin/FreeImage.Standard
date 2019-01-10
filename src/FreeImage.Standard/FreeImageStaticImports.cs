@@ -197,7 +197,11 @@ namespace FreeImageAPI
         /// Returns a string containing the current version of the library.
         /// </summary>
         /// <returns>The current version of the library.</returns>
-        public static unsafe string GetVersion() { return PtrToStr(GetVersion_()); }
+        public static unsafe string GetVersion()
+        {
+            return PtrToStr(GetVersion_());
+        }
+
         [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetVersion")]
         private static unsafe extern byte* GetVersion_();
 
@@ -205,7 +209,11 @@ namespace FreeImageAPI
         /// Returns a string containing a standard copyright message.
         /// </summary>
         /// <returns>A standard copyright message.</returns>
-        public static unsafe string GetCopyrightMessage() { return PtrToStr(GetCopyrightMessage_()); }
+        public static unsafe string GetCopyrightMessage()
+        {
+            return PtrToStr(GetCopyrightMessage_());
+        }
+
         [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetCopyrightMessage")]
         private static unsafe extern byte* GetCopyrightMessage_();
 
@@ -588,7 +596,11 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">The assigned <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>The string that was used to register the plugin.</returns>
-        public static unsafe string GetFormatFromFIF(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFormatFromFIF_(fif)); }
+        public static unsafe string GetFormatFromFIF(FREE_IMAGE_FORMAT fif)
+        {
+            return PtrToStr(GetFormatFromFIF_(fif));
+        }
+
         [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFormatFromFIF")]
         private static unsafe extern byte* GetFormatFromFIF_(FREE_IMAGE_FORMAT fif);
 
@@ -597,7 +609,11 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">The desired <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>A comma-delimited file extension list.</returns>
-        public static unsafe string GetFIFExtensionList(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFIFExtensionList_(fif)); }
+        public static unsafe string GetFIFExtensionList(FREE_IMAGE_FORMAT fif)
+        {
+            return PtrToStr(GetFIFExtensionList_(fif));
+        }
+
         [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFIFExtensionList")]
         private static unsafe extern byte* GetFIFExtensionList_(FREE_IMAGE_FORMAT fif);
 
@@ -606,7 +622,11 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">The desired <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>A descriptive string that describes the bitmap formats.</returns>
-        public static unsafe string GetFIFDescription(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFIFDescription_(fif)); }
+        public static unsafe string GetFIFDescription(FREE_IMAGE_FORMAT fif)
+        {
+            return PtrToStr(GetFIFDescription_(fif));
+        }
+
         [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFIFDescription")]
         private static unsafe extern byte* GetFIFDescription_(FREE_IMAGE_FORMAT fif);
 
@@ -616,7 +636,11 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">The desired <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>A regular expression string.</returns>
-        public static unsafe string GetFIFRegExpr(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFIFRegExpr_(fif)); }
+        public static unsafe string GetFIFRegExpr(FREE_IMAGE_FORMAT fif)
+        {
+            return PtrToStr(GetFIFRegExpr_(fif));
+        }
+
         [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFIFRegExpr")]
         private static unsafe extern byte* GetFIFRegExpr_(FREE_IMAGE_FORMAT fif);
 
@@ -625,7 +649,11 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="fif">The desired <see cref="FREE_IMAGE_FORMAT"/>.</param>
         /// <returns>A MIME content type string.</returns>
-        public static unsafe string GetFIFMimeType(FREE_IMAGE_FORMAT fif) { return PtrToStr(GetFIFMimeType_(fif)); }
+        public static unsafe string GetFIFMimeType(FREE_IMAGE_FORMAT fif)
+        {
+            return PtrToStr(GetFIFMimeType_(fif));
+        }
+
         [DllImport(ExternDll.FreeImage, EntryPoint = "FreeImage_GetFIFMimeType")]
         private static unsafe extern byte* GetFIFMimeType_(FREE_IMAGE_FORMAT fif);
 
@@ -1282,7 +1310,13 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
         /// <returns>The <see cref="FIICCPROFILE"/> data of the bitmap.</returns>
-        public static FIICCPROFILE GetICCProfileEx(FIBITMAP dib) { unsafe { return *(FIICCPROFILE*)FreeImage.GetICCProfile(dib); } }
+        public static FIICCPROFILE GetICCProfileEx(FIBITMAP dib)
+        {
+            unsafe
+            {
+                return *(FIICCPROFILE*)FreeImage.GetICCProfile(dib);
+            }
+        }
 
         /// <summary>
         /// Retrieves a pointer to the <see cref="FIICCPROFILE"/> data of the bitmap.
@@ -1693,7 +1727,11 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="tag">The tag field.</param>
         /// <returns>The field name.</returns>
-        public static unsafe string GetTagKey(FITAG tag) { return PtrToStr(GetTagKey_(tag)); }
+        public static unsafe string GetTagKey(FITAG tag)
+        {
+            return PtrToStr(GetTagKey_(tag));
+        }
+
         [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetTagKey")]
         private static unsafe extern byte* GetTagKey_(FITAG tag);
 
@@ -1702,7 +1740,11 @@ namespace FreeImageAPI
         /// </summary>
         /// <param name="tag">The tag field.</param>
         /// <returns>The description or NULL if unavailable.</returns>
-        public static unsafe string GetTagDescription(FITAG tag) { return PtrToStr(GetTagDescription_(tag)); }
+        public static unsafe string GetTagDescription(FITAG tag)
+        {
+            return PtrToStr(GetTagDescription_(tag));
+        }
+
         [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_GetTagDescription")]
         private static unsafe extern byte* GetTagDescription_(FITAG tag);
 
@@ -1899,7 +1941,11 @@ namespace FreeImageAPI
         /// <param name="tag">The interpreted tag value.</param>
         /// <param name="Make">Reserved.</param>
         /// <returns>The representing string.</returns>
-        public static unsafe string TagToString(FREE_IMAGE_MDMODEL model, FITAG tag, uint Make) { return PtrToStr(TagToString_(model, tag, Make)); }
+        public static unsafe string TagToString(FREE_IMAGE_MDMODEL model, FITAG tag, uint Make)
+        {
+            return PtrToStr(TagToString_(model, tag, Make));
+        }
+
         [DllImport(ExternDll.FreeImage, CharSet = CharSet.Ansi, EntryPoint = "FreeImage_TagToString")]
         private static unsafe extern byte* TagToString_(FREE_IMAGE_MDMODEL model, FITAG tag, uint Make);
 

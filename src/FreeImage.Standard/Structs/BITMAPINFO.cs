@@ -119,18 +119,22 @@ namespace FreeImageAPI
             {
                 return false;
             }
+
             if ((left.bmiColors == null) && (right.bmiColors == null))
             {
                 return true;
             }
+
             if ((left.bmiColors == null) || (right.bmiColors == null))
             {
                 return false;
             }
+
             if (left.bmiColors.Length != right.bmiColors.Length)
             {
                 return false;
             }
+
             for (int i = 0; i < left.bmiColors.Length; i++)
             {
                 if (left.bmiColors[i] != right.bmiColors[i])
@@ -138,6 +142,7 @@ namespace FreeImageAPI
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -191,12 +196,14 @@ namespace FreeImageAPI
                     hash ^= bmiColors[c].GetHashCode();
                     hash <<= 1;
                 }
+
                 hash <<= 1;
             }
             else
             {
                 hash >>= 1;
             }
+
             return hash;
         }
     }

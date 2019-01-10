@@ -28,13 +28,25 @@ namespace FreeImageNETUnitTest.TestFixtures
         public bool EqualColors(Color color1, Color color2)
         {
             if (color1.A != color2.A)
+            {
                 return false;
+            }
+
             if (color1.R != color2.R)
+            {
                 return false;
+            }
+
             if (color1.G != color2.G)
+            {
                 return false;
+            }
+
             if (color1.B != color2.B)
+            {
                 return false;
+            }
+
             return true;
         }
 
@@ -70,6 +82,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             catch
             {
             }
+
             Assert.IsNull(bitmap);
 
             dib = iManager.GetBitmap(ImageType.Even, ImageColorType.Type_24);
@@ -283,8 +296,12 @@ namespace FreeImageNETUnitTest.TestFixtures
             byte[] buffer2 = File.ReadAllBytes(@"out_file.bmp");
             Assert.AreEqual(buffer1.Length, buffer2.Length);
             for (int i = 0; i < buffer1.Length; i++)
+            {
                 if (buffer1[i] != buffer2[i])
+                {
                     Assert.Fail();
+                }
+            }
 
             File.Delete(@"out_stream.bmp");
             File.Delete(@"out_file.bmp");
@@ -565,6 +582,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             catch
             {
             }
+
             FreeImage.UnloadEx(ref dib);
 
             dib = iManager.GetBitmap(ImageType.Odd, ImageColorType.Type_08_Greyscale_MinIsBlack);
@@ -576,6 +594,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             {
                 Assert.Fail();
             }
+
             Assert.AreEqual(256, palette.Length);
             for (int index = 0; index < 256; index++)
             {
@@ -890,8 +909,12 @@ namespace FreeImageNETUnitTest.TestFixtures
             prof = FreeImage.CreateICCProfileEx(dib, data);
             Assert.That(prof.Size == data.Length);
             for (int i = 0; i < data.Length; i++)
+            {
                 if (prof.Data[i] != data[i])
+                {
                     Assert.Fail();
+                }
+            }
 
             FreeImage.DestroyICCProfile(dib);
             prof = FreeImage.GetICCProfileEx(dib);
@@ -919,8 +942,11 @@ namespace FreeImageNETUnitTest.TestFixtures
                 Assert.IsFalse(dib2.IsNull);
                 Assert.AreEqual(bpp, FreeImage.GetBPP(dib2));
                 if (dib != dib2)
+                {
                     FreeImage.UnloadEx(ref dib2);
-            } while (0 != (bpp = FreeImage.GetNextColorDepth(bpp)));
+                }
+            }
+            while (0 != (bpp = FreeImage.GetNextColorDepth(bpp)));
 
             FreeImage.UnloadEx(ref dib);
 
@@ -935,8 +961,11 @@ namespace FreeImageNETUnitTest.TestFixtures
                 Assert.IsFalse(dib2.IsNull);
                 Assert.AreEqual(bpp, FreeImage.GetBPP(dib2));
                 if (dib != dib2)
+                {
                     FreeImage.UnloadEx(ref dib2);
-            } while (0 != (bpp = FreeImage.GetPrevousColorDepth(bpp)));
+                }
+            }
+            while (0 != (bpp = FreeImage.GetPrevousColorDepth(bpp)));
 
             FreeImage.UnloadEx(ref dib);
         }
@@ -982,6 +1011,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             {
                 Marshal.WriteByte(buffer, index, (byte)testString[index]);
             }
+
             Marshal.WriteByte(buffer, index, (byte)0);
 
             resString = FreeImage.PtrToStr((byte*)buffer);
@@ -996,6 +1026,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             {
                 Marshal.WriteByte(buffer, index, (byte)testString[index]);
             }
+
             Marshal.WriteByte(buffer, index, (byte)0);
 
             resString = FreeImage.PtrToStr((byte*)buffer);
@@ -1233,14 +1264,18 @@ namespace FreeImageNETUnitTest.TestFixtures
             int length = transTable.Length;
 
             for (int i = 0; i < transTable.Length; i++)
+            {
                 transTable[i] = (byte)i;
+            }
 
             FreeImage.SetTransparencyTable(dib, transTable);
             transTable = null;
             transTable = FreeImage.GetTransparencyTableEx(dib);
             Assert.That(transTable.Length == length);
             for (int i = 0; i < transTable.Length; i++)
+            {
                 Assert.That(transTable[i] == i);
+            }
 
             FreeImage.UnloadEx(ref dib);
         }
@@ -1460,22 +1495,39 @@ namespace FreeImageNETUnitTest.TestFixtures
 
             index = 1;
             if (!FreeImage.SetPixelIndex(dib, 0, 0, ref index))
+            {
                 throw new Exception();
+            }
+
             index = 2;
             if (!FreeImage.SetPixelIndex(dib, 1, 0, ref index))
+            {
                 throw new Exception();
+            }
+
             index = 3;
             if (!FreeImage.SetPixelIndex(dib, 0, 1, ref index))
+            {
                 throw new Exception();
+            }
+
             index = 4;
             if (!FreeImage.SetPixelIndex(dib, 1, 1, ref index))
+            {
                 throw new Exception();
+            }
+
             index = 5;
             if (!FreeImage.SetPixelIndex(dib, 0, 2, ref index))
+            {
                 throw new Exception();
+            }
+
             index = 6;
             if (!FreeImage.SetPixelIndex(dib, 1, 2, ref index))
+            {
                 throw new Exception();
+            }
 
             //
             // 90 deg
