@@ -306,7 +306,8 @@ namespace FreeImageAPI.IO
 
 		private void checkDisposed()
 		{
-			if (disposed) throw new ObjectDisposedException("StreamWrapper");
+			if (disposed)
+				throw new ObjectDisposedException("StreamWrapper");
 		}
 	}
 }

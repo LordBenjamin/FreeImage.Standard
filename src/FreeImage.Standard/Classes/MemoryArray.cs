@@ -372,7 +372,7 @@ namespace FreeImageAPI
 
 			if (isOneBit || isFourBit)
 			{
-				for (int i = 0; i != values.Length; )
+				for (int i = 0; i != values.Length;)
 				{
 					SetValueInternal(values[i++], index++);
 				}

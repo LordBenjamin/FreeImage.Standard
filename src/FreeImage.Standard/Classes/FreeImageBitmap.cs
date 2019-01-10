@@ -54,7 +54,7 @@ namespace FreeImageAPI
 	[Serializable, Guid("64a4c935-b757-499c-ab8c-6110316a9e51")]
 	public class FreeImageBitmap : MarshalByRefObject, ICloneable, IDisposable, IEnumerable, ISerializable
 	{
-#region Fields
+		#region Fields
 
 		/// <summary>
 		/// Indicates whether this instance is disposed.
@@ -125,9 +125,9 @@ namespace FreeImageAPI
 		private const string ErrorCreatingBitmap = "Unable to create bitmap.";
 		private const string ErrorUnloadBitmap = "Unable to unload bitmap.";
 
-#endregion
+		#endregion
 
-#region Constructors and Destructor
+		#region Constructors and Destructor
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FreeImageBitmap"/> class.
@@ -945,7 +945,7 @@ namespace FreeImageAPI
 
 		#endregion
 
-#region Operators
+		#region Operators
 
 		/// <summary>
 		/// Converts a <see cref="FreeImageBitmap"/> instance to a <see cref="Bitmap"/> instance.
@@ -1018,9 +1018,9 @@ namespace FreeImageAPI
 			return (!(left == right));
 		}
 
-#endregion
+		#endregion
 
-#region Properties
+		#region Properties
 
 		/// <summary>
 		/// Type of the bitmap.
@@ -1716,9 +1716,9 @@ namespace FreeImageAPI
 			get { EnsureNotDisposed(); return dib; }
 		}
 
-#endregion
+		#endregion
 
-#region Methods
+		#region Methods
 
 		/// <summary>
 		/// Gets the bounds of this <see cref="FreeImageBitmap"/> in the specified unit.
@@ -1937,9 +1937,15 @@ namespace FreeImageAPI
 
 					switch (FreeImage.GetBPP(dib))
 					{
-						case 1u: result = new Scanline<FI1BIT>(dib, scanline, width); break;
-						case 4u: result = new Scanline<FI4BIT>(dib, scanline, width); break;
-						case 8u: result = new Scanline<Byte>(dib, scanline, width); break;
+						case 1u:
+							result = new Scanline<FI1BIT>(dib, scanline, width);
+							break;
+						case 4u:
+							result = new Scanline<FI4BIT>(dib, scanline, width);
+							break;
+						case 8u:
+							result = new Scanline<Byte>(dib, scanline, width);
+							break;
 						case 16u:
 							if ((RedMask == FreeImage.FI16_555_RED_MASK) &&
 								(GreenMask == FreeImage.FI16_555_GREEN_MASK) &&
@@ -1958,25 +1964,53 @@ namespace FreeImageAPI
 								result = new Scanline<UInt16>(dib, scanline, width);
 							}
 							break;
-						case 24u: result = new Scanline<RGBTRIPLE>(dib, scanline, width); break;
-						case 32u: result = new Scanline<RGBQUAD>(dib, scanline, width); break;
-						default: throw new ArgumentException("Color depth is not supported.");
+						case 24u:
+							result = new Scanline<RGBTRIPLE>(dib, scanline, width);
+							break;
+						case 32u:
+							result = new Scanline<RGBQUAD>(dib, scanline, width);
+							break;
+						default:
+							throw new ArgumentException("Color depth is not supported.");
 					}
 					break;
 
-				case FREE_IMAGE_TYPE.FIT_COMPLEX: result = new Scanline<FICOMPLEX>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_DOUBLE: result = new Scanline<Double>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_FLOAT: result = new Scanline<Single>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_INT16: result = new Scanline<Int16>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_INT32: result = new Scanline<Int32>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_RGB16: result = new Scanline<FIRGB16>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_RGBA16: result = new Scanline<FIRGBA16>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_RGBAF: result = new Scanline<FIRGBAF>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_RGBF: result = new Scanline<FIRGBF>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_UINT16: result = new Scanline<UInt16>(dib, scanline, width); break;
-				case FREE_IMAGE_TYPE.FIT_UINT32: result = new Scanline<UInt32>(dib, scanline, width); break;
+				case FREE_IMAGE_TYPE.FIT_COMPLEX:
+					result = new Scanline<FICOMPLEX>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_DOUBLE:
+					result = new Scanline<Double>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_FLOAT:
+					result = new Scanline<Single>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_INT16:
+					result = new Scanline<Int16>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_INT32:
+					result = new Scanline<Int32>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_RGB16:
+					result = new Scanline<FIRGB16>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_RGBA16:
+					result = new Scanline<FIRGBA16>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_RGBAF:
+					result = new Scanline<FIRGBAF>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_RGBF:
+					result = new Scanline<FIRGBF>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_UINT16:
+					result = new Scanline<UInt16>(dib, scanline, width);
+					break;
+				case FREE_IMAGE_TYPE.FIT_UINT32:
+					result = new Scanline<UInt32>(dib, scanline, width);
+					break;
 				case FREE_IMAGE_TYPE.FIT_UNKNOWN:
-				default: throw new ArgumentException("Type is not supported.");
+				default:
+					throw new ArgumentException("Type is not supported.");
 			}
 
 			return result;
@@ -2039,9 +2073,15 @@ namespace FreeImageAPI
 
 					switch (FreeImage.GetBPP(dib))
 					{
-						case 1u: list = new List<Scanline<FI1BIT>>(height); break;
-						case 4u: list = new List<Scanline<FI4BIT>>(height); break;
-						case 8u: list = new List<Scanline<Byte>>(height); break;
+						case 1u:
+							list = new List<Scanline<FI1BIT>>(height);
+							break;
+						case 4u:
+							list = new List<Scanline<FI4BIT>>(height);
+							break;
+						case 8u:
+							list = new List<Scanline<Byte>>(height);
+							break;
 						case 16u:
 							if (FreeImage.IsRGB555(dib))
 							{
@@ -2056,25 +2096,53 @@ namespace FreeImageAPI
 								list = new List<Scanline<UInt16>>(height);
 							}
 							break;
-						case 24u: list = new List<Scanline<RGBTRIPLE>>(height); break;
-						case 32u: list = new List<Scanline<RGBQUAD>>(height); break;
-						default: throw new ArgumentException("Color depth is not supported.");
+						case 24u:
+							list = new List<Scanline<RGBTRIPLE>>(height);
+							break;
+						case 32u:
+							list = new List<Scanline<RGBQUAD>>(height);
+							break;
+						default:
+							throw new ArgumentException("Color depth is not supported.");
 					}
 					break;
 
-				case FREE_IMAGE_TYPE.FIT_COMPLEX: list = new List<Scanline<FICOMPLEX>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_DOUBLE: list = new List<Scanline<Double>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_FLOAT: list = new List<Scanline<Single>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_INT16: list = new List<Scanline<Int16>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_INT32: list = new List<Scanline<Int32>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_RGB16: list = new List<Scanline<FIRGB16>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_RGBA16: list = new List<Scanline<FIRGBA16>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_RGBAF: list = new List<Scanline<FIRGBAF>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_RGBF: list = new List<Scanline<FIRGBF>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_UINT16: list = new List<Scanline<UInt16>>(height); break;
-				case FREE_IMAGE_TYPE.FIT_UINT32: list = new List<Scanline<UInt32>>(height); break;
+				case FREE_IMAGE_TYPE.FIT_COMPLEX:
+					list = new List<Scanline<FICOMPLEX>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_DOUBLE:
+					list = new List<Scanline<Double>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_FLOAT:
+					list = new List<Scanline<Single>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_INT16:
+					list = new List<Scanline<Int16>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_INT32:
+					list = new List<Scanline<Int32>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_RGB16:
+					list = new List<Scanline<FIRGB16>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_RGBA16:
+					list = new List<Scanline<FIRGBA16>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_RGBAF:
+					list = new List<Scanline<FIRGBAF>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_RGBF:
+					list = new List<Scanline<FIRGBF>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_UINT16:
+					list = new List<Scanline<UInt16>>(height);
+					break;
+				case FREE_IMAGE_TYPE.FIT_UINT32:
+					list = new List<Scanline<UInt32>>(height);
+					break;
 				case FREE_IMAGE_TYPE.FIT_UNKNOWN:
-				default: throw new ArgumentException("Type is not supported.");
+				default:
+					throw new ArgumentException("Type is not supported.");
 			}
 
 			for (int i = 0; i < height; i++)
@@ -4170,9 +4238,9 @@ namespace FreeImageAPI
 			return FreeImage.CreatePropertyItem();
 		}
 
-#endregion
+		#endregion
 
-#region Helper functions
+		#region Helper functions
 
 		/// <summary>
 		/// Throws an exception in case the instance has already been disposed.
@@ -4270,9 +4338,9 @@ namespace FreeImageAPI
 			AddMemoryPressure();
 		}
 
-#endregion
+		#endregion
 
-#region Interfaces
+		#region Interfaces
 
 		/// <summary>
 		/// Helper class to store informations for <see cref="FreeImageBitmap.SaveAdd()"/>.
@@ -4380,6 +4448,6 @@ namespace FreeImageAPI
 			}
 		}
 
-#endregion
+		#endregion
 	}
 }

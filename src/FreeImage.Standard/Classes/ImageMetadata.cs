@@ -69,7 +69,8 @@ namespace FreeImageAPI.Metadata
 		/// will be hidden until a tag to this model is added.</param>
 		public ImageMetadata(FIBITMAP dib, bool hideEmptyModels)
 		{
-			if (dib.IsNull) throw new ArgumentNullException("dib");
+			if (dib.IsNull)
+				throw new ArgumentNullException("dib");
 			data = new List<MetadataModel>(FreeImage.FREE_IMAGE_MDMODELS.Length);
 			this.dib = dib;
 			this.hideEmptyModels = hideEmptyModels;

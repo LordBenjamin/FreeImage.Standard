@@ -4,22 +4,22 @@ using System.Reflection;
 
 namespace FreeImageNETUnitTest
 {
-    [SetUpFixture]
-    public class SetUpFixture
-    {
+	[SetUpFixture]
+	public class SetUpFixture
+	{
 
-        [OneTimeSetUp]
-        public void Init()
-        {
-            string dir = Path.GetDirectoryName(typeof(SetUpFixture).GetTypeInfo().Assembly.Location);
-            Directory.SetCurrentDirectory(dir);
+		[OneTimeSetUp]
+		public void Init()
+		{
+			string dir = Path.GetDirectoryName(typeof(SetUpFixture).GetTypeInfo().Assembly.Location);
+			Directory.SetCurrentDirectory(dir);
 
-            NativeLibraryLoader.CopyFreeImageNativeDll();
-        }
+			NativeLibraryLoader.CopyFreeImageNativeDll();
+		}
 
-        [OneTimeTearDown]
-        public void DeInit()
-        {
-        }
-    }
+		[OneTimeTearDown]
+		public void DeInit()
+		{
+		}
+	}
 }

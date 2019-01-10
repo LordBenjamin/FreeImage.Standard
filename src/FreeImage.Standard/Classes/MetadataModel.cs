@@ -437,7 +437,7 @@ namespace FreeImageAPI.Metadata
 		{
 			uint[] value = GetUInt32Array(key);
 			return value == null ? default(uint?) : value[0];
-		}	
+		}
 
 		/// <summary>
 		/// Sets the value of the specified tag.
