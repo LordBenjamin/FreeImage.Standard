@@ -157,10 +157,12 @@ namespace FreeImageAPI
             {
                 return 1;
             }
+
             if (!(obj is FIMETADATA))
             {
                 throw new ArgumentException("obj");
             }
+
             return CompareTo((FIMETADATA)obj);
         }
 

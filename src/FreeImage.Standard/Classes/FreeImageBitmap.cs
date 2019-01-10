@@ -147,6 +147,7 @@ namespace FreeImageAPI
             {
                 throw new FreeImageException(ErrorLoadingBitmap);
             }
+
             this.dib = dib;
             AddMemoryPressure();
         }
@@ -164,12 +165,14 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("original");
             }
+
             original.EnsureNotDisposed();
             dib = FreeImage.Clone(original.dib);
             if (dib.IsNull)
             {
                 throw new FreeImageException(ErrorLoadingBitmap);
             }
+
             originalFormat = original.originalFormat;
             AddMemoryPressure();
         }
@@ -208,20 +211,24 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("original");
             }
+
             if (width <= 0)
             {
                 throw new ArgumentOutOfRangeException("width");
             }
+
             if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException("height");
             }
+
             original.EnsureNotDisposed();
             dib = FreeImage.Rescale(original.dib, width, height, FREE_IMAGE_FILTER.FILTER_BICUBIC);
             if (dib.IsNull)
             {
                 throw new FreeImageException(ErrorLoadingBitmap);
             }
+
             originalFormat = original.originalFormat;
             AddMemoryPressure();
         }
@@ -315,11 +322,13 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("original");
             }
+
             dib = FreeImage.CreateFromBitmap(original, true);
             if (dib.IsNull)
             {
                 throw new FreeImageException(ErrorLoadingBitmap);
             }
+
             originalFormat = FreeImage.GetFormat(original.RawFormat);
             AddMemoryPressure();
         }
@@ -374,25 +383,30 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("original");
             }
+
             if (width <= 0)
             {
                 throw new ArgumentOutOfRangeException("width");
             }
+
             if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException("height");
             }
+
             FIBITMAP temp = FreeImage.CreateFromBitmap(original, true);
             if (temp.IsNull)
             {
                 throw new FreeImageException(ErrorLoadingBitmap);
             }
+
             dib = FreeImage.Rescale(temp, width, height, FREE_IMAGE_FILTER.FILTER_BICUBIC);
             FreeImage.Unload(temp);
             if (dib.IsNull)
             {
                 throw new FreeImageException(ErrorLoadingBitmap);
             }
+
             originalFormat = FreeImage.GetFormat(original.RawFormat);
             AddMemoryPressure();
         }
@@ -479,6 +493,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("stream");
             }
+
             this.stream = stream;
             disposeStream = false;
             LoadFromStream(stream, format, flags);
@@ -553,6 +568,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("filename");
             }
+
             if (!File.Exists(filename))
             {
                 throw new FileNotFoundException("filename");
@@ -584,6 +600,7 @@ namespace FreeImageAPI
             {
                 throw new FreeImageException(ErrorCreatingBitmap);
             }
+
             AddMemoryPressure();
         }
 
@@ -638,21 +655,25 @@ namespace FreeImageAPI
             {
                 throw new ArgumentOutOfRangeException("width");
             }
+
             if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException("height");
             }
+
             uint bpp, redMask, greenMask, blueMask;
             FREE_IMAGE_TYPE type;
             if (!FreeImage.GetFormatParameters(format, out type, out bpp, out redMask, out greenMask, out blueMask))
             {
                 throw new ArgumentException("format is invalid");
             }
+
             dib = FreeImage.AllocateT(type, width, height, (int)bpp, redMask, greenMask, blueMask);
             if (dib.IsNull)
             {
                 throw new FreeImageException(ErrorCreatingBitmap);
             }
+
             AddMemoryPressure();
         }
 
@@ -675,19 +696,23 @@ namespace FreeImageAPI
             {
                 throw new ArgumentOutOfRangeException("width");
             }
+
             if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException("height");
             }
+
             if ((type == FREE_IMAGE_TYPE.FIT_BITMAP) || (type == FREE_IMAGE_TYPE.FIT_UNKNOWN))
             {
                 throw new ArgumentException("type is invalid.");
             }
+
             dib = FreeImage.AllocateT(type, width, height, 0, 0u, 0u, 0u);
             if (dib.IsNull)
             {
                 throw new FreeImageException(ErrorCreatingBitmap);
             }
+
             AddMemoryPressure();
         }
 
@@ -722,10 +747,12 @@ namespace FreeImageAPI
             {
                 throw new ArgumentOutOfRangeException("width");
             }
+
             if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException("height");
             }
+
             uint bpp, redMask, greenMask, blueMask;
             FREE_IMAGE_TYPE type;
             bool topDown = (stride > 0);
@@ -743,6 +770,7 @@ namespace FreeImageAPI
             {
                 throw new FreeImageException(ErrorCreatingBitmap);
             }
+
             AddMemoryPressure();
         }
 
@@ -778,14 +806,17 @@ namespace FreeImageAPI
             {
                 throw new ArgumentOutOfRangeException("width");
             }
+
             if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException("height");
             }
+
             if (bits == null)
             {
                 throw new ArgumentNullException("bits");
             }
+
             uint bpp, redMask, greenMask, blueMask;
             FREE_IMAGE_TYPE type;
             bool topDown = (stride > 0);
@@ -803,6 +834,7 @@ namespace FreeImageAPI
             {
                 throw new FreeImageException(ErrorCreatingBitmap);
             }
+
             AddMemoryPressure();
         }
 
@@ -830,10 +862,12 @@ namespace FreeImageAPI
             {
                 throw new ArgumentOutOfRangeException("width");
             }
+
             if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException("height");
             }
+
             uint redMask, greenMask, blueMask;
             bool topDown = (stride > 0);
             stride = (stride > 0) ? stride : (stride * -1);
@@ -850,6 +884,7 @@ namespace FreeImageAPI
             {
                 throw new FreeImageException(ErrorCreatingBitmap);
             }
+
             AddMemoryPressure();
         }
 
@@ -878,14 +913,17 @@ namespace FreeImageAPI
             {
                 throw new ArgumentOutOfRangeException("width");
             }
+
             if (height <= 0)
             {
                 throw new ArgumentOutOfRangeException("height");
             }
+
             if (bits == null)
             {
                 throw new ArgumentNullException("bits");
             }
+
             uint redMask, greenMask, blueMask;
             bool topDown = (stride > 0);
             stride = (stride > 0) ? stride : (stride * -1);
@@ -902,6 +940,7 @@ namespace FreeImageAPI
             {
                 throw new FreeImageException(ErrorCreatingBitmap);
             }
+
             AddMemoryPressure();
         }
 
@@ -1133,6 +1172,7 @@ namespace FreeImageAPI
                 {
                     return new Palette(dib);
                 }
+
                 throw new InvalidOperationException("This bitmap does not have a palette.");
             }
         }
@@ -1341,6 +1381,7 @@ namespace FreeImageAPI
                 {
                     throw new InvalidOperationException("No background color available.");
                 }
+
                 RGBQUAD rgbq;
                 FreeImage.GetBackgroundColor(dib, out rgbq);
                 return rgbq.Color;
@@ -1757,6 +1798,7 @@ namespace FreeImageAPI
                     }
                 }
             }
+
             return null;
         }
 
@@ -1779,6 +1821,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -1800,6 +1843,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -1963,6 +2007,7 @@ namespace FreeImageAPI
                             {
                                 result = new Scanline<UInt16>(dib, scanline, width);
                             }
+
                             break;
                         case 24u:
                             result = new Scanline<RGBTRIPLE>(dib, scanline, width);
@@ -1973,6 +2018,7 @@ namespace FreeImageAPI
                         default:
                             throw new ArgumentException("Color depth is not supported.");
                     }
+
                     break;
 
                 case FREE_IMAGE_TYPE.FIT_COMPLEX:
@@ -2095,6 +2141,7 @@ namespace FreeImageAPI
                             {
                                 list = new List<Scanline<UInt16>>(height);
                             }
+
                             break;
                         case 24u:
                             list = new List<Scanline<RGBTRIPLE>>(height);
@@ -2105,6 +2152,7 @@ namespace FreeImageAPI
                         default:
                             throw new ArgumentException("Color depth is not supported.");
                     }
+
                     break;
 
                 case FREE_IMAGE_TYPE.FIT_COMPLEX:
@@ -2232,6 +2280,7 @@ namespace FreeImageAPI
                     newDib = FreeImage.Clone(dib);
                     break;
             }
+
             ReplaceDib(newDib);
         }
 
@@ -2248,6 +2297,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("bitmap");
             }
+
             EnsureNotDisposed();
             bitmap.EnsureNotDisposed();
             FreeImage.CloneMetadata(dib, bitmap.dib);
@@ -2268,6 +2318,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("bitmap");
             }
+
             EnsureNotDisposed();
             bitmap.EnsureNotDisposed();
             FreeImage.CloneMetadataEx(bitmap.dib, dib, flags);
@@ -2315,6 +2366,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentException("filename");
             }
+
             if (!FreeImage.SaveEx(dib, filename, format, flags))
             {
                 throw new FreeImageException("Unable to save bitmap");
@@ -2353,6 +2405,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("stream");
             }
+
             if (!FreeImage.SaveToStream(dib, stream, format, flags))
             {
                 throw new FreeImageException("Unable to save bitmap");
@@ -2545,7 +2598,9 @@ namespace FreeImageAPI
                 FREE_IMAGE_FORMAT format = originalFormat;
                 FIMULTIBITMAP mdib = FreeImage.OpenMultiBitmapFromStream(stream, ref format, saveInformation.loadFlags);
                 if (mdib.IsNull)
+                {
                     throw new FreeImageException(ErrorLoadingBitmap);
+                }
 
                 try
                 {
@@ -2567,6 +2622,7 @@ namespace FreeImageAPI
                         {
                             throw new FreeImageException(ErrorCreatingBitmap);
                         }
+
                         ReplaceDib(clone);
                     }
                     finally
@@ -2661,6 +2717,7 @@ namespace FreeImageAPI
                     {
                         throw new FreeImageException("FreeImage.GetPixelColor() failed");
                     }
+
                     return rgbq.Color;
                 }
                 else if (ColorDepth == 1 || ColorDepth == 4 || ColorDepth == 8)
@@ -2670,10 +2727,12 @@ namespace FreeImageAPI
                     {
                         throw new FreeImageException("FreeImage.GetPixelIndex() failed");
                     }
+
                     RGBQUAD* palette = (RGBQUAD*)FreeImage.GetPalette(dib);
                     return palette[index].Color;
                 }
             }
+
             throw new NotSupportedException("The type of the image is not supported");
         }
 
@@ -2720,6 +2779,7 @@ namespace FreeImageAPI
                     {
                         throw new FreeImageException("FreeImage.SetPixelColor() failed");
                     }
+
                     return;
                 }
                 else if (ColorDepth == 1 || ColorDepth == 4 || ColorDepth == 8)
@@ -2735,12 +2795,15 @@ namespace FreeImageAPI
                             {
                                 throw new FreeImageException("FreeImage.SetPixelIndex() failed");
                             }
+
                             return;
                         }
                     }
+
                     throw new ArgumentOutOfRangeException("color");
                 }
             }
+
             throw new NotSupportedException("The type of the image is not supported");
         }
 
@@ -2841,6 +2904,7 @@ namespace FreeImageAPI
                     result = new FreeImageBitmap(newDib);
                 }
             }
+
             return result;
         }
 
@@ -2867,10 +2931,12 @@ namespace FreeImageAPI
             {
                 newDib = FreeImage.Clone(dib);
             }
+
             if (!newDib.IsNull)
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -2931,6 +2997,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3028,6 +3095,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3158,6 +3226,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3220,6 +3289,7 @@ namespace FreeImageAPI
             {
                 result = ReplaceDib(FreeImage.Rotate(dib, angle));
             }
+
             return result;
         }
 
@@ -3244,6 +3314,7 @@ namespace FreeImageAPI
             {
                 result = ReplaceDib(FreeImage.Rotate(dib, angle, backgroundColor));
             }
+
             return result;
         }
 
@@ -3269,10 +3340,12 @@ namespace FreeImageAPI
             {
                 newDib = FreeImage.Rotate(dib, angle, backgroundColor);
             }
+
             if (!newDib.IsNull)
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3296,10 +3369,12 @@ namespace FreeImageAPI
             {
                 newDib = FreeImage.Rotate(dib, angle);
             }
+
             if (!newDib.IsNull)
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3345,6 +3420,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3434,6 +3510,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3465,6 +3542,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3510,6 +3588,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3643,14 +3722,17 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("srccolors");
             }
+
             if (dstcolors == null)
             {
                 throw new ArgumentNullException("dstcolors");
             }
+
             if (srccolors.Length != dstcolors.Length)
             {
                 throw new ArgumentException("srccolors and dstcolors must have the same length.");
             }
+
             return FreeImage.ApplyColorMapping(dib, srccolors, dstcolors, (uint)srccolors.Length, ignore_alpha, swap);
         }
 
@@ -3692,14 +3774,17 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("srcindices");
             }
+
             if (dstindices == null)
             {
                 throw new ArgumentNullException("dstindices");
             }
+
             if (srcindices.Length != dstindices.Length)
             {
                 throw new ArgumentException("srcindices and dstindices must have the same length.");
             }
+
             return FreeImage.ApplyPaletteIndexMapping(dib, srcindices, dstindices, (uint)srcindices.Length, swap);
         }
 
@@ -3753,6 +3838,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("data");
             }
+
             return CreateICCProfile(data, data.Length);
         }
 
@@ -3770,6 +3856,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("data");
             }
+
             return FreeImage.CreateICCProfileEx(dib, data, size);
         }
 
@@ -3894,6 +3981,7 @@ namespace FreeImageAPI
             {
                 result = new FreeImageBitmap(newDib);
             }
+
             return result;
         }
 
@@ -3997,14 +4085,17 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("source");
             }
+
             if (!File.Exists(source))
             {
                 throw new FileNotFoundException("source");
             }
+
             if (destination == null)
             {
                 throw new ArgumentNullException("destination");
             }
+
             return JPEGCrop(source, destination, rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
 
@@ -4030,14 +4121,17 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("source");
             }
+
             if (!File.Exists(source))
             {
                 throw new FileNotFoundException("source");
             }
+
             if (destination == null)
             {
                 throw new ArgumentNullException("destination");
             }
+
             return FreeImage.JPEGCrop(source, destination, left, top, right, bottom);
         }
 
@@ -4056,6 +4150,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("color");
             }
+
             return FreeImage.LookupX11Color(color, out red, out green, out blue);
         }
 
@@ -4074,6 +4169,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("color");
             }
+
             return FreeImage.LookupSVGColor(color, out red, out green, out blue);
         }
 
@@ -4104,10 +4200,12 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("lookUpTable");
             }
+
             if (lookUpTable.Length != 256)
             {
                 throw new ArgumentException("lookUpTable");
             }
+
             return FreeImage.GetAdjustColorsLookupTable(lookUpTable, brightness, contrast, gamma, invert);
         }
 
@@ -4136,30 +4234,39 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("filename");
             }
+
             if (!File.Exists(filename))
             {
                 throw new FileNotFoundException("filename");
             }
+
             if (bitmap == null)
             {
                 throw new ArgumentNullException("bitmap");
             }
+
             bitmap.EnsureNotDisposed();
 
             FIBITMAP dib = bitmap.dib;
             if (dib.IsNull)
+            {
                 throw new ArgumentNullException("bitmap");
+            }
 
             FIMULTIBITMAP mpBitmap =
                 FreeImage.OpenMultiBitmapEx(filename, ref format, loadFlags, false, false, true);
 
             if (mpBitmap.IsNull)
+            {
                 throw new FreeImageException(ErrorLoadingBitmap);
+            }
 
             FreeImage.AppendPage(mpBitmap, bitmap.dib);
 
             if (!FreeImage.CloseMultiBitmap(mpBitmap, saveFlags))
+            {
                 throw new FreeImageException(ErrorUnloadBitmap);
+            }
         }
 
         /// <summary>
@@ -4190,42 +4297,58 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("filename");
             }
+
             if (!File.Exists(filename))
             {
                 throw new FileNotFoundException("filename");
             }
+
             if (bitmap == null)
             {
                 throw new ArgumentNullException("bitmap");
             }
+
             if (insertPosition < 0)
             {
                 throw new ArgumentOutOfRangeException("insertPosition");
             }
+
             bitmap.EnsureNotDisposed();
 
             FIBITMAP dib = bitmap.dib;
             if (dib.IsNull)
+            {
                 throw new ArgumentNullException("bitmap");
+            }
 
             FIMULTIBITMAP mpBitmap =
                 FreeImage.OpenMultiBitmapEx(filename, ref format, loadFlags, false, false, true);
 
             if (mpBitmap.IsNull)
+            {
                 throw new FreeImageException(ErrorLoadingBitmap);
+            }
 
             int pageCount = FreeImage.GetPageCount(mpBitmap);
 
             if (insertPosition > pageCount)
+            {
                 throw new ArgumentOutOfRangeException("insertPosition");
+            }
 
             if (insertPosition == pageCount)
+            {
                 FreeImage.AppendPage(mpBitmap, bitmap.dib);
+            }
             else
+            {
                 FreeImage.InsertPage(mpBitmap, insertPosition, bitmap.dib);
+            }
 
             if (!FreeImage.CloseMultiBitmap(mpBitmap, saveFlags))
+            {
                 throw new FreeImageException(ErrorUnloadBitmap);
+            }
         }
 
         /// <summary>
@@ -4254,6 +4377,7 @@ namespace FreeImageAPI
                     return;
                 }
             }
+
             throw new ObjectDisposedException(ToString());
         }
 
@@ -4276,6 +4400,7 @@ namespace FreeImageAPI
                 AddMemoryPressure();
                 result = true;
             }
+
             return result;
         }
 
@@ -4290,7 +4415,9 @@ namespace FreeImageAPI
                 long size = FreeImage.GetDIBSize(dib);
                 FreeImage.UnloadEx(ref dib);
                 if (size > 0L)
+                {
                     GC.RemoveMemoryPressure(size);
+                }
             }
         }
 
@@ -4301,7 +4428,9 @@ namespace FreeImageAPI
         {
             long dataSize;
             if ((dataSize = DataSize) > 0L)
+            {
                 GC.AddMemoryPressure(dataSize);
+            }
         }
 
         /// <summary>
@@ -4315,6 +4444,7 @@ namespace FreeImageAPI
             {
                 throw new FreeImageException(ErrorLoadingBitmap);
             }
+
             try
             {
                 frameCount = FreeImage.GetPageCount(mdib);
@@ -4374,6 +4504,7 @@ namespace FreeImageAPI
                 result.tag = tag;
                 result.originalFormat = originalFormat;
             }
+
             return result;
         }
 
@@ -4401,6 +4532,7 @@ namespace FreeImageAPI
                 {
                     return;
                 }
+
                 disposed = true;
             }
 
@@ -4413,6 +4545,7 @@ namespace FreeImageAPI
                     {
                         stream.Dispose();
                     }
+
                     stream = null;
                 }
             }
@@ -4443,6 +4576,7 @@ namespace FreeImageAPI
                 {
                     throw new SerializationException();
                 }
+
                 memory.Capacity = (int)memory.Length;
                 info.AddValue("Bitmap Data", memory.GetBuffer());
             }

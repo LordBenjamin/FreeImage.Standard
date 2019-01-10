@@ -50,7 +50,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_ANIMATION(FIBITMAP dib) : base(dib) { }
+        public MDM_ANIMATION(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -233,6 +235,7 @@ namespace FreeImageAPI.Metadata
                 {
                     val = (byte)(value.Value ? 1 : 0);
                 }
+
                 SetTagValue("NoLocalPalette", val);
             }
         }
@@ -263,6 +266,7 @@ namespace FreeImageAPI.Metadata
                 {
                     val = (byte)(value.Value ? 1 : 0);
                 }
+
                 SetTagValue("Interlaced", val);
             }
         }
@@ -327,7 +331,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_COMMENTS(FIBITMAP dib) : base(dib) { }
+        public MDM_COMMENTS(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -373,7 +379,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_CUSTOM(FIBITMAP dib) : base(dib) { }
+        public MDM_CUSTOM(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -394,7 +402,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_EXIF_EXIF(FIBITMAP dib) : base(dib) { }
+        public MDM_EXIF_EXIF(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -734,6 +744,7 @@ namespace FreeImageAPI.Metadata
                 {
                     text = text.Substring(0, text.Length - 1);
                 }
+
                 return text;
             }
             set
@@ -743,6 +754,7 @@ namespace FreeImageAPI.Metadata
                     FreeImage.Resize(ref value, 12);
                     value += '\0';
                 }
+
                 SetTagValue("RelatedSoundFile", value);
             }
         }
@@ -775,6 +787,7 @@ namespace FreeImageAPI.Metadata
                     {
                     }
                 }
+
                 return result;
             }
             set
@@ -790,6 +803,7 @@ namespace FreeImageAPI.Metadata
                     {
                     }
                 }
+
                 SetTagValue("DateTimeOriginal", val);
             }
         }
@@ -822,6 +836,7 @@ namespace FreeImageAPI.Metadata
                     {
                     }
                 }
+
                 return result;
             }
             set
@@ -837,6 +852,7 @@ namespace FreeImageAPI.Metadata
                     {
                     }
                 }
+
                 SetTagValue("DateTimeDigitized", val);
             }
         }
@@ -862,6 +878,7 @@ namespace FreeImageAPI.Metadata
                 {
                     text = text.Substring(0, text.Length - 1);
                 }
+
                 return text;
             }
             set
@@ -870,6 +887,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("SubsecTime", value);
             }
         }
@@ -895,6 +913,7 @@ namespace FreeImageAPI.Metadata
                 {
                     text = text.Substring(0, text.Length - 1);
                 }
+
                 return text;
             }
             set
@@ -903,6 +922,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("SubsecTimeOriginal", value);
             }
         }
@@ -928,6 +948,7 @@ namespace FreeImageAPI.Metadata
                 {
                     text = text.Substring(0, text.Length - 1);
                 }
+
                 return text;
             }
             set
@@ -936,6 +957,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("SubsecTimeDigitized", value);
             }
         }
@@ -1083,6 +1105,7 @@ namespace FreeImageAPI.Metadata
                 {
                     text = text.Substring(0, text.Length - 1);
                 }
+
                 return text;
             }
             set
@@ -1091,6 +1114,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("SpectralSensitivity", value);
             }
         }
@@ -2434,6 +2458,7 @@ namespace FreeImageAPI.Metadata
                 {
                     text = text.Substring(0, text.Length - 1);
                 }
+
                 return text;
             }
             set
@@ -2443,6 +2468,7 @@ namespace FreeImageAPI.Metadata
                     FreeImage.Resize(ref value, 32);
                     value += '\0';
                 }
+
                 SetTagValue("ImageUniqueID", value);
             }
         }
@@ -2458,7 +2484,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_EXIF_GPS(FIBITMAP dib) : base(dib) { }
+        public MDM_EXIF_GPS(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -2628,6 +2656,7 @@ namespace FreeImageAPI.Metadata
                             return AltitudeType.Undefined;
                     }
                 }
+
                 return null;
             }
             set
@@ -2650,6 +2679,7 @@ namespace FreeImageAPI.Metadata
                             break;
                     }
                 }
+
                 SetTagValue("GPSAltitudeRef", val);
             }
         }
@@ -2703,6 +2733,7 @@ namespace FreeImageAPI.Metadata
                 {
                     return (seaLevel.Value == AltitudeType.BelowSeaLevel) ? -1 : 1;
                 }
+
                 return null;
             }
             set
@@ -2747,9 +2778,13 @@ namespace FreeImageAPI.Metadata
                 {
                     int sign = AltitudeSign ?? 1;
                     if (((int)altitude.Value.Numerator < 0) || ((int)altitude.Value.Denominator < 0))
+                    {
                         throw new OverflowException();
+                    }
+
                     result = new FIRational((int)altitude.Value.Numerator * sign, (int)altitude.Value.Denominator);
                 }
+
                 return result;
             }
             set
@@ -2766,8 +2801,10 @@ namespace FreeImageAPI.Metadata
                     {
                         AltitudeSign = 1;
                     }
+
                     val = new FIURational((uint)value.Value.Numerator, (uint)value.Value.Denominator);
                 }
+
                 Altitude = val;
             }
         }
@@ -2810,6 +2847,7 @@ namespace FreeImageAPI.Metadata
                     stamp[1] = span.Minutes;
                     stamp[2] = span.Seconds;
                 }
+
                 SetTagValue("GPSTimeStamp", stamp);
             }
         }
@@ -2837,6 +2875,7 @@ namespace FreeImageAPI.Metadata
                 {
                     result = result.Substring(0, result.Length - 1);
                 }
+
                 return result;
             }
             set
@@ -2845,6 +2884,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("GPSTimeStamp", value);
             }
         }
@@ -3102,6 +3142,7 @@ namespace FreeImageAPI.Metadata
                 {
                     result = result.Substring(0, result.Length - 1);
                 }
+
                 return result;
             }
             set
@@ -3376,10 +3417,12 @@ namespace FreeImageAPI.Metadata
                     {
                         date = DateTime.MinValue;
                     }
+
                     if (time == null)
                     {
                         time = TimeSpan.MinValue;
                     }
+
                     return date.Value.Add(time.Value);
                 }
             }
@@ -3425,6 +3468,7 @@ namespace FreeImageAPI.Metadata
                     {
                     }
                 }
+
                 return null;
             }
             set
@@ -3440,6 +3484,7 @@ namespace FreeImageAPI.Metadata
                     {
                     }
                 }
+
                 SetTagValue("GPSDateStamp", val);
             }
         }
@@ -3481,7 +3526,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_INTEROP(FIBITMAP dib) : base(dib) { }
+        public MDM_INTEROP(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -3529,7 +3576,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_MAIN(FIBITMAP dib) : base(dib) { }
+        public MDM_MAIN(FIBITMAP dib) : base(dib)
+        {
+        }
     }
 
     /// <summary>
@@ -3542,7 +3591,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_EXIF_MAIN(FIBITMAP dib) : base(dib) { }
+        public MDM_EXIF_MAIN(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -4317,6 +4368,7 @@ namespace FreeImageAPI.Metadata
                     {
                     }
                 }
+
                 return result;
             }
             set
@@ -4332,6 +4384,7 @@ namespace FreeImageAPI.Metadata
                     {
                     }
                 }
+
                 SetTagValue("DateTime", val);
             }
         }
@@ -4357,6 +4410,7 @@ namespace FreeImageAPI.Metadata
                 {
                     result = result.Substring(0, result.Length - 1);
                 }
+
                 return result;
             }
             set
@@ -4365,6 +4419,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("ImageDescription", value);
             }
         }
@@ -4390,6 +4445,7 @@ namespace FreeImageAPI.Metadata
                 {
                     result = result.Substring(0, result.Length - 1);
                 }
+
                 return result;
             }
             set
@@ -4398,6 +4454,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("Make", value);
             }
         }
@@ -4423,6 +4480,7 @@ namespace FreeImageAPI.Metadata
                 {
                     result = result.Substring(0, result.Length - 1);
                 }
+
                 return result;
             }
             set
@@ -4431,6 +4489,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("Model", value);
             }
         }
@@ -4457,6 +4516,7 @@ namespace FreeImageAPI.Metadata
                 {
                     result = result.Substring(0, result.Length - 1);
                 }
+
                 return result;
             }
             set
@@ -4465,6 +4525,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("Software", value);
             }
         }
@@ -4490,6 +4551,7 @@ namespace FreeImageAPI.Metadata
                 {
                     result = result.Substring(0, result.Length - 1);
                 }
+
                 return result;
             }
             set
@@ -4498,6 +4560,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("Artist", value);
             }
         }
@@ -4525,6 +4588,7 @@ namespace FreeImageAPI.Metadata
                 {
                     result = text.Split(new char[] { '\0' }, StringSplitOptions.RemoveEmptyEntries);
                 }
+
                 return result;
             }
             set
@@ -4547,6 +4611,7 @@ namespace FreeImageAPI.Metadata
                         }
                     }
                 }
+
                 SetTagValue("Copyright", val);
             }
         }
@@ -4562,7 +4627,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_MAKERNOTE(FIBITMAP dib) : base(dib) { }
+        public MDM_MAKERNOTE(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -4583,7 +4650,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_GEOTIFF(FIBITMAP dib) : base(dib) { }
+        public MDM_GEOTIFF(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -4636,6 +4705,7 @@ namespace FreeImageAPI.Metadata
                 {
                     text = text.Substring(0, text.Length - 1);
                 }
+
                 return text;
             }
             set
@@ -4644,6 +4714,7 @@ namespace FreeImageAPI.Metadata
                 {
                     value += '\0';
                 }
+
                 SetTagValue("GeoASCIIParams", value);
             }
         }
@@ -4978,7 +5049,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_IPTC(FIBITMAP dib) : base(dib) { }
+        public MDM_IPTC(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -6642,7 +6715,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_NODATA(FIBITMAP dib) : base(dib) { }
+        public MDM_NODATA(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.
@@ -6663,7 +6738,9 @@ namespace FreeImageAPI.Metadata
         /// Initializes a new instance of this class.
         /// </summary>
         /// <param name="dib">Handle to a FreeImage bitmap.</param>
-        public MDM_XMP(FIBITMAP dib) : base(dib) { }
+        public MDM_XMP(FIBITMAP dib) : base(dib)
+        {
+        }
 
         /// <summary>
         /// Retrieves the datamodel that this instance represents.

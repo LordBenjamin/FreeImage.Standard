@@ -96,6 +96,7 @@ namespace FreeImageNETUnitTest
                             filename = Path.Combine(baseDirectory, "Even", "Image_32.tif");
                             break;
                     }
+
                     break;
                 case ImageType.Odd:
                     switch (colorType)
@@ -134,6 +135,7 @@ namespace FreeImageNETUnitTest
                             filename = Path.Combine(baseDirectory, "Odd", "Image_24.tif");
                             break;
                     }
+
                     break;
                 case ImageType.JPEG:
                     filename = Path.Combine(baseDirectory, "JPEG", "Image.jpg");
@@ -145,6 +147,7 @@ namespace FreeImageNETUnitTest
                     filename = Path.Combine(baseDirectory, "Multipaged", "Image.tif");
                     break;
             }
+
             return filename;
         }
 
@@ -153,7 +156,10 @@ namespace FreeImageNETUnitTest
             FreeImageAPI.FIBITMAP result = new FreeImageAPI.FIBITMAP();
             string filename = GetBitmapPath(type, colorType);
             if (!String.IsNullOrEmpty(filename) && File.Exists(filename))
+            {
                 result = FreeImageAPI.FreeImage.LoadEx(filename);
+            }
+
             return result;
         }
 

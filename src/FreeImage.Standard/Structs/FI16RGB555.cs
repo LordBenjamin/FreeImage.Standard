@@ -214,10 +214,12 @@ namespace FreeImageAPI
             {
                 return 1;
             }
+
             if (!(obj is FI16RGB555))
             {
                 throw new ArgumentException("obj");
             }
+
             return CompareTo((FI16RGB555)obj);
         }
 

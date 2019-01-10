@@ -47,6 +47,7 @@ namespace FreeImageAPI.Metadata
                 {
                     val = (byte)(value.Value ? 1 : 0);
                 }
+
                 SetTagValue("NoLocalPalette", val);
             }
         }
@@ -117,6 +118,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("palette");
             }
+
             if (size <= 0)
             {
                 throw new ArgumentOutOfRangeException("size");

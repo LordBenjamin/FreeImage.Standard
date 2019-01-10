@@ -117,10 +117,12 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("tag");
             }
+
             if (dib.IsNull)
             {
                 throw new ArgumentNullException("dib");
             }
+
             this.tag = tag;
             model = GetModel(dib, tag);
             selfCreated = false;
@@ -142,6 +144,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("tag");
             }
+
             this.tag = tag;
             this.model = model;
             selfCreated = false;
@@ -222,6 +225,7 @@ namespace FreeImageAPI.Metadata
             {
                 return false;
             }
+
             left.CheckDisposed();
             right.CheckDisposed();
             // Check all properties
@@ -235,10 +239,12 @@ namespace FreeImageAPI.Metadata
             {
                 return false;
             }
+
             if (left.Length == 0)
             {
                 return true;
             }
+
             IntPtr ptr1 = FreeImage.GetTagValue(left.tag);
             IntPtr ptr2 = FreeImage.GetTagValue(right.tag);
             return FreeImage.CompareMemory(ptr1, ptr2, left.Length);
@@ -277,6 +283,7 @@ namespace FreeImageAPI.Metadata
                 {
                     continue;
                 }
+
                 try
                 {
                     do
@@ -296,6 +303,7 @@ namespace FreeImageAPI.Metadata
                     }
                 }
             }
+
             throw new ArgumentException("'tag' is no metadata object of 'dib'");
         }
 
@@ -377,6 +385,7 @@ namespace FreeImageAPI.Metadata
             {
                 value[i] = ptr[i];
             }
+
             return value;
         }
 
@@ -400,6 +409,7 @@ namespace FreeImageAPI.Metadata
                         {
                             sb.Append(Convert.ToChar(value[i]));
                         }
+
                         return sb.ToString();
                     }
                     else if (Type == FREE_IMAGE_MDTYPE.FIDT_NOTYPE)
@@ -437,6 +447,7 @@ namespace FreeImageAPI.Metadata
             {
                 throw new NotSupportedException("The type of value is not supported");
             }
+
             return SetValue(value, typeList[type]);
         }
 
@@ -461,6 +472,7 @@ namespace FreeImageAPI.Metadata
                 array.SetValue(value, 0);
                 return SetArrayValue(array, type);
             }
+
             return SetArrayValue(value, type);
         }
 
@@ -497,6 +509,7 @@ namespace FreeImageAPI.Metadata
                 {
                     throw new ArgumentException("value");
                 }
+
                 Type = type;
                 Length = Count = (uint)tempValue.Length;
                 data = new byte[Length];
@@ -519,8 +532,12 @@ namespace FreeImageAPI.Metadata
                 }
 
                 if (array.Length != 0)
+                {
                     if (!CheckType(array.GetValue(0).GetType(), type))
+                    {
                         throw new ArgumentException("The type of value is incorrect.");
+                    }
+                }
 
                 Type = type;
                 Count = (uint)array.Length;
@@ -535,6 +552,7 @@ namespace FreeImageAPI.Metadata
         private static bool CheckType(Type dataType, FREE_IMAGE_MDTYPE type)
         {
             if (dataType != null)
+            {
                 switch (type)
                 {
                     case FREE_IMAGE_MDTYPE.FIDT_ASCII:
@@ -568,6 +586,8 @@ namespace FreeImageAPI.Metadata
                     case FREE_IMAGE_MDTYPE.FIDT_UNDEFINED:
                         return dataType == typeof(byte);
                 }
+            }
+
             return false;
         }
 
@@ -583,10 +603,12 @@ namespace FreeImageAPI.Metadata
             {
                 throw new ArgumentNullException("dib");
             }
+
             if (Key == null)
             {
                 throw new ArgumentNullException("Key");
             }
+
             if (!selfCreated)
             {
                 tag = FreeImage.CloneTag(tag);
@@ -594,12 +616,15 @@ namespace FreeImageAPI.Metadata
                 {
                     throw new FreeImageException("FreeImage.CloneTag() failed.");
                 }
+
                 selfCreated = true;
             }
+
             if (!FreeImage.SetMetadata(Model, dib, Key, tag))
             {
                 return false;
             }
+
             FREE_IMAGE_MDMODEL _model = Model;
             string _key = Key;
             selfCreated = false;
@@ -699,10 +724,12 @@ namespace FreeImageAPI.Metadata
             {
                 return 1;
             }
+
             if (!(obj is MetadataTag))
             {
                 throw new ArgumentException("obj");
             }
+
             return CompareTo((MetadataTag)obj);
         }
 

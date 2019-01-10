@@ -124,6 +124,7 @@ namespace FreeImageAPI
                 {
                     throw new OverflowException("value");
                 }
+
                 try
                 {
                     int[] contFract = CreateContinuedFraction(value);
@@ -135,6 +136,7 @@ namespace FreeImageAPI
                     numerator = 0;
                     denominator = 1;
                 }
+
                 if (Math.Abs(((decimal)numerator / (decimal)denominator) - value) > 0.0001m)
                 {
                     int maxDen = (Int32.MaxValue / (int)value) - 2;
@@ -146,6 +148,7 @@ namespace FreeImageAPI
                         throw new OverflowException("Unable to convert value into a fraction");
                     }
                 }
+
                 Normalize();
             }
             catch (Exception ex)
@@ -204,6 +207,7 @@ namespace FreeImageAPI
                 a = b;
                 b = r;
             }
+
             return a;
         }
 
@@ -272,6 +276,7 @@ namespace FreeImageAPI
                 value -= decimal.Truncate(value);
                 result++;
             }
+
             return result;
         }
 
@@ -296,14 +301,17 @@ namespace FreeImageAPI
                 {
                     break;
                 }
+
                 value = 1m / value;
                 if (Math.Abs((Math.Round(value, precision - 1) - value)) < epsilon)
                 {
                     value = Math.Round(value, precision - 1);
                 }
+
                 list.Add((int)value);
                 value -= ((int)value);
             }
+
             return list.ToArray();
         }
 
@@ -342,6 +350,7 @@ namespace FreeImageAPI
                 {
                     mul *= 10;
                 }
+
                 if (mul <= maxDen)
                 {
                     num = (uint)(value * mul);
@@ -425,6 +434,7 @@ namespace FreeImageAPI
             {
                 value.numerator += value.denominator;
             }
+
             return value;
         }
 
@@ -437,6 +447,7 @@ namespace FreeImageAPI
             {
                 value.numerator -= value.denominator;
             }
+
             return value;
         }
 
@@ -471,6 +482,7 @@ namespace FreeImageAPI
                     right.numerator *= denom;
                     right.denominator *= denom;
                 }
+
                 left.numerator -= right.numerator;
                 left.Normalize();
                 return left;
@@ -509,7 +521,10 @@ namespace FreeImageAPI
         {
             right.Normalize();
             if (Math.Abs(right.numerator) < right.denominator)
+            {
                 return new FIURational(0, 0);
+            }
+
             int div = (int)(left / right);
             return left - (right * div);
         }
@@ -945,10 +960,12 @@ namespace FreeImageAPI
             {
                 return 1;
             }
+
             if (!(obj is FIURational))
             {
                 throw new ArgumentException();
             }
+
             return CompareTo((FIURational)obj);
         }
 
@@ -968,6 +985,7 @@ namespace FreeImageAPI
             {
                 format = "";
             }
+
             return String.Format(formatProvider, format, ((IConvertible)this).ToDouble(formatProvider));
         }
 
@@ -1001,11 +1019,18 @@ namespace FreeImageAPI
             FIURational difference = this - other;
             difference.Normalize();
             if (difference.numerator > 0)
+            {
                 return 1;
+            }
+
             if (difference.numerator < 0)
+            {
                 return -1;
+            }
             else
+            {
                 return 0;
+            }
         }
 
         #endregion

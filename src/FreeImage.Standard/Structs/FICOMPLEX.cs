@@ -93,10 +93,12 @@ namespace FreeImageAPI
             {
                 return 1;
             }
+
             if (!(obj is FICOMPLEX))
             {
                 throw new ArgumentException("obj");
             }
+
             return CompareTo((FICOMPLEX)obj);
         }
 

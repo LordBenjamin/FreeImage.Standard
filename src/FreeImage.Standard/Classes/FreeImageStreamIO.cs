@@ -84,6 +84,7 @@ namespace FreeImageAPI.IO
             {
                 return 0;
             }
+
             uint readCount = 0;
             byte* ptr = (byte*)buffer;
             byte[] bufferTemp = new byte[size];
@@ -96,12 +97,15 @@ namespace FreeImageAPI.IO
                     stream.Seek(-read, SeekOrigin.Current);
                     break;
                 }
+
                 for (int i = 0; i < read; i++, ptr++)
                 {
                     *ptr = bufferTemp[i];
                 }
+
                 readCount++;
             }
+
             return (uint)readCount;
         }
 
@@ -115,6 +119,7 @@ namespace FreeImageAPI.IO
             {
                 return 0;
             }
+
             uint writeCount = 0;
             byte[] bufferTemp = new byte[size];
             byte* ptr = (byte*)buffer;
@@ -124,6 +129,7 @@ namespace FreeImageAPI.IO
                 {
                     bufferTemp[i] = *ptr;
                 }
+
                 try
                 {
                     stream.Write(bufferTemp, 0, bufferTemp.Length);
@@ -132,8 +138,10 @@ namespace FreeImageAPI.IO
                 {
                     return writeCount;
                 }
+
                 writeCount++;
             }
+
             return writeCount;
         }
 
@@ -147,6 +155,7 @@ namespace FreeImageAPI.IO
             {
                 return 1;
             }
+
             stream.Seek((long)offset, origin);
             return 0;
         }
@@ -161,6 +170,7 @@ namespace FreeImageAPI.IO
             {
                 return -1;
             }
+
             return (int)stream.Position;
         }
     }

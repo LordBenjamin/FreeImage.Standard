@@ -140,6 +140,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("baseAddress");
             }
+
             if (length < 1)
             {
                 throw new ArgumentOutOfRangeException("length");
@@ -187,16 +188,19 @@ namespace FreeImageAPI
             {
                 return true;
             }
+
             if (object.ReferenceEquals(right, null) ||
                 object.ReferenceEquals(left, null) ||
                 (left.length != right.length))
             {
                 return false;
             }
+
             if (left.baseAddress == right.baseAddress)
             {
                 return true;
             }
+
             return FreeImage.CompareMemory(left.baseAddress, right.baseAddress, (uint)left.length);
         }
 
@@ -265,6 +269,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentOutOfRangeException("index");
             }
+
             SetValueInternal(value, index);
         }
 
@@ -319,6 +324,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentOutOfRangeException("index");
             }
+
             if (((index + length) > this.length) || (length < 1))
             {
                 throw new ArgumentOutOfRangeException("length");
@@ -339,6 +345,7 @@ namespace FreeImageAPI
                 CopyMemory(dst, baseAddress + (size * index), size * length);
                 handle.Free();
             }
+
             return data;
         }
 
@@ -361,10 +368,12 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("values");
             }
+
             if ((index >= this.length) || (index < 0))
             {
                 throw new ArgumentOutOfRangeException("index");
             }
+
             if ((index + values.Length) > this.length)
             {
                 throw new ArgumentOutOfRangeException("values.Length");
@@ -402,6 +411,7 @@ namespace FreeImageAPI
             {
                 throw new InvalidCastException("array");
             }
+
             try
             {
                 CopyTo((T[])array, 0, index, length);
@@ -442,14 +452,17 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("array");
             }
+
             if ((sourceIndex >= this.length) || (sourceIndex < 0))
             {
                 throw new ArgumentOutOfRangeException("sourceIndex");
             }
+
             if ((destinationIndex >= array.Length) || (destinationIndex < 0))
             {
                 throw new ArgumentOutOfRangeException("destinationIndex");
             }
+
             if ((sourceIndex + length > this.length) ||
                 (destinationIndex + length > array.Length) ||
                 (length < 1))
@@ -503,14 +516,17 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("array");
             }
+
             if ((destinationIndex >= this.length) || (destinationIndex < 0))
             {
                 throw new ArgumentOutOfRangeException("destinationIndex");
             }
+
             if ((sourceIndex >= array.Length) || (sourceIndex < 0))
             {
                 throw new ArgumentOutOfRangeException("sourceIndex");
             }
+
             if ((destinationIndex + length > this.length) ||
                 (sourceIndex + length > array.Length) ||
                 (length < 1))
@@ -554,10 +570,12 @@ namespace FreeImageAPI
             {
                 result = new byte[size * length];
             }
+
             fixed (byte* dst = result)
             {
                 CopyMemory(dst, baseAddress, result.Length);
             }
+
             return result;
         }
 
@@ -597,10 +615,12 @@ namespace FreeImageAPI
                 {
                     throw new ArgumentNullException("value");
                 }
+
                 if (value.Length != length)
                 {
                     throw new ArgumentOutOfRangeException("value.Lengt");
                 }
+
                 SetValues(value, 0);
             }
         }
@@ -669,6 +689,7 @@ namespace FreeImageAPI
                 {
                     System.Threading.Interlocked.CompareExchange(ref syncRoot, new object(), null);
                 }
+
                 return syncRoot;
             }
         }
@@ -721,7 +742,10 @@ namespace FreeImageAPI
             if (baseAddress != null)
             {
                 if (handle.IsAllocated)
+                {
                     handle.Free();
+                }
+
                 baseAddress = null;
                 buffer = null;
                 length = 0;
@@ -736,7 +760,9 @@ namespace FreeImageAPI
         protected virtual void EnsureNotDisposed()
         {
             if (baseAddress == null)
+            {
                 throw new ObjectDisposedException("This instance is disposed.");
+            }
         }
 
         /// <summary>
@@ -798,6 +824,7 @@ namespace FreeImageAPI
                 }
                 while ((len -= 0x10) >= 0x10);
             }
+
             if (len > 0)
             {
                 if ((len & 8) != 0)
@@ -807,18 +834,21 @@ namespace FreeImageAPI
                     dest += 8;
                     src += 8;
                 }
+
                 if ((len & 4) != 0)
                 {
                     *((int*)dest) = *((int*)src);
                     dest += 4;
                     src += 4;
                 }
+
                 if ((len & 2) != 0)
                 {
                     *((short*)dest) = *((short*)src);
                     dest += 2;
                     src += 2;
                 }
+
                 if ((len & 1) != 0)
                 {
                     *dest = *src;

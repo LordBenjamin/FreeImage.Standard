@@ -97,6 +97,7 @@ namespace FreeImageAPI.IO
             {
                 throw new ArgumentException("stream is not capable of reading.");
             }
+
             this.stream = stream;
             this.blocking = blocking;
         }
@@ -145,6 +146,7 @@ namespace FreeImageAPI.IO
                 {
                     Fill();
                 }
+
                 return memoryStream.Length;
             }
         }
@@ -188,15 +190,18 @@ namespace FreeImageAPI.IO
                         eos = true;
                         break;
                     }
+
                     if (!blocking)
                     {
                         break;
                     }
-                } while ((memoryBytes + streamBytes) < count);
+                }
+                while ((memoryBytes + streamBytes) < count);
                 // copy the bytes from the original stream into the memory stream
                 // if 0 bytes were read we write 0 so the memory-stream is not changed
                 memoryStream.Write(buffer, offset + memoryBytes, streamBytes);
             }
+
             return memoryBytes + streamBytes;
         }
 
@@ -220,11 +225,13 @@ namespace FreeImageAPI.IO
                     {
                         Fill();
                     }
+
                     newPosition = memoryStream.Length + offset;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("origin");
             }
+
             // in case the new position is beyond the memory-streams end
             // and the original streams end hasn't been reached
             // the original stream is read until either the stream ends or
@@ -237,8 +244,10 @@ namespace FreeImageAPI.IO
                 do
                 {
                     bytesToRead -= Read(buffer, 0, (bytesToRead >= buffer.Length) ? buffer.Length : bytesToRead);
-                } while ((bytesToRead > 0) && (!eos));
+                }
+                while ((bytesToRead > 0) && (!eos));
             }
+
             memoryStream.Position = (newPosition <= memoryStream.Length) ? newPosition : memoryStream.Length;
             return 0;
         }
@@ -273,7 +282,8 @@ namespace FreeImageAPI.IO
                 {
                     bytesRead = stream.Read(buffer, 0, buffer.Length);
                     memoryStream.Write(buffer, 0, bytesRead);
-                } while (bytesRead != 0);
+                }
+                while (bytesRead != 0);
                 eos = true;
             }
         }
@@ -307,7 +317,9 @@ namespace FreeImageAPI.IO
         private void checkDisposed()
         {
             if (disposed)
+            {
                 throw new ObjectDisposedException("StreamWrapper");
+            }
         }
     }
 }

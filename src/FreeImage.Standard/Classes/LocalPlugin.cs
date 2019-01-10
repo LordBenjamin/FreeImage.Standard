@@ -216,59 +216,113 @@ namespace FreeImageAPI.Plugins
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual string DescriptionProc() { return ""; }
+        protected virtual string DescriptionProc()
+        {
+            return "";
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual string ExtensionListProc() { return ""; }
+        protected virtual string ExtensionListProc()
+        {
+            return "";
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual string RegExprProc() { return ""; }
+        protected virtual string RegExprProc()
+        {
+            return "";
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual IntPtr OpenProc(ref FreeImageIO io, fi_handle handle, bool read) { return IntPtr.Zero; }
+        protected virtual IntPtr OpenProc(ref FreeImageIO io, fi_handle handle, bool read)
+        {
+            return IntPtr.Zero;
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual void CloseProc(ref FreeImageIO io, fi_handle handle, IntPtr data) { }
+        protected virtual void CloseProc(ref FreeImageIO io, fi_handle handle, IntPtr data)
+        {
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual int PageCountProc(ref FreeImageIO io, fi_handle handle, IntPtr data) { return 0; }
+        protected virtual int PageCountProc(ref FreeImageIO io, fi_handle handle, IntPtr data)
+        {
+            return 0;
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual int PageCapabilityProc(ref FreeImageIO io, fi_handle handle, IntPtr data) { return 0; }
+        protected virtual int PageCapabilityProc(ref FreeImageIO io, fi_handle handle, IntPtr data)
+        {
+            return 0;
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual FIBITMAP LoadProc(ref FreeImageIO io, fi_handle handle, int page, int flags, IntPtr data) { return FIBITMAP.Zero; }
+        protected virtual FIBITMAP LoadProc(ref FreeImageIO io, fi_handle handle, int page, int flags, IntPtr data)
+        {
+            return FIBITMAP.Zero;
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual bool SaveProc(ref FreeImageIO io, FIBITMAP dib, fi_handle handle, int page, int flags, IntPtr data) { return false; }
+        protected virtual bool SaveProc(ref FreeImageIO io, FIBITMAP dib, fi_handle handle, int page, int flags, IntPtr data)
+        {
+            return false;
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual bool ValidateProc(ref FreeImageIO io, fi_handle handle) { return false; }
+        protected virtual bool ValidateProc(ref FreeImageIO io, fi_handle handle)
+        {
+            return false;
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual string MimeProc() { return ""; }
+        protected virtual string MimeProc()
+        {
+            return "";
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual bool SupportsExportBPPProc(int bpp) { return false; }
+        protected virtual bool SupportsExportBPPProc(int bpp)
+        {
+            return false;
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual bool SupportsExportTypeProc(FREE_IMAGE_TYPE type) { return false; }
+        protected virtual bool SupportsExportTypeProc(FREE_IMAGE_TYPE type)
+        {
+            return false;
+        }
+
         /// <summary>
         /// Function that can be implemented.
         /// </summary>
-        protected virtual bool SupportsICCProfilesProc() { return false; }
+        protected virtual bool SupportsICCProfilesProc()
+        {
+            return false;
+        }
 
         /// <summary>
         /// The constructor automatically registeres the plugin in FreeImage.
@@ -285,54 +339,67 @@ namespace FreeImageAPI.Plugins
             {
                 plugin.descriptionProc = new DescriptionProc(DescriptionProc);
             }
+
             if ((implementedMethods & MethodFlags.ExtensionListProc) != 0)
             {
                 plugin.extensionListProc = new ExtensionListProc(ExtensionListProc);
             }
+
             if ((implementedMethods & MethodFlags.RegExprProc) != 0)
             {
                 plugin.regExprProc = new RegExprProc(RegExprProc);
             }
+
             if ((implementedMethods & MethodFlags.OpenProc) != 0)
             {
                 plugin.openProc = new OpenProc(OpenProc);
             }
+
             if ((implementedMethods & MethodFlags.CloseProc) != 0)
             {
                 plugin.closeProc = new CloseProc(CloseProc);
             }
+
             if ((implementedMethods & MethodFlags.PageCountProc) != 0)
             {
                 plugin.pageCountProc = new PageCountProc(PageCountProc);
             }
+
             if ((implementedMethods & MethodFlags.PageCapabilityProc) != 0)
             {
                 plugin.pageCapabilityProc = new PageCapabilityProc(PageCapabilityProc);
             }
+
             if ((implementedMethods & MethodFlags.LoadProc) != 0)
             {
                 plugin.loadProc = new LoadProc(LoadProc);
             }
+
             if ((implementedMethods & MethodFlags.SaveProc) != 0)
             {
                 plugin.saveProc = new SaveProc(SaveProc);
             }
+
             if ((implementedMethods & MethodFlags.ValidateProc) != 0)
             {
                 plugin.validateProc = new ValidateProc(ValidateProc);
             }
+
             if ((implementedMethods & MethodFlags.MimeProc) != 0)
             {
                 plugin.mimeProc = new MimeProc(MimeProc);
             }
+
             if ((implementedMethods & MethodFlags.SupportsExportBPPProc) != 0)
             {
                 plugin.supportsExportBPPProc = new SupportsExportBPPProc(SupportsExportBPPProc);
             }
+
             if ((implementedMethods & MethodFlags.SupportsExportTypeProc) != 0)
             {
                 plugin.supportsExportTypeProc = new SupportsExportTypeProc(SupportsExportTypeProc);
             }
+
             if ((implementedMethods & MethodFlags.SupportsICCProfilesProc) != 0)
             {
                 plugin.supportsICCProfilesProc = new SupportsICCProfilesProc(SupportsICCProfilesProc);

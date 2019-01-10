@@ -238,13 +238,16 @@ namespace FreeImageAPI
         public static RGBQUAD[] ToRGBQUAD(Color[] array)
         {
             if (array == null)
+            {
                 return null;
+            }
 
             RGBQUAD[] result = new RGBQUAD[array.Length];
             for (int i = 0; i < array.Length; i++)
             {
                 result[i] = array[i];
             }
+
             return result;
         }
 
@@ -257,13 +260,16 @@ namespace FreeImageAPI
         public static Color[] ToColor(RGBQUAD[] array)
         {
             if (array == null)
+            {
                 return null;
+            }
 
             Color[] result = new Color[array.Length];
             for (int i = 0; i < array.Length; i++)
             {
                 result[i] = array[i].Color;
             }
+
             return result;
         }
 
@@ -279,10 +285,12 @@ namespace FreeImageAPI
             {
                 return 1;
             }
+
             if (!(obj is RGBQUAD))
             {
                 throw new ArgumentException("obj");
             }
+
             return CompareTo((RGBQUAD)obj);
         }
 

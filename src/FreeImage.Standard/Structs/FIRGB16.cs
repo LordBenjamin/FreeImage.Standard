@@ -204,10 +204,12 @@ namespace FreeImageAPI
             {
                 return 1;
             }
+
             if (!(obj is FIRGB16))
             {
                 throw new ArgumentException("obj");
             }
+
             return CompareTo((FIRGB16)obj);
         }
 

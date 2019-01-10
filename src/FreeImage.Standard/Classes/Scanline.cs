@@ -41,6 +41,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             if ((scanline < 0) || (scanline >= FreeImage.GetHeight(dib)))
             {
                 throw new ArgumentOutOfRangeException("scanline");

@@ -25,13 +25,25 @@ namespace FreeImageNETUnitTest.TestFixtures
         public bool EqualColors(Color color1, Color color2)
         {
             if (color1.A != color2.A)
+            {
                 return false;
+            }
+
             if (color1.R != color2.R)
+            {
                 return false;
+            }
+
             if (color1.G != color2.G)
+            {
                 return false;
+            }
+
             if (color1.B != color2.B)
+            {
                 return false;
+            }
+
             return true;
         }
 
@@ -322,8 +334,12 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.AreEqual(256, var.Size);
             byte[] dataComp = var.Data;
             for (int i = 0; i < data.Length && i < dataComp.Length; i++)
+            {
                 if (data[i] != dataComp[i])
+                {
                     Assert.Fail();
+                }
+            }
 
             FreeImage.DestroyICCProfile(dib);
             var = FreeImage.GetICCProfileEx(dib);
@@ -335,8 +351,12 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.AreEqual(512, var.Size);
             dataComp = var.Data;
             for (int i = 0; i < data.Length && i < dataComp.Length; i++)
+            {
                 if (data[i] != dataComp[i])
+                {
                     Assert.Fail();
+                }
+            }
 
             var = FreeImage.GetICCProfileEx(dib);
             Assert.AreEqual(512, var.Data.Length);

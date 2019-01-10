@@ -154,10 +154,12 @@ namespace FreeImageAPI
             {
                 return 1;
             }
+
             if (!(obj is FIBITMAP))
             {
                 throw new ArgumentException("obj");
             }
+
             return CompareTo((FIBITMAP)obj);
         }
 

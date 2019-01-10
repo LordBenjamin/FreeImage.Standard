@@ -26,6 +26,7 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             IntPtr hBitmap = IntPtr.Zero;
             bool release = false;
             IntPtr ppvBits = IntPtr.Zero;
@@ -35,6 +36,7 @@ namespace FreeImageAPI
                 // We don't so request dc
                 hdc = Gdi.GetDC(IntPtr.Zero);
             }
+
             if (hdc != IntPtr.Zero)
             {
                 // Get pointer to the infoheader of the bitmap
@@ -51,12 +53,14 @@ namespace FreeImageAPI
                         Unload(dib);
                     }
                 }
+
                 // We have to release the dc
                 if (release)
                 {
                     Gdi.ReleaseDC(IntPtr.Zero, hdc);
                 }
             }
+
             return hBitmap;
         }
 
@@ -81,12 +85,14 @@ namespace FreeImageAPI
             {
                 throw new ArgumentNullException("dib");
             }
+
             IntPtr hbitmap = IntPtr.Zero;
             bool release = false;
             if (release = (hdc == IntPtr.Zero))
             {
                 hdc = Gdi.GetDC(IntPtr.Zero);
             }
+
             if (hdc != IntPtr.Zero)
             {
                 hbitmap = Gdi.CreateDIBitmap(
@@ -100,11 +106,13 @@ namespace FreeImageAPI
                 {
                     Unload(dib);
                 }
+
                 if (release)
                 {
                     Gdi.ReleaseDC(IntPtr.Zero, hdc);
                 }
             }
+
             return hbitmap;
         }
 
@@ -138,6 +146,7 @@ namespace FreeImageAPI
                     {
                         hdc = Gdi.GetDC(IntPtr.Zero);
                     }
+
                     if (Gdi.GetDIBits(
                         hdc,
                         hbitmap,
@@ -157,6 +166,7 @@ namespace FreeImageAPI
                     {
                         UnloadEx(ref dib);
                     }
+
                     if (release)
                     {
                         Gdi.ReleaseDC(IntPtr.Zero, hdc);
