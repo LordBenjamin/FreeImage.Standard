@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.IO;
+using System.Runtime.InteropServices;
 using FreeImageAPI;
 using FreeImageAPI.IO;
 using FreeImageAPI.Plugins;

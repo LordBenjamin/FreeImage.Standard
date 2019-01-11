@@ -1,9 +1,9 @@
 using System;
-using System.Drawing;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using FreeImageAPI;
 using FreeImageAPI.IO;
 using FreeImageAPI.Metadata;

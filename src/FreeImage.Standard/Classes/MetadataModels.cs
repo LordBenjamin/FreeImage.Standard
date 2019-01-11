@@ -34,9 +34,9 @@
 // ==========================================================
 
 using System;
-using System.Xml;
 using System.IO;
 using System.Text;
+using System.Xml;
 
 namespace FreeImageAPI.Metadata
 {

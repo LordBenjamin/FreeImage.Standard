@@ -34,10 +34,10 @@
 // ==========================================================
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using FreeImageAPI.IO;
-using System.Diagnostics;
 
 namespace FreeImageAPI.Plugins
 {
