@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using FreeImageAPI.Metadata;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
+using System.Text;
+using FreeImageAPI.Metadata;
 
 namespace FreeImageAPI
 {

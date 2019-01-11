@@ -34,17 +34,17 @@
 // ==========================================================
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
-using System.Runtime.InteropServices;
-using System.Collections;
-using System.Collections.Generic;
-using FreeImageAPI.Metadata;
-using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using FreeImageAPI.Metadata;
 
 namespace FreeImageAPI
 {

@@ -35,8 +35,8 @@
 
 using System;
 using System.Runtime.InteropServices;
-using FreeImageAPI.Plugins;
 using FreeImageAPI.IO;
+using FreeImageAPI.Plugins;
 
 namespace FreeImageAPI
 {

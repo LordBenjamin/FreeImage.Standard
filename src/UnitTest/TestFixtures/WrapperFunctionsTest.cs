@@ -1,8 +1,8 @@
 using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using System.IO;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Runtime.InteropServices;
 using FreeImageAPI;
 using FreeImageAPI.Metadata;
 using NUnit.Framework;
