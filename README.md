@@ -1,6 +1,8 @@
 # FreeImage.Standard
 
-This is a clone of the FreeImage .NET project (http://freeimage.sourceforge.net/) modified to work with .NET Standard 2.0.
+This a .NET Standard 2.0 wrapper for the FreeImage library.
+
+Currently API-compatible with the FreeImage .NET Wrapper (http://freeimage.sourceforge.net/), however this may diverge over time as the original wrapper is no longer maintained.
 
 ## Installing
 Nuget package: https://www.nuget.org/packages/FreeImage.Standard
