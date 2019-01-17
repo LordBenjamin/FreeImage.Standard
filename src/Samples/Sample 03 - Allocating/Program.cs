@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using FreeImageAPI;
+using FreeImageNETUnitTest;
 
 namespace Sample03
 {
@@ -8,21 +9,21 @@ namespace Sample03
 	{
 		static void Main(string[] args)
 		{
-			// Check if FreeImage.dll is available (can be in %path%).
-			if (!FreeImage.IsAvailable())
-			{
-				Console.WriteLine("FreeImage.dll seems to be missing. Aborting.");
-				return;
-			}
+            NativeLibraryLoader.CopyFreeImageNativeDll();
 
-			// Add this class to the message event
-			FreeImageEngine.Message += new OutputMessageFunction(FreeImage_Message);
+            // Check if FreeImage.dll is available (can be in %path%).
+            FreeImage.ValidateAvailability();
+
+            // Add this class to the message event
+            FreeImageEngine.Message += new OutputMessageFunction(FreeImage_Message);
 
 			Sample sample = new Sample();
 			sample.Example();
 
 			// Remove this class from the message event
 			FreeImageEngine.Message -= new OutputMessageFunction(FreeImage_Message);
+
+            Console.ReadKey();
 		}
 
 		static void FreeImage_Message(FREE_IMAGE_FORMAT fif, string message)
