@@ -1,21 +1,18 @@
 using System;
 using FreeImageAPI;
-using System.Drawing;
+using FreeImageNETUnitTest;
 
 namespace Sample05
 {
-	class Program
+    class Program
 	{
 		static void Main(string[] args)
 		{
-			// Check if FreeImage.dll is available (can be in %path%).
-			if (!FreeImage.IsAvailable())
-			{
-				Console.WriteLine("FreeImage.dll seems to be missing. Aborting.");
-				return;
-			}
 
-			Sample sample = new Sample();
+            NativeLibraryLoader.CopyFreeImageNativeDll();
+            FreeImage.ValidateAvailability();
+
+            Sample sample = new Sample();
 
 			// The example will flip the bitmap by manually accessing the
 			// bitmaps scanlines and swapping them
