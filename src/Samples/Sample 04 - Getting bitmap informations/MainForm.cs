@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using FreeImageAPI;
+using FreeImageNETUnitTest;
 
 namespace Sample04
 {
@@ -10,8 +11,11 @@ namespace Sample04
 
 		[STAThread]
 		static void Main()
-		{
-			Application.EnableVisualStyles();
+        {
+            NativeLibraryLoader.CopyFreeImageNativeDll();
+            FreeImage.ValidateAvailability();
+
+            Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new MainForm());
 		}
