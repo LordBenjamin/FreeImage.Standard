@@ -5,9 +5,9 @@ using System.IO;
 
 namespace Sample01
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        internal static void Main(string[] args)
         {
             NativeLibraryLoader.CopyFreeImageNativeDll();
 
