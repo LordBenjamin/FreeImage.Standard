@@ -188,5 +188,13 @@ namespace FreeImageAPI
         /// RAW camera image (*.*)
         /// </summary>
         FIF_RAW = 34,
+        /// <summary>
+        /// WEBP format (*.webp)
+        /// </summary>
+        FIF_WEBP = 35,
+        /// <summary>
+        /// JPEG XR (*.jxr)
+        /// </summary>
+        FIF_JXR = 36
     }
 }
