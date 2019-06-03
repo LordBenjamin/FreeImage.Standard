@@ -50,7 +50,7 @@ namespace FreeImageNETUnitTest
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 runtimeFolderName = "linux-x64";
-                libraryFileName = "libfreeimage-3.17.0.so";
+                libraryFileName = "libfreeimage-3.18.0.so";
             }
             else
             {
