@@ -13,13 +13,13 @@ Nuget package: https://www.nuget.org/packages/FreeImage.Standard
 
 ## Native Compatibility
 
-FreeImage native binaries are included in the nuget package for Windows x86/x64, Linux x64/armhf, and OSX x64 (^10.10).
+FreeImage native binaries are included in the nuget package for Windows x86/x64 and Linux x64/armhf.
 
 For other platforms they will have to be installed separately. Note that the native function calls require the library filename to be `FreeImage`, so symlinking may be required (eg. `sudo ln -s /usr/lib/x86_64-linux-gnu/libfreeimage.so /usr/lib/FreeImage`).
 
 ## FreeImage Version
 
-This is for FreeImage version 3.17.0 
+This is for FreeImage version 3.18.0 
 
 **The version number of this package no longer matches the FreeImage native library version!**
 
