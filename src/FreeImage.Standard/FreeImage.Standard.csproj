@@ -20,10 +20,10 @@
     <Description>
       FreeImage (http://freeimage.sourceforge.net/) wrapper targetting .NET Standard 2.0.
 
-      FreeImage native binaries are included in the nuget package for Windows x86/x64, Linux x64/armhf, and OSX x64 (^10.10).
+      FreeImage native binaries are included in the nuget package for Windows x86/x64, Linux x64/armhf.
 
       Linked to FreeImage version 3.18.0.
-    </Description>
+</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,10 +44,6 @@
     </None>
 
     <!-- NOTE: this is renaming to FreeImage... might be avoidable if dll mapping is implemented: https://github.com/dotnet/coreclr/issues/930 -->
-    <None Include="..\..\runtimes\osx.10.10-x64\native\libfreeimage.3.17.0.dylib">
-      <PackagePath>runtimes/osx.10.10-x64/native/FreeImage.dylib</PackagePath>
-      <Pack>true</Pack>
-    </None>
 
     <!-- NOTE: this is renaming to FreeImage... might be avoidable if dll mapping is implemented: https://github.com/dotnet/coreclr/issues/930 -->
     <None Include="..\..\runtimes\linux-x64\native\libfreeimage-3.18.0.so">
