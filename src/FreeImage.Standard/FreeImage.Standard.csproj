@@ -3,7 +3,9 @@
   <PropertyGroup>
     <Copyright></Copyright>
     <AssemblyTitle>FreeImage.Standard</AssemblyTitle>
-    <VersionPrefix>4.3.7</VersionPrefix>
+    <Version>4.3.8</Version>
+    <AssemblyVersion>4.3.8.0</AssemblyVersion>
+    <FileVersion>4.3.8.0</FileVersion>
     <Authors>FreeImage contributors; matgr1; lordbenjamin</Authors>
     <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -16,14 +18,13 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/LordBenjamin/FreeImage.Standard</RepositoryUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>4.3.8</Version>
     <Description>
       FreeImage (http://freeimage.sourceforge.net/) wrapper targetting .NET Standard 2.0.
 
       FreeImage native binaries are included in the nuget package for Windows x86/x64 and Linux x64/armhf.
 
       Linked to FreeImage version 3.18.0.
-</Description>
+    </Description>
   </PropertyGroup>
 
   <ItemGroup>
