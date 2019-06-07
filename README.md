@@ -19,7 +19,9 @@ For other platforms they will have to be installed separately. Note that the nat
 
 ## FreeImage Version
 
-This is for FreeImage version 3.18.0 
+This is for FreeImage version 3.18.0
+
+Note that FreeImage 3.18.0 is not available on Raspian yet - please use the v4.3.7 package which is linked against FreeImage 3.17.0 for now.
 
 **The version number of this package no longer matches the FreeImage native library version!**
 
