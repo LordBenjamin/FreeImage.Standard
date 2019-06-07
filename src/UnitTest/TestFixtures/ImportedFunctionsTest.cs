@@ -1145,19 +1145,6 @@ namespace FreeImageNETUnitTest.TestFixtures
         }
 
         [Test]
-        public void FreeImage_RotateClassic()
-        {
-            dib = iManager.GetBitmap(ImageType.Even, ImageColorType.Type_24);
-            Assert.That(!dib.IsNull);
-
-            FIBITMAP temp = FreeImage.RotateClassic(dib, 45d);
-            Assert.AreNotEqual(0, temp);
-
-            FreeImage.UnloadEx(ref temp);
-            FreeImage.UnloadEx(ref dib);
-        }
-
-        [Test]
         public void FreeImage_RotateEx()
         {
             dib = iManager.GetBitmap(ImageType.Even, ImageColorType.Type_24);

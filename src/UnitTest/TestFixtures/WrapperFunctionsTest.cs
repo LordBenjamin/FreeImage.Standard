@@ -263,7 +263,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             FreeImage.UnloadEx(ref dib);
 
             Assert.That(dib.IsNull);
-            Assert.Throws<IOException>(() => FreeImage.LoadFromStream(new MemoryStream(new byte[] { })));
+            Assert.DoesNotThrow(() => dib = FreeImage.LoadFromStream(new MemoryStream(new byte[] { })));
             Assert.That(dib.IsNull);
 
             format = FREE_IMAGE_FORMAT.FIF_BMP;

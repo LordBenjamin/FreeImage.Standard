@@ -116,7 +116,7 @@ namespace FreeImageAPI
 
         #region General functions
 
-        private static readonly Version ExpectedNativeFreeImageVersion = new Version("3.17.0");
+        private static readonly Version ExpectedNativeFreeImageVersion = new Version("3.18.0");
 
         ///// <summary>
         ///// Returns the internal version of this FreeImage .NET wrapper.
