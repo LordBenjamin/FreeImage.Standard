@@ -186,6 +186,26 @@ namespace FreeImageAPI
         /// <summary>
         /// Save using JPEG compression.
         /// </summary>
-        TIFF_JPEG = 0x8000
+        TIFF_JPEG = 0x8000,
+        /// <summary>
+        /// WEBP default quality (75)
+        /// </summary>
+        WEBP_DEFAULT = 0x0,
+        /// <summary>
+        /// WEBP lossless quality (100)
+        /// </summary>
+        WEBP_LOSSLESS = 0x100,
+        /// <summary>
+        /// save with quality 80 and no chroma subsampling (4:4:4)
+        /// </summary>
+        JXR_DEFAULT = 0x0,
+        /// <summary>
+        /// save lossless
+        /// </summary>
+        JXR_LOSSLESS = 0x0064,
+        /// <summary>
+        /// save as a progressive-JXR (use | to combine with other save flags)
+        /// </summary>
+        JXR_PROGRESSIVE = 0x2000
     }
 }
