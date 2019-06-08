@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using BenchmarkDotNet.Attributes;
 using FreeImageAPI;
 using FreeImageAPI.IO;
@@ -9,7 +8,7 @@ namespace Benchmarking.Benchmarks
     [CoreJob]
     [ClrJob]
     [MemoryDiagnoser]
-    public class StreamBenchmark
+    public class StreamWriteBenchmark
     {
         private FIBITMAP bmp;
         private Stream stream;
@@ -31,7 +30,7 @@ namespace Benchmarking.Benchmarks
         [Benchmark(Baseline = true)]
         public void Legacy()
         {
-            FreeImage.IO = LegacyFreeImageStreamIO.IO;
+            FreeImage.IO = FreeImageStreamIO.IO;
             Exec();
         }
 

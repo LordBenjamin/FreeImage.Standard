@@ -51,28 +51,38 @@ namespace FreeImageAPI.IO
                 return 0;
             }
 
-            uint readCount = 0;
-            byte* ptr = (byte*)buffer;
-            byte[] bufferTemp = new byte[size];
-            int read;
-            while (readCount < count)
+            var arrayPool = ArrayPool<byte>.Shared;
+            byte[] bufferTemp = arrayPool.Rent((int)size);
+
+            try
             {
-                read = stream.Read(bufferTemp, 0, (int)size);
-                if (read != (int)size)
+                uint readCount = 0;
+                int read;
+
+                while (readCount < count)
                 {
-                    stream.Seek(-read, SeekOrigin.Current);
-                    break;
+
+                    read = stream.Read(bufferTemp, 0, (int)size);
+                    if (read != (int)size)
+                    {
+                        stream.Seek(-read, SeekOrigin.Current);
+                        break;
+                    }
+
+                    Span<byte> source = new Span<byte>(bufferTemp, 0, read);
+                    Span<byte> dest = new Span<byte>(buffer.ToPointer(), read);
+                    source.CopyTo(dest);
+                    buffer += read;
+
+                    readCount++;
                 }
 
-                for (int i = 0; i < read; i++, ptr++)
-                {
-                    *ptr = bufferTemp[i];
-                }
-
-                readCount++;
+                return (uint)readCount;
             }
-
-            return (uint)readCount;
+            finally
+            {
+                arrayPool.Return(bufferTemp);
+            }
         }
 
         /// <summary>
@@ -88,18 +98,17 @@ namespace FreeImageAPI.IO
 
             int sizeInt = (int)size;
 
+            var arrayPool = ArrayPool<byte>.Shared;
             byte* ptr = (byte*)buffer.ToPointer();
             uint writeCount = 0;
-            byte[] managedBuffer = ArrayPool<byte>.Shared.Rent(sizeInt);
 
-            try
-            {
-                while (writeCount < count)
-                {
-                    ReadOnlySpan<byte> span = new ReadOnlySpan<byte>(ptr, sizeInt);
+            byte[] managedBuffer = arrayPool.Rent(sizeInt);
+            try {
+                while (writeCount < count)  {
+                    ReadOnlySpan<byte> source = new ReadOnlySpan<byte>(ptr, sizeInt);
                     ptr += sizeInt;
 
-                    span.CopyTo(managedBuffer);
+                    source.CopyTo(managedBuffer);
 
                     stream.Write(managedBuffer, 0, sizeInt);
 
@@ -107,10 +116,8 @@ namespace FreeImageAPI.IO
                 }
 
                 return writeCount;
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(managedBuffer);
+            } finally {
+                arrayPool.Return(managedBuffer);
             }
         }
 

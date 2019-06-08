@@ -7,7 +7,8 @@ namespace Benchmarking
     {
         public static void Main(string[] args)
         {
-            BenchmarkRunner.Run<StreamBenchmark>();
+            BenchmarkRunner.Run<StreamReadBenchmark>();
+            BenchmarkRunner.Run<StreamWriteBenchmark>();
         }
     }
 }
