@@ -114,7 +114,7 @@ namespace FreeImageAPI
 
         #endregion
 
-        public static FreeImageIO IO { get; set; } = FreeImageStreamIO.IO;
+        public static FreeImageIO IO { get; set; } = SpanStreamIO.IO;
 
         #region General functions
 
