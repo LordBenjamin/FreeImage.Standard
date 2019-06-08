@@ -7,8 +7,15 @@ namespace Benchmarking
     {
         public static void Main(string[] args)
         {
+#if !DEBUG
             BenchmarkRunner.Run<StreamReadBenchmark>();
-            BenchmarkRunner.Run<StreamWriteBenchmark>();
+#else
+            StreamReadBenchmark b = new StreamReadBenchmark();
+            b.Setup();
+            for (int i = 0; i < 10000; i++)
+                b.Legacy();
+            b.Cleanup();
+#endif
         }
     }
 }

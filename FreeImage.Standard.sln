@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{32568241-B63
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "src\UnitTest\UnitTest.csproj", "{0140ED84-DFCD-4547-9642-4557A24F835E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarking", "src\Benchmark\Benchmarking.csproj", "{48F16843-68A9-4D5C-BE60-228AD26B0ED0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarking", "src\Benchmarking\Benchmarking.csproj", "{48F16843-68A9-4D5C-BE60-228AD26B0ED0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
