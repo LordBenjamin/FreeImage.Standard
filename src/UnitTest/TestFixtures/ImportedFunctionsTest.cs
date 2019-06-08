@@ -119,7 +119,7 @@ namespace FreeImageNETUnitTest.TestFixtures
         {
             byte[] data = File.ReadAllBytes(iManager.GetBitmapPath(ImageType.Even, ImageColorType.Type_16_555));
             MemoryStream mStream = new MemoryStream(data);
-            FreeImageIO io = FreeImageStreamIO.io;
+            FreeImageIO io = FreeImageStreamIO.IO;
 
             using (fi_handle handle = new fi_handle(mStream))
             {
@@ -354,7 +354,7 @@ namespace FreeImageNETUnitTest.TestFixtures
         [Test]
         public void FreeImage_GetFileTypeFromHandle()
         {
-            FreeImageIO io = FreeImageStreamIO.io;
+            FreeImageIO io = FreeImageStreamIO.IO;
             Assert.AreEqual(FREE_IMAGE_FORMAT.FIF_UNKNOWN, FreeImage.GetFileTypeFromHandle(ref io, new fi_handle(), 0));
         }
 

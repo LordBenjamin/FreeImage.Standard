@@ -1,39 +1,5 @@
-// ==========================================================
-// FreeImage 3 .NET wrapper
-// Original FreeImage 3 functions and .NET compatible derived functions
-//
-// Design and implementation by
-// - Jean-Philippe Goerke (jpgoerke@users.sourceforge.net)
-// - Carsten Klein (cklein05@users.sourceforge.net)
-//
-// Contributors:
-// - David Boland (davidboland@vodafone.ie)
-//
-// Main reference : MSDN Knowlede Base
-//
-// This file is part of FreeImage 3
-//
-// COVERED CODE IS PROVIDED UNDER THIS LICENSE ON AN "AS IS" BASIS, WITHOUT WARRANTY
-// OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES
-// THAT THE COVERED CODE IS FREE OF DEFECTS, MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE
-// OR NON-INFRINGING. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE COVERED
-// CODE IS WITH YOU. SHOULD ANY COVERED CODE PROVE DEFECTIVE IN ANY RESPECT, YOU (NOT
-// THE INITIAL DEVELOPER OR ANY OTHER CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY
-// SERVICING, REPAIR OR CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL
-// PART OF THIS LICENSE. NO USE OF ANY COVERED CODE IS AUTHORIZED HEREUNDER EXCEPT UNDER
-// THIS DISCLAIMER.
-//
-// Use at your own risk!
-// ==========================================================
-
-// ==========================================================
-// CVS
-// $Revision: 1.5 $
-// $Date: 2009/09/15 11:47:46 $
-// $Id: FreeImageStreamIO.cs,v 1.5 2009/09/15 11:47:46 cklein05 Exp $
-// ==========================================================
-
 using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -54,7 +20,7 @@ namespace FreeImageAPI.IO
     /// <para/>
     /// The class is for internal use only.
     /// </remarks>
-    public static class FreeImageStreamIO
+    public static class SpanStreamIO
     {
         /// <summary>
         /// <see cref="FreeImageAPI.IO.FreeImageIO"/> structure that can be used to read from streams via
@@ -66,7 +32,7 @@ namespace FreeImageAPI.IO
         /// Initializes a new instances which can be used to
         /// create a FreeImage compatible <see cref="FreeImageAPI.IO.FreeImageIO"/> structure.
         /// </summary>
-        static FreeImageStreamIO()
+        static SpanStreamIO()
         {
             IO.readProc = new ReadProc(streamRead);
             IO.writeProc = new WriteProc(streamWrite);
@@ -120,29 +86,32 @@ namespace FreeImageAPI.IO
                 return 0;
             }
 
+            int sizeInt = (int)size;
+
+            byte* ptr = (byte*)buffer.ToPointer();
             uint writeCount = 0;
-            byte[] bufferTemp = new byte[size];
-            byte* ptr = (byte*)buffer;
-            while (writeCount < count)
+            byte[] managedBuffer = ArrayPool<byte>.Shared.Rent(sizeInt);
+
+            try
             {
-                for (int i = 0; i < size; i++, ptr++)
+                while (writeCount < count)
                 {
-                    bufferTemp[i] = *ptr;
+                    ReadOnlySpan<byte> span = new ReadOnlySpan<byte>(ptr, sizeInt);
+                    ptr += sizeInt;
+
+                    span.CopyTo(managedBuffer);
+
+                    stream.Write(managedBuffer, 0, sizeInt);
+
+                    writeCount++;
                 }
 
-                try
-                {
-                    stream.Write(bufferTemp, 0, bufferTemp.Length);
-                }
-                catch
-                {
-                    return writeCount;
-                }
-
-                writeCount++;
+                return writeCount;
             }
-
-            return writeCount;
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(managedBuffer);
+            }
         }
 
         /// <summary>

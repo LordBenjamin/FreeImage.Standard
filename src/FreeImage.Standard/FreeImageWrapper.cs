@@ -114,6 +114,8 @@ namespace FreeImageAPI
 
         #endregion
 
+        public static FreeImageIO IO { get; set; } = FreeImageStreamIO.IO;
+
         #region General functions
 
         private static readonly Version ExpectedNativeFreeImageVersion = new Version("3.18.0");
@@ -1529,7 +1531,7 @@ namespace FreeImageAPI
 
             // Create a 'FreeImageIO' structure for calling 'LoadFromHandle'
             // using the internal structure 'FreeImageStreamIO'.
-            FreeImageIO io = FreeImageStreamIO.io;
+            FreeImageIO io = IO;
             using (fi_handle handle = new fi_handle(stream))
             {
                 return LoadFromHandle(format, ref io, handle, flags);
@@ -1734,7 +1736,7 @@ namespace FreeImageAPI
             try
             {
                 // Create a 'FreeImageIO' structure for calling 'SaveToHandle'
-                FreeImageIO io = FreeImageStreamIO.io;
+                FreeImageIO io = IO;
 
                 using (fi_handle handle = new fi_handle(stream))
                 {
@@ -2086,7 +2088,7 @@ namespace FreeImageAPI
             }
 
             FIMULTIBITMAP mdib = FIMULTIBITMAP.Zero;
-            FreeImageIO io = FreeImageStreamIO.io;
+            FreeImageIO io = IO;
             fi_handle handle = new fi_handle(stream);
 
             try
@@ -2320,7 +2322,7 @@ namespace FreeImageAPI
             // Wrap the stream if it cannot seek
             stream = (stream.CanSeek) ? stream : new StreamWrapper(stream, true);
             // Create a 'FreeImageIO' structure for the stream
-            FreeImageIO io = FreeImageStreamIO.io;
+            FreeImageIO io = IO;
             using (fi_handle handle = new fi_handle(stream))
             {
                 return GetFileTypeFromHandle(ref io, handle, 0);

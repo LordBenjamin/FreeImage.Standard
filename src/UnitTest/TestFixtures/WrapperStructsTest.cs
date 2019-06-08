@@ -409,7 +409,7 @@ namespace FreeImageNETUnitTest.TestFixtures
             Assert.IsNotNull(stream);
             using (fi_handle handle = new fi_handle(stream))
             {
-                FreeImageIO io = FreeImageAPI.IO.FreeImageStreamIO.io;
+                FreeImageIO io = FreeImageAPI.IO.FreeImageStreamIO.IO;
                 Assert.IsNotNull(io.readProc);
                 Assert.IsNotNull(io.writeProc);
                 Assert.IsNotNull(io.seekProc);
