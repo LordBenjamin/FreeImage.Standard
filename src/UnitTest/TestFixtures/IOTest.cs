@@ -29,7 +29,7 @@ namespace UnitTest.TestFixtures
                 FreeImage.SaveToStream(dib, stream2, FREE_IMAGE_FORMAT.FIF_BMP);
                 Assert.Greater(stream2.Position, 0);
 
-                Assert.IsTrue(Enumerable.SequenceEqual(stream1.GetBuffer(), stream2.GetBuffer()));
+                Assert.IsTrue(Enumerable.SequenceEqual(stream1.ToArray(), stream2.ToArray()));
             }
 
             FreeImage.UnloadEx(ref dib);
