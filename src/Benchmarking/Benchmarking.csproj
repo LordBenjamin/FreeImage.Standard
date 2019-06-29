@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0;netcoreapp2.1;net472</TargetFrameworks>
     <ApplicationIcon />
-    <OutputType>WinExe</OutputType>
+     <OutputType>Exe</OutputType>
     <StartupObject />
   </PropertyGroup>
 
