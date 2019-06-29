@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Attributes;
 using FreeImageAPI;
 using FreeImageAPI.IO;
@@ -28,19 +29,20 @@ namespace Benchmarking.Benchmarks
         }
 
         [Benchmark(Baseline = true)]
-        public void Legacy()
+        public void WriteLegacy()
         {
             FreeImage.IO = FreeImageStreamIO.IO;
             Exec();
         }
 
         [Benchmark]
-        public void Span()
+        public void WriteSpan()
         {
             FreeImage.IO = SpanStreamIO.IO;
             Exec();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Exec()
         {
             stream.Seek(0, SeekOrigin.Begin);

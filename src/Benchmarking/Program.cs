@@ -13,7 +13,7 @@ namespace Benchmarking
             StreamReadBenchmark b = new StreamReadBenchmark();
             b.Setup();
             for (int i = 0; i < 10000; i++)
-                b.Legacy();
+                b.ReadSpan();
             b.Cleanup();
 #endif
         }
