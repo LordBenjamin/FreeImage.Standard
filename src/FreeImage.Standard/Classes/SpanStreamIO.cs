@@ -22,6 +22,8 @@ namespace FreeImageAPI.IO
     /// </remarks>
     public static class SpanStreamIO
     {
+        private const int SharedArrayPoolMaxBufferSize = 1024 * 1024;
+
         /// <summary>
         /// <see cref="FreeImageAPI.IO.FreeImageIO"/> structure that can be used to read from streams via
         /// <see cref="FreeImageAPI.FreeImage.LoadFromHandle(FREE_IMAGE_FORMAT, ref FreeImageIO, fi_handle, FREE_IMAGE_LOAD_FLAGS)"/>.
@@ -52,18 +54,22 @@ namespace FreeImageAPI.IO
             }
 
             var arrayPool = ArrayPool<byte>.Shared;
-            byte[] bufferTemp = arrayPool.Rent((int)size);
+            byte[] bufferTemp = arrayPool.Rent(
+                size < SharedArrayPoolMaxBufferSize ? (int)size : SharedArrayPoolMaxBufferSize);
+
+            int readSize = (int)Math.Min(bufferTemp.Length, size);
+
+            int copyIterations = (int)(size / readSize);
 
             try
             {
                 uint readCount = 0;
                 int read;
 
-                while (readCount < count)
+                while (readCount < count * copyIterations)
                 {
-
-                    read = stream.Read(bufferTemp, 0, (int)size);
-                    if (read != (int)size)
+                    read = stream.Read(bufferTemp, 0, readSize);
+                    if (read != readSize)
                     {
                         stream.Seek(-read, SeekOrigin.Current);
                         break;
@@ -96,23 +102,32 @@ namespace FreeImageAPI.IO
                 return 0;
             }
 
-            int sizeInt = (int)size;
-
             var arrayPool = ArrayPool<byte>.Shared;
+            byte[] managedBuffer = arrayPool.Rent(
+                size < SharedArrayPoolMaxBufferSize ? (int)size : SharedArrayPoolMaxBufferSize);
+
+            int writeSize = (int)Math.Min(managedBuffer.Length, size);
+
+            int copyIterations = (int)Math.Ceiling(size / (float)writeSize);
+
             byte* ptr = (byte*)buffer.ToPointer();
             uint writeCount = 0;
 
-            byte[] managedBuffer = arrayPool.Rent(sizeInt);
+            int bytesWritten = 0;
+
             try {
-                while (writeCount < count)  {
-                    ReadOnlySpan<byte> source = new ReadOnlySpan<byte>(ptr, sizeInt);
-                    ptr += sizeInt;
+                while (writeCount < count * copyIterations)  {
+                    int actualWriteSize = Math.Min((int)(size - bytesWritten), writeSize);
+
+                    ReadOnlySpan<byte> source = new ReadOnlySpan<byte>(ptr, actualWriteSize);
+                    ptr += actualWriteSize;
 
                     source.CopyTo(managedBuffer);
 
-                    stream.Write(managedBuffer, 0, sizeInt);
+                    stream.Write(managedBuffer, 0, actualWriteSize);
 
                     writeCount++;
+                    bytesWritten += actualWriteSize;
                 }
 
                 return writeCount;
