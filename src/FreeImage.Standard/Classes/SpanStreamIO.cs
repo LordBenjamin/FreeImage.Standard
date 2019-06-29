@@ -58,32 +58,30 @@ namespace FreeImageAPI.IO
                 size < SharedArrayPoolMaxBufferSize ? (int)size : SharedArrayPoolMaxBufferSize);
 
             int readSize = (int)Math.Min(bufferTemp.Length, size);
+            uint numReads = count * (uint)Math.Ceiling(size / (float)readSize);
 
-            int copyIterations = (int)(size / readSize);
+            uint readCount = 0;
 
             try
             {
-                uint readCount = 0;
-                int read;
-
-                while (readCount < count * copyIterations)
+                while (readCount < numReads)
                 {
-                    read = stream.Read(bufferTemp, 0, readSize);
-                    if (read != readSize)
+                    int bytesRead = stream.Read(bufferTemp, 0, readSize);
+                    if (bytesRead != readSize)
                     {
-                        stream.Seek(-read, SeekOrigin.Current);
+                        stream.Seek(-bytesRead, SeekOrigin.Current);
                         break;
                     }
 
-                    Span<byte> source = new Span<byte>(bufferTemp, 0, read);
-                    Span<byte> dest = new Span<byte>(buffer.ToPointer(), read);
+                    Span<byte> source = new Span<byte>(bufferTemp, 0, bytesRead);
+                    Span<byte> dest = new Span<byte>(buffer.ToPointer(), bytesRead);
                     source.CopyTo(dest);
-                    buffer += read;
+                    buffer += bytesRead;
 
                     readCount++;
                 }
 
-                return (uint)readCount;
+                return readCount;
             }
             finally
             {
@@ -107,8 +105,7 @@ namespace FreeImageAPI.IO
                 size < SharedArrayPoolMaxBufferSize ? (int)size : SharedArrayPoolMaxBufferSize);
 
             int writeSize = (int)Math.Min(managedBuffer.Length, size);
-
-            int copyIterations = (int)Math.Ceiling(size / (float)writeSize);
+            uint numWrites = count * (uint)Math.Ceiling(size / (float)writeSize);
 
             byte* ptr = (byte*)buffer.ToPointer();
             uint writeCount = 0;
@@ -116,8 +113,9 @@ namespace FreeImageAPI.IO
             int bytesWritten = 0;
 
             try {
-                while (writeCount < count * copyIterations)  {
-                    int actualWriteSize = Math.Min((int)(size - bytesWritten), writeSize);
+                while (writeCount < numWrites)  {
+                    int remainder = (int)((size - bytesWritten) % writeSize);
+                    int actualWriteSize = remainder > 0 ? remainder : writeSize;
 
                     ReadOnlySpan<byte> source = new ReadOnlySpan<byte>(ptr, actualWriteSize);
                     ptr += actualWriteSize;
