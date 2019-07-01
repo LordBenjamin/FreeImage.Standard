@@ -13,7 +13,7 @@ namespace UnitTest.TestFixtures
     public class IOTest
     {
         [Test]
-        public void WriteStream()
+        public void WriteStreamBmp()
         {
             FIBITMAP dib = FreeImage.Allocate(1000, 800, 24, 0xFF0000, 0xFF00, 0xFF);
             Assert.IsFalse(dib.IsNull);
@@ -34,6 +34,31 @@ namespace UnitTest.TestFixtures
 
             FreeImage.UnloadEx(ref dib);
         }
+
+        [Test]
+        public void WriteStreamJpeg()
+        {
+            FIBITMAP dib = FreeImage.Allocate(1000, 800, 24, 0xFF0000, 0xFF00, 0xFF);
+            Assert.IsFalse(dib.IsNull);
+
+            using (MemoryStream stream1 = new MemoryStream())
+            using (MemoryStream stream2 = new MemoryStream())
+            {
+                FreeImage.IO = FreeImageStreamIO.IO;
+                FreeImage.SaveToStream(dib, stream1, FREE_IMAGE_FORMAT.FIF_JPEG);
+                Assert.Greater(stream1.Position, 0);
+
+                FreeImage.IO = SpanStreamIO.IO;
+                FreeImage.SaveToStream(dib, stream2, FREE_IMAGE_FORMAT.FIF_JPEG);
+                Assert.Greater(stream2.Position, 0);
+
+                Assert.IsTrue(Enumerable.SequenceEqual(stream1.ToArray(), stream2.ToArray()));
+            }
+
+            FreeImage.UnloadEx(ref dib);
+        }
+
+
         [Test]
         public void ReadStream()
         {

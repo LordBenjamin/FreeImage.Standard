@@ -100,15 +100,17 @@ namespace FreeImageAPI.IO
                 return 0;
             }
 
+            // size is the size of a record, count is the number of records.
+            uint totalSize = size * count;
+
             var arrayPool = ArrayPool<byte>.Shared;
             byte[] managedBuffer = arrayPool.Rent(
-                size < SharedArrayPoolMaxBufferSize ? (int)size : SharedArrayPoolMaxBufferSize);
+                totalSize < SharedArrayPoolMaxBufferSize ? (int)totalSize : SharedArrayPoolMaxBufferSize);
 
             byte* ptr = (byte*)buffer.ToPointer();
-            uint writeCount = 0;
 
             int remainder;
-            int iterations = Math.DivRem(checked((int)size), managedBuffer.Length, out remainder);
+            int iterations = Math.DivRem(checked((int)totalSize), managedBuffer.Length, out remainder);
 
             try
             {
@@ -117,19 +119,15 @@ namespace FreeImageAPI.IO
                 ptr += remainder;
                 source.CopyTo(managedBuffer);
                 stream.Write(managedBuffer, 0, remainder);
-                writeCount++;
 
                 // Repeated full-buffer copies
-                while (writeCount < iterations + 1)
+                for (int j = 0; j < iterations; j++)
                 {
                     source = new ReadOnlySpan<byte>(ptr, managedBuffer.Length);
                     ptr += managedBuffer.Length;
 
                     source.CopyTo(managedBuffer);
-
                     stream.Write(managedBuffer, 0, managedBuffer.Length);
-
-                    writeCount++;
                 }
             }
             finally
@@ -137,7 +135,7 @@ namespace FreeImageAPI.IO
                 arrayPool.Return(managedBuffer);
             }
 
-            return writeCount;
+            return count;
         }
 
         /// <summary>
