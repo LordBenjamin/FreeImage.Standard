@@ -1,8 +1,6 @@
 using System;
 using System.Buffers;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace FreeImageAPI.IO
 {
@@ -53,40 +51,43 @@ namespace FreeImageAPI.IO
                 return 0;
             }
 
+            byte* bufferPointer = (byte*)buffer.ToPointer();
+
+            // size is the size of a record, count is the number of records.
+            uint totalSize = size * count;
+
             var arrayPool = ArrayPool<byte>.Shared;
             byte[] bufferTemp = arrayPool.Rent(
                 size < SharedArrayPoolMaxBufferSize ? (int)size : SharedArrayPoolMaxBufferSize);
 
-            int readSize = (int)Math.Min(bufferTemp.Length, size);
-            uint numReads = count * (uint)Math.Ceiling(size / (float)readSize);
-
-            uint readCount = 0;
+            int remainder;
+            int iterations = Math.DivRem(checked((int)totalSize), bufferTemp.Length, out remainder);
 
             try
             {
-                while (readCount < numReads)
+                int bytesRead = stream.Read(bufferTemp, 0, remainder);
+                Span<byte> source = new Span<byte>(bufferTemp, 0, remainder);
+                Span<byte> dest = new Span<byte>(bufferPointer, remainder);
+                source.CopyTo(dest);
+                bufferPointer += bytesRead;
+
+                for (int i = 0; i < iterations; i++)
                 {
-                    int bytesRead = stream.Read(bufferTemp, 0, readSize);
-                    if (bytesRead != readSize)
-                    {
-                        stream.Seek(-bytesRead, SeekOrigin.Current);
-                        break;
-                    }
+                    bytesRead = stream.Read(bufferTemp, 0, bufferTemp.Length);
 
-                    Span<byte> source = new Span<byte>(bufferTemp, 0, bytesRead);
-                    Span<byte> dest = new Span<byte>(buffer.ToPointer(), bytesRead);
+                    source = new Span<byte>(bufferTemp, 0, bytesRead);
+                    dest = new Span<byte>(bufferPointer, bytesRead);
+
                     source.CopyTo(dest);
-                    buffer += bytesRead;
-
-                    readCount++;
+                    bufferPointer += bytesRead;
                 }
-
-                return readCount;
             }
             finally
             {
                 arrayPool.Return(bufferTemp);
             }
+
+            return count;
         }
 
         /// <summary>
