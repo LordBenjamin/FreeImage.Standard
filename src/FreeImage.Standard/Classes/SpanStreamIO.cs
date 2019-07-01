@@ -114,6 +114,7 @@ namespace FreeImageAPI.IO
             {
                 // Copy bytes that don't divide exactly into the buffer size
                 ReadOnlySpan<byte> source = new ReadOnlySpan<byte>(ptr, remainder);
+                ptr += remainder;
                 source.CopyTo(managedBuffer);
                 stream.Write(managedBuffer, 0, remainder);
                 writeCount++;
