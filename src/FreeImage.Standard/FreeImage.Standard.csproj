@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Copyright></Copyright>
     <AssemblyTitle>FreeImage.Standard</AssemblyTitle>
-    <Version>4.3.9-beta1</Version>
+    <Version>4.3.9-beta4</Version>
     <AssemblyVersion>4.3.9.0</AssemblyVersion>
     <FileVersion>4.3.9.0</FileVersion>
     <Authors>FreeImage contributors; matgr1; lordbenjamin</Authors>
@@ -11,7 +11,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>FreeImage.Standard</AssemblyName>
     <PackageId>FreeImage.Standard</PackageId>
-    <PackageTags>FreeImage;netcore;dotnetcore</PackageTags>
+    <PackageTags>FreeImage;netcore;dotnetcore;netstandard</PackageTags>
     <PackageIconUrl>http://freeimage.sourceforge.net/images/logo.jpg</PackageIconUrl>
     <PackageProjectUrl>https://github.com/LordBenjamin/FreeImage.Standard</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
@@ -24,8 +24,12 @@
 
       Linked to FreeImage version 3.18.0.
     </Description>
-    <PackageLicenseExpression>FreeImage OR GPL-3.0-only OR GPL-2.0-only</PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\license-fi.txt" Link="license-fi.txt" Pack="true" PackagePath="LICENSE.txt" />
+  </ItemGroup>
 
   <ItemGroup>
 
