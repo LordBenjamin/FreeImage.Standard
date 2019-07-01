@@ -104,34 +104,39 @@ namespace FreeImageAPI.IO
             byte[] managedBuffer = arrayPool.Rent(
                 size < SharedArrayPoolMaxBufferSize ? (int)size : SharedArrayPoolMaxBufferSize);
 
-            int writeSize = (int)Math.Min(managedBuffer.Length, size);
-            uint numWrites = count * (uint)Math.Ceiling(size / (float)writeSize);
-
             byte* ptr = (byte*)buffer.ToPointer();
             uint writeCount = 0;
 
-            int bytesWritten = 0;
+            int remainder;
+            int iterations = Math.DivRem(checked((int)size), managedBuffer.Length, out remainder);
 
-            try {
-                while (writeCount < numWrites)  {
-                    int remainder = (int)((size - bytesWritten) % writeSize);
-                    int actualWriteSize = remainder > 0 ? remainder : writeSize;
+            try
+            {
+                // Copy bytes that don't divide exactly into the buffer size
+                ReadOnlySpan<byte> source = new ReadOnlySpan<byte>(ptr, remainder);
+                source.CopyTo(managedBuffer);
+                stream.Write(managedBuffer, 0, remainder);
+                writeCount++;
 
-                    ReadOnlySpan<byte> source = new ReadOnlySpan<byte>(ptr, actualWriteSize);
-                    ptr += actualWriteSize;
+                // Repeated full-buffer copies
+                while (writeCount < iterations + 1)
+                {
+                    source = new ReadOnlySpan<byte>(ptr, managedBuffer.Length);
+                    ptr += managedBuffer.Length;
 
                     source.CopyTo(managedBuffer);
 
-                    stream.Write(managedBuffer, 0, actualWriteSize);
+                    stream.Write(managedBuffer, 0, managedBuffer.Length);
 
                     writeCount++;
-                    bytesWritten += actualWriteSize;
                 }
-
-                return writeCount;
-            } finally {
+            }
+            finally
+            {
                 arrayPool.Return(managedBuffer);
             }
+
+            return writeCount;
         }
 
         /// <summary>
