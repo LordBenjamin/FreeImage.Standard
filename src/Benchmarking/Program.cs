@@ -8,12 +8,12 @@ namespace Benchmarking
         public static void Main(string[] args)
         {
 #if !DEBUG
-            BenchmarkRunner.Run<StreamReadBenchmark>();
+            BenchmarkRunner.Run<StreamWriteBenchmark>();
 #else
-            StreamReadBenchmark b = new StreamReadBenchmark();
+            StreamWriteBenchmark b = new StreamWriteBenchmark();
             b.Setup();
             for (int i = 0; i < 10000; i++)
-                b.ReadSpan();
+                b.WriteSpan();
             b.Cleanup();
 #endif
         }
