@@ -144,7 +144,7 @@ namespace FreeImageNETUnitTest
                     filename = Path.Combine(baseDirectory, "Metadata", "exif.jpg");
                     break;
                 case ImageType.Multipaged:
-                    filename = Path.Combine(baseDirectory, "Multipaged", "Image.tif");
+                    filename = Path.Combine(baseDirectory, "MultiPaged", "Image.tif");
                     break;
             }
 
