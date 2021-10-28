@@ -7,7 +7,7 @@
     <AssemblyVersion>4.3.9.0</AssemblyVersion>
     <FileVersion>4.3.9.0</FileVersion>
     <Authors>FreeImage contributors; matgr1; lordbenjamin</Authors>
-    <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>FreeImage.Standard</AssemblyName>
     <PackageId>FreeImage.Standard</PackageId>
