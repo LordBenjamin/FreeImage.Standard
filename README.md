@@ -25,6 +25,10 @@ Note that FreeImage 3.18.0 is not available on Raspian yet - please use the v4.3
 
 **The version number of this package no longer matches the FreeImage native library version!**
 
+## Dependencies
+
+Windows build requires [Microsoft Visual C++ Runtime 2015](https://www.microsoft.com/en-gb/download/details.aspx?id=48145).
+
 ## License
 
 The license is the same as the FreeImage license available at the link above
